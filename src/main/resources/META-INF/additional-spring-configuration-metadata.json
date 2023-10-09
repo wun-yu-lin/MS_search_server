@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "MYSQL.USERNAME",
+      "type": "java.lang.String",
+      "description": "Description for MY_SQL.USERNAME."
+    },
+    {
+      "name": "MYSQL.password",
+      "type": "java.lang.String",
+      "description": "Description for MYSQL.password."
+    }
+  ] }
