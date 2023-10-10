@@ -50,6 +50,12 @@ public class TestController {
     }
 
 
+    @GetMapping("/exception")
+    public String exceptionTest(){
+        throw new RuntimeException("Test RunTimeException invoke");
+    }
+
+
 
 
 }

@@ -1,7 +1,9 @@
 package service.ms_search_engine;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Spectrum {
     String authorName;
 
