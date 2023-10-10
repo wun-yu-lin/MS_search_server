@@ -24,15 +24,12 @@ public class MyAspect {
         System.out.println("Before Aspect invoke");
     }
 
-    @Around("execution(* service.ms_search_engine.Controllers.TestController.*(..))")
+    @Around("execution(* service.ms_search_engine.Controllers.TestController.*(..)) || execution(* service.ms_search_engine.Controllers.SpectrumController.*(..))" )
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("Starting timer");
         Date startDate = new Date();
 
         Object obj = pjp.proceed();
-
-
-
         System.out.println("End timer");
         Date endDate = new Date();
         long spendTime = endDate.getTime() - startDate.getTime();

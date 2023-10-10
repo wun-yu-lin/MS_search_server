@@ -1,7 +1,11 @@
 package service.ms_search_engine;
 
+import jakarta.validation.constraints.NotNull;
+
 public class Spectrum {
     String authorName;
+
+    @NotNull
     Float precursor_mz;
     String formula;
 
