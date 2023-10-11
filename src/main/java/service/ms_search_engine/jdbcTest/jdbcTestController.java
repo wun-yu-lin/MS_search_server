@@ -2,18 +2,19 @@ package service.ms_search_engine.jdbcTest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.*;
+import service.ms_search_engine.Spectrum;
 import service.ms_search_engine.model.SpectrumData;
 
+import java.sql.Array;
 import java.sql.Struct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/jdbcTest")
@@ -31,7 +32,7 @@ public class jdbcTestController {
         try{
 
 
-        String sql_string = "INSERT INTO spectrum_data(compound_data_id, compound_classification_id, author_id, ms_level, precursor_mz, exact_mass,"+
+        String sqlString = "INSERT INTO spectrum_data(compound_data_id, compound_classification_id, author_id, ms_level, precursor_mz, exact_mass,"+
                             " collision_energy, mz_error, data_source, tool_type, instrument, ion_mode, ms2_spectrum, precursor_type)" +
                             "VALUES (:compound_data_id, :compound_classification_id, :author_id, :ms_level, :precursor_mz, :exact_mass, :collision_energy,"+
                             ":mz_error, :data_source, :tool_type, :instrument, :ion_mode, :ms2_spectrum, :precursor_type)";
@@ -49,11 +50,58 @@ public class jdbcTestController {
         map.put("ion_mode", spectrumData.getIonMode());
         map.put("ms2_spectrum", spectrumData.getMs2Spectrum());
         map.put("precursor_type", spectrumData.getPrecursorType());
-        namedParameterJdbcTemplate.update(sql_string, new MapSqlParameterSource(map), keyHolder);
+        namedParameterJdbcTemplate.update(sqlString, new MapSqlParameterSource(map), keyHolder);
         }catch (RuntimeException runtimeException){
             throw new RuntimeException(runtimeException);
         }
         int insertedId = Objects.requireNonNull(keyHolder.getKey()).intValue();
-        return ResponseEntity.status(200).body("Success insert into database, id:" + insertedId);
+        return ResponseEntity.status(HttpStatus.OK.value()).body("Success insert into database, id:" + insertedId);
     }
+
+
+    @PostMapping("/insertBatchSpectrum")
+    public ResponseEntity<String> insertBatchSpectrum(@RequestBody List<SpectrumData> spectrumList){
+        String sqlString = "INSERT INTO spectrum_data(compound_data_id, compound_classification_id, author_id, ms_level, precursor_mz, exact_mass,"+
+                " collision_energy, mz_error, data_source, tool_type, instrument, ion_mode, ms2_spectrum, precursor_type)" +
+                "VALUES (:compound_data_id, :compound_classification_id, :author_id, :ms_level, :precursor_mz, :exact_mass, :collision_energy,"+
+                ":mz_error, :data_source, :tool_type, :instrument, :ion_mode, :ms2_spectrum, :precursor_type)";
+        MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[spectrumList.size()];
+
+        int spectrumListSize = spectrumList.size();
+
+        for (int i = 0; i<spectrumListSize; i++){
+            SpectrumData spectrumData = spectrumList.get(i);
+
+            parameterSources[i] = new MapSqlParameterSource();
+
+            parameterSources[i].addValue("compound_data_id", spectrumData.getCompoundDataId());
+            parameterSources[i].addValue("compound_classification_id", spectrumData.getCompoundClassificationId());
+            parameterSources[i].addValue("author_id", spectrumData.getAuthorId());
+            parameterSources[i].addValue("ms_level", spectrumData.getMsLevel());
+            parameterSources[i].addValue("precursor_mz", spectrumData.getPrecursorMz());
+            parameterSources[i].addValue("exact_mass", spectrumData.getExactMass());
+            parameterSources[i].addValue("collision_energy", spectrumData.getCollisionEnergy());
+            parameterSources[i].addValue("mz_error", spectrumData.getMzError());
+            parameterSources[i].addValue("data_source", spectrumData.getDataSourceArrayList().toString());
+            parameterSources[i].addValue("tool_type", spectrumData.getToolType());
+            parameterSources[i].addValue("instrument", spectrumData.getInstrument());
+            parameterSources[i].addValue("ion_mode", spectrumData.getIonMode());
+            parameterSources[i].addValue("ms2_spectrum", spectrumData.getMs2Spectrum());
+            parameterSources[i].addValue("precursor_type", spectrumData.getPrecursorType());
+        }
+        namedParameterJdbcTemplate.batchUpdate(sqlString, parameterSources);
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body("successfully insert batch spectrum data");
+    }
+
+    @DeleteMapping("/deleteSpectrum/{id}")
+    public ResponseEntity<String> deleteSpectrumByID(@PathVariable int id){
+        String sqlString = "DELETE FROM  spectrum_data WHERE id = :spectrumID";
+        Map<String,Object> map = new HashMap<>();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        map.put("spectrumID", id);
+        namedParameterJdbcTemplate.update(sqlString, new MapSqlParameterSource(map), keyHolder);
+        return ResponseEntity.status(HttpStatus.OK.value()).body("執行 delete sql");
+    }
+
 }
