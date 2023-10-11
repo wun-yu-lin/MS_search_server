@@ -1,4 +1,4 @@
-package service.ms_search_engine.Controllers;
+package service.ms_search_engine.controllers;
 import org.springframework.web.bind.annotation.*;
 import service.ms_search_engine.Spectrum;
 

@@ -1,10 +1,10 @@
-package service.ms_search_engine.Config;
+package service.ms_search_engine.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import service.ms_search_engine.Interceptor.MyInterceptor;
+import service.ms_search_engine.interceptor.MyInterceptor;
 
 
 @Component

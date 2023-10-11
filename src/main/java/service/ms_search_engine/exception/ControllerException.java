@@ -1,4 +1,4 @@
-package service.ms_search_engine.Exception;
+package service.ms_search_engine.exception;
 
 
 import org.springframework.http.HttpStatus;

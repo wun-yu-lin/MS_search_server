@@ -1,4 +1,4 @@
-package service.ms_search_engine.AopTest;
+package service.ms_search_engine.aopTest;
 
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,17 +14,17 @@ import java.util.Date;
 @Component
 public class MyAspect {
 
-    @Before("execution(* service.ms_search_engine.Controllers.TestController.*(..))")
+    @Before("execution(* service.ms_search_engine.controllers.TestController.*(..))")
     public void before(){
         System.out.println("Before Aspect invoke");
     }
 
-    @After("execution(* service.ms_search_engine.Controllers.TestController.*(..))")
+    @After("execution(* service.ms_search_engine.controllers.TestController.*(..))")
     public void after(){
         System.out.println("Before Aspect invoke");
     }
 
-    @Around("execution(* service.ms_search_engine.Controllers.TestController.*(..)) || execution(* service.ms_search_engine.Controllers.SpectrumController.*(..))" )
+    @Around("execution(* service.ms_search_engine.controllers.TestController.*(..)) || execution(* service.ms_search_engine.controllers.SpectrumController.*(..))" )
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("Starting timer");
         Date startDate = new Date();
