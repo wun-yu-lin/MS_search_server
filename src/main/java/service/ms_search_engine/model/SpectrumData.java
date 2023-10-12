@@ -5,11 +5,14 @@ import org.springframework.stereotype.Component;
 import javax.xml.crypto.Data;
 import java.sql.Array;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Component
 public class SpectrumData {
+    private int id;
     private int compoundDataId;
+
     private int compoundClassificationId;
     private int authorId;
     private int msLevel;
@@ -17,8 +20,8 @@ public class SpectrumData {
     private double exactMass;
     private String collisionEnergy;
     private double mzError;
-    private Date lastModify;
-    private Date dateCreated;
+    private Timestamp lastModify;
+    private Timestamp dateCreated;
     private ArrayList<String> dataSourceArrayList;
     private String toolType;
     private String instrument;
@@ -26,6 +29,12 @@ public class SpectrumData {
     private String ms2Spectrum;
     private String precursorType;
 
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getCompoundDataId() {
         return compoundDataId;
     }
@@ -90,19 +99,19 @@ public class SpectrumData {
         this.mzError = mzError;
     }
 
-    public Date getLastModify() {
+    public Timestamp getLastModify() {
         return lastModify;
     }
 
-    public void setLastModify(Date lastModify) {
+    public void setLastModify(Timestamp lastModify) {
         this.lastModify = lastModify;
     }
 
-    public Date getDateCreated() {
+    public Timestamp getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
     }
 

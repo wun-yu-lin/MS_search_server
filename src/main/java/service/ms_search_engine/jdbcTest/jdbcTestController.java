@@ -4,6 +4,7 @@ package service.ms_search_engine.jdbcTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,7 +12,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.*;
 import service.ms_search_engine.Spectrum;
 import service.ms_search_engine.model.SpectrumData;
+import service.ms_search_engine.utility.SpectrumDataRowMapper;
 
+import javax.sound.sampled.EnumControl;
 import java.sql.Array;
 import java.sql.Struct;
 import java.util.*;
@@ -102,6 +105,36 @@ public class jdbcTestController {
         map.put("spectrumID", id);
         namedParameterJdbcTemplate.update(sqlString, new MapSqlParameterSource(map), keyHolder);
         return ResponseEntity.status(HttpStatus.OK.value()).body("執行 delete sql");
+    }
+
+
+    @GetMapping("/spectrum")
+    public ResponseEntity<List<SpectrumData>> getSpectrum(){
+        String sqlStringForCount = "SELECT COUNT(*) FROM spectrum_data;";
+        Map<String, Object> countMap = new HashMap<>();
+        Integer countOfSpectrumData = namedParameterJdbcTemplate.queryForObject(sqlStringForCount, countMap, Integer.class);
+        System.out.printf("目前 Spectrum data 總共有 %d 筆數據 ", countOfSpectrumData);
+
+
+        String sqlString = "SELECT compound_data_id, compound_classification_id, id, author_id, ms_level, precursor_mz, exact_mass" +
+        ", collision_energy, mz_error, last_modify, date_created, data_source, tool_type, instrument, ion_mode, ms2_spectrum, precursor_type  from spectrum_data limit 0,500;";
+        Map<String,Object> map = new HashMap<>();
+        List<SpectrumData> spectrumDataList  = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
+        return ResponseEntity.status(200).body(spectrumDataList);
+    }
+
+    @GetMapping("/spectrum/{id}")
+    public ResponseEntity<SpectrumData> getSpectrumByID(@PathVariable int id){
+        String sqlString = "SELECT compound_data_id, compound_classification_id, id, author_id, ms_level, precursor_mz, exact_mass" +
+                ", collision_energy, mz_error, last_modify, date_created, data_source, tool_type, instrument, ion_mode, ms2_spectrum, precursor_type  from spectrum_data WHERE id = :id";
+        Map<String,Object> map = new HashMap<>();
+        map.put("id", id);
+        List<SpectrumData> spectrumDataList  = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
+        if (spectrumDataList.isEmpty()){
+            return ResponseEntity.status(200).body(null);
+        }
+
+        return ResponseEntity.status(200).body(spectrumDataList.get(0));
     }
 
 }
