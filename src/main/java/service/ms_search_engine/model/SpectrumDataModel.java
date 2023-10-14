@@ -2,14 +2,11 @@ package service.ms_search_engine.model;
 
 import org.springframework.stereotype.Component;
 
-import javax.xml.crypto.Data;
-import java.sql.Array;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Component
-public class SpectrumData {
+public class SpectrumDataModel {
     private int id;
     private int compoundDataId;
 

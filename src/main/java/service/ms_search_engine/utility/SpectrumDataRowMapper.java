@@ -1,18 +1,18 @@
 package service.ms_search_engine.utility;
 
 import org.springframework.jdbc.core.RowMapper;
-import service.ms_search_engine.model.SpectrumData;
+import service.ms_search_engine.model.SpectrumDataModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SpectrumDataRowMapper implements RowMapper<SpectrumData> {
+public class SpectrumDataRowMapper implements RowMapper<SpectrumDataModel> {
     @Override
-    public SpectrumData mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public SpectrumDataModel mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        SpectrumData spectrumData = new SpectrumData();
+        SpectrumDataModel spectrumData = new SpectrumDataModel();
         spectrumData.setCompoundDataId(rs.getInt("compound_data_id"));
         spectrumData.setCompoundClassificationId(rs.getInt("compound_classification_id"));
         spectrumData.setId(rs.getInt("id"));
