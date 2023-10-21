@@ -1,6 +1,7 @@
 package service.ms_search_engine.controller;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,8 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.service.SpectrumService;
-
-import java.awt.print.Book;
 import java.util.List;
 
 @RestController
@@ -23,12 +22,19 @@ import java.util.List;
 @Validated
 public class SpectrumController {
 
+    //log operation setting
+    private final static Logger log = LoggerFactory.getLogger(SpectrumController.class);
+
     @Autowired
     private SpectrumService spectrumService;
 
 
     @GetMapping("/")
-    public ResponseEntity<List<SpectrumDataModel>> getSpectrumList(@RequestParam @NotNull int spectrumNum){
+    public ResponseEntity<List<SpectrumDataModel>> getSpectrumList(
+            @RequestParam @NotNull int spectrumNum
+    ){
+        log.info("Get request for spectrum list");
+
         List<SpectrumDataModel> spectrumDataModelList = spectrumService.getSpectrumByParameter(spectrumNum);
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModelList);
     }
