@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.service.SpectrumService;
+
 import java.util.List;
 
 @RestController
@@ -34,28 +35,29 @@ public class SpectrumController {
     @GetMapping("/")
     public ResponseEntity<List<SpectrumDataModel>> getSpectrumList(
             @RequestParam @NotNull int spectrumNum
-    ){
+    ) {
         log.info("Get request for spectrum list");
 
         List<SpectrumDataModel> spectrumDataModelList = spectrumService.getSpectrumByParameter(spectrumNum);
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModelList);
     }
+
     @Operation(summary = "Get a spectrum by its id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the spectrum",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = SpectrumDataModel.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = SpectrumDataModel.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid id supplied",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Spectrum not found",
-                    content = @Content) })
+                    content = @Content)})
     @GetMapping("/{id}")
     public ResponseEntity<SpectrumDataModel> getSpectrumByID(@PathVariable int id) throws JsonProcessingException {
         SpectrumDataModel spectrumDataModel = spectrumService.getSpectrumByID(id);
 
         //使用 object mapper 轉成 json string
         ObjectMapper objectMapper = new ObjectMapper();
-        String  jsonStr = objectMapper.writeValueAsString(spectrumDataModel);
+        String jsonStr = objectMapper.writeValueAsString(spectrumDataModel);
         System.out.println("json的值為：" + jsonStr);
         log.info("Get request for spectrum by id: " + id);
         log.info("json的值為：" + jsonStr);
@@ -65,7 +67,7 @@ public class SpectrumController {
         SpectrumDataModel spectrumDataModel1 = objectMapper.readValue(jsonStr, SpectrumDataModel.class);
         System.out.println("spectrumDataModel1 的IonMode值為：" + spectrumDataModel1.getIonMode());
 
-        return  ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModel);
+        return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModel);
     }
 
 }

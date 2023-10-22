@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="en"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/base.css}">
+	<!--    <link rel="stylesheet" href="../static/css/base.css">-->
+	<title>Layout</title>
+
+</head>
+<header class="header">
+	<div class="div_header flex container">
+		<div class="header_div">
+			<li class="header_div_li"><a class="header_div_li_a" href="./"></a></li>
+		</div>
+		<div class="header_div_other">
+			<li class="header_div_other_li"><a class="header_div_other_li_a b-16" href="./">Feature</a>
+			</li>
+		</div>
+	</div>
+</header>
+<body>
+
+<div class="wrapper">
+	<div layout:fragment="content"></div>
+</div>
+
+
+</body>
+<br>
+<footer class="footer flex">
+	<div class="footer flex">
+		<div class="footer_div">
+			<p class="footer_div_p">MS search engine</p>
+		</div>
+	</div>
+</footer>
+<script layout::fragment="script"></script>
+<!--<script src="{{ url_for('static', filename='/base.js') }}"></script>-->
+</html>
