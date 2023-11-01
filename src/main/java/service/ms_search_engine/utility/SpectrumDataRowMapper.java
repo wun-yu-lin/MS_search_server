@@ -34,6 +34,17 @@ public class SpectrumDataRowMapper implements RowMapper<SpectrumDataModel> {
         spectrumData.setMs2Spectrum(rs.getString("ms2_spectrum"));
         spectrumData.setPrecursorType(rs.getString("precursor_type"));
 
+
+        //join data from compound_data table
+        spectrumData.setFormula(rs.getString("formula"));
+        spectrumData.setName(rs.getString("name"));
+        spectrumData.setInChiKey(rs.getString("inchi_key"));
+        spectrumData.setInChi(rs.getString("inchi"));
+        spectrumData.setCas(rs.getString("cas"));
+        spectrumData.setKind(rs.getString("kind"));
+        spectrumData.setSmile(rs.getString("smile"));
+
+
         return spectrumData;
     }
 }

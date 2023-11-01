@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import javax.naming.Name;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class SpectrumDataModel {
+    //spectrum info
     private int id;
     private int compoundDataId;
-
     private int compoundClassificationId;
     private int authorId;
     private int msLevel;
@@ -34,5 +35,16 @@ public class SpectrumDataModel {
     private String ionMode;
     private String ms2Spectrum;
     private String precursorType;
+    private Double ms2SpectrumSimilarity;
+
+    //compound info
+    private String formula;
+    private String name;
+    private String InChiKey;
+    private String InChi;
+    private String cas;
+    private String kind;
+    private String smile;
+
 
 }
