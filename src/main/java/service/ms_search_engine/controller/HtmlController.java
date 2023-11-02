@@ -14,4 +14,16 @@ public class HtmlController {
         //return index.html 首頁
         return "index";
     }
+
+    @GetMapping("/msSearch")
+    public String msSearch(){
+
+        return "msSearch";
+    }
+
+    @GetMapping("/ms2Search")
+    public String ms2Search(){
+
+        return "ms2Search";
+    }
 }
