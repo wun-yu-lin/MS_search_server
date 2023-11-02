@@ -1,0 +1,88 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  gap: 30px;
+}
+
+.search_div {
+  width: 300px;
+  display: flex;
+  background-color: #D9D9D9;
+  align-items: center;
+}
+.search_div .search_param_div {
+  width: 100%;
+  padding: 10px;
+  background-color: #D9D9D9;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  gap: 5px;
+}
+.search_div .compound_name_para_div,
+.search_div .formula_para_div,
+.search_div .exact_mass_para_div,
+.search_div .precursor_mz_para_div,
+.search_div .tolerance_para_div,
+.search_div .charge_para_div,
+.search_div .ms2Spectrum_para_div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px;
+}
+.search_div .compound_name_para_div input, .search_div .compound_name_para_div select,
+.search_div .formula_para_div input,
+.search_div .formula_para_div select,
+.search_div .exact_mass_para_div input,
+.search_div .exact_mass_para_div select,
+.search_div .precursor_mz_para_div input,
+.search_div .precursor_mz_para_div select,
+.search_div .tolerance_para_div input,
+.search_div .tolerance_para_div select,
+.search_div .charge_para_div input,
+.search_div .charge_para_div select,
+.search_div .ms2Spectrum_para_div input,
+.search_div .ms2Spectrum_para_div select {
+  width: 200px;
+  height: 30px;
+  border-radius: 10px;
+  padding: 0 10px;
+}
+.search_div .tolerance_para_div_div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: space-around;
+}
+.search_div .tolerance_para_select {
+  width: 90px !important;
+  color: black !important;
+}
+.search_div .tolerance_input {
+  width: 100px !important;
+}
+.search_div .ms2Spectrum {
+  width: 200px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.spectrum_container_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 1200px;
+}
+.spectrum_container_div .spectrum_item_div {
+  width: 100%;
+  padding: 10px;
+  background-color: #D9D9D9;
+  border-radius: 10px;
+}
+
+/*# sourceMappingURL=msSearch.css.map */

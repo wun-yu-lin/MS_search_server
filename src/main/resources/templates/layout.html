@@ -5,27 +5,35 @@
 <head>
 
 	<meta charset="UTF-8">
+	<link rel="icon" th:href="@{/icon/webIcon.png}" type="image/x-icon">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" th:href="@{/css/base.css}">
-	<!--    <link rel="stylesheet" href="../static/css/base.css">-->
+		<link rel="stylesheet" th:href="@{/css/base.css}">
+	   <link rel="stylesheet" href="../static/css/base.css">
 	<title>Layout</title>
 
 </head>
 <header class="header">
 	<div class="div_header flex container">
 		<div class="header_div">
-			<li class="header_div_li"><a class="header_div_li_a" href="./"></a></li>
+			<img th:src="@{/icon/webIcon.png}" alt="" style="width: 30px; height: 30px">
+			<li class="header_div_li"><a class="header_div_li_a" href="./">MS search engine</a></li>
+		</div>
+		<div class="header_search_div">
+			<button class="header_search_button" id="header_search_button"></button>
+			<label for="msSearch"></label>
+			<input class="header_search_input" type="text" name="msSearch" id="msSearch">
 		</div>
 		<div class="header_div_other">
-			<li class="header_div_other_li"><a class="header_div_other_li_a b-16" href="./">Feature</a>
+			<li class="header_div_other_li"><a class="header_div_other_li_a b-16" href="./msSearch">MS Search</a>
 			</li>
 		</div>
 	</div>
+
 </header>
 <body>
 
 <div class="wrapper">
-	<div layout:fragment="content"></div>
+	<div class="container" layout:fragment="content"></div>
 </div>
 
 
@@ -34,10 +42,9 @@
 <footer class="footer flex">
 	<div class="footer flex">
 		<div class="footer_div">
-			<p class="footer_div_p">MS search engine</p>
+			<p class="footer_div_p">2023 @ MS search engine</p>
 		</div>
 	</div>
 </footer>
 <script layout::fragment="script"></script>
-<!--<script src="{{ url_for('static', filename='/base.js') }}"></script>-->
 </html>

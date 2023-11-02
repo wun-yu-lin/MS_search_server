@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="en"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	  layout:decorate="~{layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>MS search engine</title>
+	<link rel="stylesheet" th:href="@{/css/msSearch.css}">
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="search_div">
+		<div class="search_param_div">
+			<button class="search_button">Search</button>
+
+			<div class="compound_name_para_div">
+				<label for="compound_name_para">Compound name</label>
+				<input class="compound_name_para" type="text" name="compound_name_para" id="compound_name_para">
+			</div>
+			<div class="formula_para_div">
+				<label for="formula">Formula</label>
+				<input class="formula_para" type="text" name="formula_para" id="formula">
+			</div>
+			<div class="exact_mass_para_div">
+				<label for="exact_mass">Exact Mass</label>
+				<input class="exact_mass" type="text" name="exact_mass" id="exact_mass">
+			</div>
+			<div class="precursor_mz_para_div">
+				<label for="precursor_mz">Precursor m/z</label>
+				<input class="precursor_mz" type="text" name="precursor_mz" id="precursor_mz">
+			</div>
+			<div class="tolerance_para_div">
+				<label for="tolerance">Tolerance</label>
+				<div class="tolerance_para_div_div">
+					<input class="tolerance_input" type="text" name="tolerance" id="tolerance">
+					<select name="tolerance" id="tolerance_unit" class="tolerance_para_select">
+					<option value="ppm">ppm</option>
+					<option value="Da">Da</option>
+				</select>
+				</div>
+			</div>
+			<div class="charge_para_div">
+				<label for="charge">Charge</label>
+				<select name="charge" id="charge">
+					<option value="">All</option>
+					<option value="positive">Positive</option>
+					<option value="negative">Negative</option>
+				</select>
+			</div>
+			<div class="ms2Spectrum_para_div">
+				<label for="ms2Spectrum">MS2 Spectrum</label>
+				<textarea name="ms2Spectrum" class="ms2Spectrum" rows="10" id="ms2Spectrum"></textarea>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="spectrum_container_div">
+		<div class="spectrum_item_div">
+			<div class="spectrum_canvas_div">
+				<h1>test</h1>
+			</div>
+			<div class="spectrum_info_div">
+				<h1>test</h1>
+			</div>
+		</div>
+		<div class="spectrum_item_div">
+			<div class="spectrum_canvas_div">
+				<h1>test</h1>
+			</div>
+			<div class="spectrum_info_div">
+				<h1>test</h1>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

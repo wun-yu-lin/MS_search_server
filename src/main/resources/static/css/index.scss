@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+}
+
+.left_div {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .userInfo_div {
+    padding: 10px;
+    width: 100%;
+    height: 300px;
+    background-color: #2D333B;
+    border-radius: 10px;
+    color: white;
+
+  }
+}
+
+.middle_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 1200px;
+
+  .introduction_project_div {
+    padding: 10px;
+    width: 100%;
+    height: 500px;
+    background-color: #2D333B;
+    border-radius: 10px;
+    color: white;
+  }
+
+  .source_ref_div {
+    padding: 10px;
+    width: 100%;
+    height: 500px;
+    background-color: #2D333B;
+    border-radius: 10px;
+    color: white;
+
+
+  }
+}
+
+
+.right_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 300px;
+
+  .release_note_div {
+    padding: 10px;
+    width: 100%;
+    height: 500px;
+    background-color: #2D333B;
+    border-radius: 10px;
+    color: white;
+  }
+
+  .ads_div {
+    padding: 10px;
+    width: 100%;
+    height: 100px;
+    background-color: #2D333B;
+    border-radius: 10px;
+    color: white;
+  }
+
+}
