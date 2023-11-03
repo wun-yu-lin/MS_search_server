@@ -13,7 +13,7 @@
 
 </head>
 <header class="header">
-	<div class="div_header flex container">
+	<div class="div_header flex">
 		<div class="header_div">
 			<img th:src="@{/icon/webIcon.png}" alt="" style="width: 30px; height: 30px">
 			<li class="header_div_li"><a class="header_div_li_a" href="./">MS search engine</a></li>
@@ -21,7 +21,7 @@
 		<div class="header_search_div">
 			<button class="header_search_button" id="header_search_button"></button>
 			<label for="msSearch"></label>
-			<input class="header_search_input" type="text" name="msSearch" id="msSearch">
+			<input class="header_search_input" type="text" name="msSearch" id="msSearch" placeholder="MS search by precursor m/z, compound name, formula, inchi key" minlength="3">
 		</div>
 		<div class="header_div_other">
 			<li class="header_div_other_li"><a class="header_div_other_li_a b-16" href="./msSearch">MS Search</a>
