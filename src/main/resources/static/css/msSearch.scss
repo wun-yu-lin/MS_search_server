@@ -85,10 +85,24 @@
     overflow: hidden;
 
     .spectrum_item_div {
+      display: flex;
+      flex-direction: row;
       width: 100%;
       padding: 10px;
       background-color: #D9D9D9;
       border-radius: 10px;
+      gap:10px;
+      justify-content: space-around;
+      align-items: center;
+      .spectrum_canvas_div{
+        width:60%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .spectrum_info_div {
+        width:30%;
+      }
 
     }
 }
@@ -98,8 +112,9 @@ table {
   border-collapse: collapse;
 
   th, td {
-    padding: 10px;
     text-align: left;
+    font-size: 14px;
+    padding: 5px;
   }
 
   th {
