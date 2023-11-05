@@ -66,356 +66,108 @@
 	</div>
 
 
-	<div class="spectrum_container_div">
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
+	<div class="spectrum_container_div" id="spectrum_container_div">
+<!--		<div class="spectrum_item_div">-->
+<!--			<div class="spectrum_canvas_div">-->
+<!--				<canvas class="spectrumChart"></canvas>-->
+<!--			</div>-->
+<!--			<div class="spectrum_info_div">-->
+<!--				<table>-->
+<!--					<tr>-->
+<!--						<th>Compound Name：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Exact Mass：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Formula：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>InChi key</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Charge：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Collision Energy：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Precursor m/z：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Adduct ion：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Tool type：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>SMILE：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--				</table>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="spectrum_item_div">-->
+<!--			<div class="spectrum_canvas_div">-->
+<!--				<canvas class="spectrumChart"></canvas>-->
+<!--			</div>-->
+<!--			<div class="spectrum_info_div">-->
+<!--				<table>-->
 
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
+<!--					<tr>-->
+<!--						<th>Compound Name：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Exact Mass：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Formula：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>InChi key</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Charge：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Collision Energy：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Precursor m/z：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Adduct ion：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>Tool type：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<th>SMILE：</th>-->
+<!--						<td>NA</td>-->
+<!--					</tr>-->
+<!--				</table>-->
+<!--			</div>-->
+<!--		</div>-->
 
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
 
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
-
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
-
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="spectrum_item_div">
-			<div class="spectrum_canvas_div">
-				<canvas class="spectrumChart"></canvas>
-			</div>
-			<div class="spectrum_info_div">
-				<table>
-
-					<tr>
-						<th>Compound Name：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Exact Mass：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Formula：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>InChi key</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Charge：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Collision Energy：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Precursor m/z：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Adduct ion：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>Tool type：</th>
-						<td>NA</td>
-					</tr>
-					<tr>
-						<th>SMILE：</th>
-						<td>NA</td>
-					</tr>
-				</table>
-			</div>
-		</div>
 
 
 
@@ -424,6 +176,7 @@
 </div>
 </body>
 <div layout:fragment="script">
-	<script th:src="@{/js/utility/spectrumChart.js}"></script>
+<!--	<script type="module" th:src="@{/js/utility/spectrumChart.js}"></script>-->
+	<script type="module" th:src="@{/js/msSearch.js}"></script>
 </div>
 </html>

@@ -116,13 +116,30 @@
   width: 30%;
 }
 
+.spectrum_info_div {
+  width: 40% !important;
+}
+
 table {
+  width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+}
+table tr {
+  width: 100%;
 }
 table th, table td {
   text-align: left;
-  font-size: 14px;
+  font-size: 12px;
   padding: 5px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+table th {
+  width: 20%;
+}
+table td {
+  width: 80%;
 }
 table th {
   color: black;
