@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.naming.Name;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,6 +35,7 @@ public class SpectrumDataModel {
     private String instrument;
     private String ionMode;
     private String ms2Spectrum;
+    private List<Double[]> ms2SpectrumList;
     private String precursorType;
     private Double ms2SpectrumSimilarity;
 

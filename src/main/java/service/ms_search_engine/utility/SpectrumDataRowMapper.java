@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class SpectrumDataRowMapper implements RowMapper<SpectrumDataModel> {
     @Override
     public SpectrumDataModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+        MS2spectrumDataTransFormation ms2spectrumDataTransFormation = new MS2spectrumDataTransFormation();
 
         SpectrumDataModel spectrumData = new SpectrumDataModel();
         spectrumData.setCompoundDataId(rs.getInt("compound_data_id"));
@@ -32,6 +33,7 @@ public class SpectrumDataRowMapper implements RowMapper<SpectrumDataModel> {
         spectrumData.setInstrument(rs.getString("instrument"));
         spectrumData.setIonMode(rs.getString("ion_mode"));
         spectrumData.setMs2Spectrum(rs.getString("ms2_spectrum"));
+        spectrumData.setMs2SpectrumList(ms2spectrumDataTransFormation.ms2SpectrumStringToNestedArray(rs.getString("ms2_spectrum")));
         spectrumData.setPrecursorType(rs.getString("precursor_type"));
 
 
