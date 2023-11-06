@@ -47,8 +47,10 @@ async function fetchSpectrumData() {
     let requestParaObj = {
         methods: "GET"
     }
+    // let url = '/api/spectrum/?maxPrecursorMz=445.17&minPrecursorMz=445.15&ionMode=positive'
+    let url = '/api/spectrum/?spectrumOffSet=10'
 
-    let data = await fetch('/api/spectrum/?maxPrecursorMz=445.17&minPrecursorMz=445.15&ionMode=positive', requestParaObj)
+    let data = await fetch(url, requestParaObj)
     data = await data.json()
     console.log(data)
 
