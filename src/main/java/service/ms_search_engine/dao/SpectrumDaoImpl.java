@@ -1,10 +1,10 @@
 package service.ms_search_engine.dao;
 
-import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
+import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.utility.SpectrumDataRowMapper;
 
@@ -35,10 +35,6 @@ public class SpectrumDaoImpl implements SpectrumDao {
 
     @Override
     public List<SpectrumDataModel> getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) {
-        String sqlStringForCount = "SELECT COUNT(*) FROM spectrum_data;";
-        Map<String, Object> countMap = new HashMap<>();
-        Integer countOfSpectrumData = namedParameterJdbcTemplate.queryForObject(sqlStringForCount, countMap, Integer.class);
-        System.out.printf("目前 Spectrum data 總共有 %d 筆數據 ", countOfSpectrumData);
 
 
         String sqlString = "SELECT compound_data_id, sd.compound_classification_id, sd.id, author_id, ms_level, precursor_mz, sd.exact_mass" +
@@ -82,8 +78,9 @@ public class SpectrumDaoImpl implements SpectrumDao {
 
         if (spectrumQueryParaDto.getCompoundName() != null) {
             sqlString = sqlString + " AND cd.name LIKE :compoundName ";
-            map.put("compoundName", "%" + spectrumQueryParaDto.getCompoundName() + "%");
+            map.put("compoundName", "['"+ spectrumQueryParaDto.getCompoundName() + "%");
         }
+
 
         //如果不需要 ms2 spectrum 比對, 再限制數據的比數
         if (spectrumQueryParaDto.getMs2Spectrum() == null
@@ -98,6 +95,54 @@ public class SpectrumDaoImpl implements SpectrumDao {
 
         List<SpectrumDataModel> spectrumDataList = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
 
+        return spectrumDataList;
+    }
+
+    @Override
+    public List<SpectrumDataModel> getSpectrumByFuzzySearch(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException {
+
+        String sqlString = "SELECT compound_data_id, sd.compound_classification_id, sd.id, author_id, ms_level, precursor_mz, sd.exact_mass" +
+                ", collision_energy, mz_error, last_modify, date_created, data_source, tool_type, instrument, ion_mode, ms2_spectrum," +
+                " precursor_type, cd.name, cd.formula, cd.inchi_key, cd.inchi, cd.cas, cd.kind, cd.smile from spectrum_data sd left join ms_search_library.compound_data cd on sd.compound_data_id = cd.id where ";
+        Map<String, Object> map = new HashMap<>();
+
+        if (spectrumQueryParaDto.getKeyWord()== null || spectrumQueryParaDto.getKeyWord() == "") {
+            throw new QueryParameterException("KeyWord is empty");
+        }
+        //process keyWord
+        String[] keyWordArray = spectrumQueryParaDto.getKeyWord().split(" ");
+
+        //if keyWordArray is empty, return null
+        if (keyWordArray.length == 0) {
+            throw new QueryParameterException("KeyWord is empty");
+        }
+        for (int i = 0; i < keyWordArray.length; i++) {
+            //當是數字
+            if (keyWordArray[i] == ""){continue;}
+            if (keyWordArray[i].matches("-?\\d+(\\.\\d+)?")){
+                System.out.println("is number");
+                double paraDouble = Double.parseDouble(keyWordArray[i]);
+                sqlString = sqlString + " `precursor_mz` >= :minPrecursorMz AND `precursor_mz` <= :maxPrecursorMz ";
+                map.put("minPrecursorMz", Double.toString(paraDouble - 0.2));
+                map.put("maxPrecursorMz", Double.toString(paraDouble + 0.2));
+            }else {
+                //if is string
+                sqlString = sqlString + "cd.formula = :formula or cd.name LIKE :compoundName or cd.inchi like :inChiKey ";
+                map.put("formula", keyWordArray[i]);
+                map.put("compoundName", "['"+ keyWordArray[i] + "%");
+                map.put("inChiKey", keyWordArray[i] + "%");
+            }
+            sqlString = sqlString + " LIMIT :spectrumInit,:spectrumOffSet";
+            map.put("spectrumInit", spectrumQueryParaDto.getSpectrumInit());
+            map.put("spectrumOffSet", spectrumQueryParaDto.getSpectrumOffSet());
+            break;
+        }
+
+
+        System.out.println(sqlString);
+
+
+        List<SpectrumDataModel> spectrumDataList = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
         return spectrumDataList;
     }
 

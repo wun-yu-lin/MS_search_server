@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
+import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.service.SpectrumService;
 
@@ -31,6 +32,21 @@ public class SpectrumController {
 
     @Autowired
     private SpectrumService spectrumService;
+
+    @GetMapping("/fuzzy")
+    public ResponseEntity<List<SpectrumDataModel>> getSpectrumListFuzzySearch(
+            @RequestParam(required = true) String keyWord,
+            @RequestParam(defaultValue = "0", required = true) int spectrumInit,
+            @RequestParam(defaultValue = "10", required = true) int spectrumOffSet
+    ) throws QueryParameterException {
+        log.info("Get request for spectrum list with fuzzy search");
+        SpectrumQueryParaDto spectrumQueryParaDto = new SpectrumQueryParaDto();
+        spectrumQueryParaDto.setKeyWord(keyWord);
+        spectrumQueryParaDto.setSpectrumInit(spectrumInit);
+        spectrumQueryParaDto.setSpectrumOffSet(spectrumOffSet);
+        return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumService.getSpectrumByFuzzySearch(spectrumQueryParaDto));
+    }
+
 
     @Operation(summary = "Get a spectrum by parameter")
     @GetMapping("/")
@@ -97,5 +113,7 @@ public class SpectrumController {
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModel);
     }
+
+
 
 }

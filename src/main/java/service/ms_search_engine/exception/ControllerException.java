@@ -22,4 +22,10 @@ public class ControllerException {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("RunTimeException: " + exception.getMessage());
     }
+
+    @ExceptionHandler(QueryParameterException.class)
+    public ResponseEntity<String> prepareResponseForQueryParameterException(QueryParameterException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("QueryParameterException: " + exception.getMessage());
+    }
 }

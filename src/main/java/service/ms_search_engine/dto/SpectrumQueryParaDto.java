@@ -18,4 +18,5 @@ public class SpectrumQueryParaDto {
    private String ms2Spectrum;
    private Double ms2SpectrumSimilarityTolerance;
    private String formula;
+   private String keyWord;
 }
