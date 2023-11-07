@@ -3,6 +3,9 @@
 class SpectrumChart {
 
     createComparisonChartBySpectrumData(refSpectrumData, expSpectrumData, canvasElement) {
+
+
+
         let xArray, yRefArray, yExpArray = prepareArray(refSpectrumData, expSpectrumData);
 
         let chartObject = new Chart(canvasElement, {
@@ -86,6 +89,13 @@ class SpectrumChart {
 
 
     createChartBySpectrumData(refSpectrumDataArr, canvasElement) {
+        if (refSpectrumDataArr.length === 0 ||
+            refSpectrumDataArr === undefined ||
+            refSpectrumDataArr === null ||
+            typeof(refSpectrumDataArr) !== 'object'
+        ){
+            return;
+        }
         function prepareDataForChart() {
             let dataDev = 2.0; //定義每隔多少放一個空值
             let arrMax = Math.max(...refSpectrumDataArr.map(e=>e[0]));

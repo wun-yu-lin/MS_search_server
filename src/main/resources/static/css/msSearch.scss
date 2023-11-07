@@ -29,7 +29,8 @@
   .precursor_mz_para_div,
   .tolerance_para_div,
   .charge_para_div,
-  .ms2Spectrum_para_div {
+  .ms2Spectrum_para_div,
+  .ms2_para_div{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -94,6 +95,11 @@
       gap:10px;
       justify-content: space-around;
       align-items: center;
+      h1 {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 20px;
+      }
       .spectrum_canvas_div{
         width:60%;
         display: flex;

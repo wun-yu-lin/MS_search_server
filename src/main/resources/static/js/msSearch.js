@@ -2,59 +2,148 @@ import SpectrumChart from "./utility/spectrumChart.js"
 
 const spectrumCart = new SpectrumChart();
 
-
-let data = [
-    [
-        115.054,
-        19.371234
-    ],
-    [
-        139.0542,
-        100.0
-    ],
-    [
-        151.0539,
-        25.289117
-    ],
-    [
-        152.0619,
-        77.953417
-    ],
-    [
-        163.054,
-        20.564534
-    ],
-    [
-        165.0699,
-        27.061389
-    ]];
-
 mainAsync();
 
 async function mainAsync() {
-    let data = await fetchSpectrumData()
-    console.log(data)
-    console.log(data[0]["ms2SpectrumList"])
-    data.forEach(function(item) {
-        let canvasDiv = createSpectrumItemElementBySpectrumData(item)
-        spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
-    });
+    createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
+
+
+
+    document.getElementById("search_button").onclick = async function () {
+        let getParameterObj = getSpectrumQueryParaFromForm()
+        console.log(getParameterObj)
+        let fetchUrl = generateGetUrlByParameter(getParameterObj, "/api/spectrum/")
+        let fetchData = await fetchSpectrumDataByGetMethod(fetchUrl)
+        document.getElementById("spectrum_container_div").innerHTML = ""
+        if (fetchData.length === 0) {
+            createMessageIntoSpectrumContainer("No spectrum data found")
+            return
+        }
+        fetchData.forEach(function (item) {
+            let canvasDiv = createSpectrumItemElementBySpectrumData(item)
+            spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
+        });
+    }
 
 }
 
-
-async function fetchSpectrumData() {
-    let requestParaObj = {
-        methods: "GET"
+function generateGetUrlByParameter(getParameterObj, apiUrl) {
+    if (getParameterObj.isPassCheck === false || apiUrl === null || getParameterObj === null) {
+        alart("Please check your input data")
+        return null
     }
-    // let url = '/api/spectrum/?maxPrecursorMz=445.17&minPrecursorMz=445.15&ionMode=positive'
-    let url = '/api/spectrum/?spectrumOffSet=10'
+
+    apiUrl = apiUrl + "?";
+    let paraArr = Object.keys(getParameterObj)
+    //generate the url
+    for (let i = 0; i < paraArr.length; i++) {
+        if (getParameterObj[paraArr[i]] === null || paraArr[i]==="isPassCheck") {
+            continue
+        }
+        apiUrl += "&"
+        apiUrl += paraArr[i] + "=" + getParameterObj[paraArr[i]]
+    }
+
+    return apiUrl
+}
+
+
+function getSpectrumQueryParaFromForm() {
+    let getParameterObj = {
+        spectrumInit: null,
+        spectrumOffSet: null,
+        compoundName: null,
+        formula: null,
+        authorId: null,
+        msLevel: null,
+        maxPrecursorMz: null,
+        minPrecursorMz: null,
+        maxExactMass: null,
+        minExactMass: null,
+        precursorType: null,
+        ionMode: null,
+        ms2Spectrum: null,
+        ms2SpectrumSimilarityTolerance: null,
+        isPassCheck: true
+    }
+    try {
+
+        getParameterObj.compoundName = document.getElementById("compound_name_para").value
+        getParameterObj.formula = document.getElementById("formula").value
+        getParameterObj.ionMode = document.getElementById("charge").value
+        getParameterObj.ms2Spectrum = document.getElementById("ms2Spectrum").value
+
+        let tolerance_unit = document.getElementById("tolerance_unit").value
+        let tolerance_value = parseFloat(document.getElementById("tolerance").value)
+        let ms2_tolerance_value = parseFloat(document.getElementById("ms2_para").value)
+        let exactMass = parseFloat(document.getElementById("exact_mass").value)
+        let precursorMz = parseFloat(document.getElementById("precursor_mz").value)
+
+        //計算出tolerance的值 - exact mass
+        if (isNaN(exactMass) || exactMass === null || exactMass === undefined) {
+            getParameterObj.maxExactMass = null
+            getParameterObj.minExactMass = null
+        } else {
+            if (tolerance_unit === "ppm") {
+                let deviationDa = exactMass * tolerance_value / 10 ** 6
+                getParameterObj.maxExactMass = exactMass + deviationDa
+                getParameterObj.minExactMass = exactMass - deviationDa
+
+            } else if (tolerance_unit === "Da") {
+                getParameterObj.maxExactMass = exactMass + tolerance_value
+                getParameterObj.minExactMass = exactMass - tolerance_value
+            }
+        }
+
+        //計算出tolerance的值 - precursor mz
+        if (isNaN(precursorMz) || precursorMz === null || precursorMz === undefined) {
+            getParameterObj.maxPrecursorMz = null
+            getParameterObj.minPrecursorMz = null
+        } else {
+            if (tolerance_unit === "ppm") {
+                let deviationMz = precursorMz * tolerance_value / 10 ** 6
+                getParameterObj.maxPrecursorMz = precursorMz + deviationMz
+                getParameterObj.minPrecursorMz = precursorMz - deviationMz
+
+            } else if (tolerance_unit === "Da") {
+                getParameterObj.maxPrecursorMz = precursorMz + tolerance_value
+                getParameterObj.minPrecursorMz = precursorMz - tolerance_value
+            }
+        }
+
+        let keys = Object.keys(getParameterObj)
+        for (let i = 0; i < keys.length; i++) {
+            if (getParameterObj[keys[i]] === "" || getParameterObj[keys[i]] === undefined) {
+                getParameterObj[keys[i]] = null
+            }
+        }
+
+
+    }catch (e) {
+        console.log(e)
+
+        //if any failed data is not valid, then set the isPassCheck to false
+        getParameterObj.isPassCheck = false
+        return null
+    }
+
+    if(getParameterObj.isPassCheck=== false){
+        alert("Please check your input data")
+    }
+
+    return getParameterObj
+}
+
+
+async function fetchSpectrumDataByGetMethod(url) {
+    let requestParaObj = {
+        "method": "GET",
+    }
 
     let data = await fetch(url, requestParaObj)
-    data = await data.json()
-    console.log(data)
+    let dataParse = await data.json()
 
-    return data
+    return dataParse
 }
 
 function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
@@ -77,6 +166,14 @@ function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
     infoDiv.className = "spectrum_info_div";
 
     let table = document.createElement("table");
+
+    //preprocess the data for undefined or null data
+    let spectrumDataObjKeys = Object.keys(spectrumDataObj)
+    for (let i = 0; i < spectrumDataObjKeys.length; i++) {
+        if (spectrumDataObj[spectrumDataObjKeys[i]] == null || spectrumDataObj[spectrumDataObjKeys[i]] === undefined) {
+            spectrumDataObj[spectrumDataObjKeys[i]] = "N/A"
+        }
+    }
 
     let tableContent = [
         ["Compound Name:", `${spectrumDataObj.name}`],
@@ -107,4 +204,12 @@ function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
     containerDiv.appendChild(itemDiv);
     return canvas;
 
+}
+
+
+function createMessageIntoSpectrumContainer(message) {
+    let containerDiv = document.getElementById("spectrum_container_div");
+    containerDiv.innerHTML = `<div class="spectrum_item_div">
+			<h1>${message}</h1>
+		</div>`
 }

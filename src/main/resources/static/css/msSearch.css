@@ -29,7 +29,8 @@
 .search_div .precursor_mz_para_div,
 .search_div .tolerance_para_div,
 .search_div .charge_para_div,
-.search_div .ms2Spectrum_para_div {
+.search_div .ms2Spectrum_para_div,
+.search_div .ms2_para_div {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -50,7 +51,9 @@
 .search_div .charge_para_div input,
 .search_div .charge_para_div select,
 .search_div .ms2Spectrum_para_div input,
-.search_div .ms2Spectrum_para_div select {
+.search_div .ms2Spectrum_para_div select,
+.search_div .ms2_para_div input,
+.search_div .ms2_para_div select {
   width: 200px;
   height: 30px;
   border-radius: 10px;
@@ -105,6 +108,11 @@
   gap: 10px;
   justify-content: space-around;
   align-items: center;
+}
+.spectrum_container_div .spectrum_item_div h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px;
 }
 .spectrum_container_div .spectrum_item_div .spectrum_canvas_div {
   width: 60%;

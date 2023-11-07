@@ -17,4 +17,5 @@ public class SpectrumQueryParaDto {
    private int spectrumOffSet;
    private String ms2Spectrum;
    private Double ms2SpectrumSimilarityTolerance;
+   private String formula;
 }

@@ -65,6 +65,11 @@ public class SpectrumDaoImpl implements SpectrumDao {
 //            map.put("precursorType", "%"+spectrumQueryParaDto.getPrecursorType()+"%");
 //        }
 
+        if (spectrumQueryParaDto.getFormula()!= null) {
+            sqlString = sqlString + " AND cd.formula = :formula ";
+            map.put("formula", spectrumQueryParaDto.getFormula());
+        }
+
         if (spectrumQueryParaDto.getIonMode() != null) {
             sqlString = sqlString + " AND sd.ion_mode = :ionMode ";
             map.put("ionMode", spectrumQueryParaDto.getIonMode());

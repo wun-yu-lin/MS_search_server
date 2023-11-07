@@ -38,6 +38,7 @@ public class SpectrumController {
             @RequestParam(defaultValue = "0", required = true) int spectrumInit,
             @RequestParam(defaultValue = "10", required = true) int spectrumOffSet,
             @RequestParam(required = false) String compoundName,
+            @RequestParam(required = false) String formula,
             @RequestParam(defaultValue = "0", required = true) int authorId,
             @RequestParam(defaultValue = "1", required = true) int msLevel,
             @RequestParam(required = false) Double maxPrecursorMz,
@@ -63,6 +64,7 @@ public class SpectrumController {
         spectrumQueryParaDto.setIonMode(ionMode);
         spectrumQueryParaDto.setMs2Spectrum(ms2Spectrum);
         spectrumQueryParaDto.setCompoundName(compoundName);
+        spectrumQueryParaDto.setFormula(formula);
 
         List<SpectrumDataModel> spectrumDataModelList = spectrumService.getSpectrumByParameter(spectrumQueryParaDto);
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModelList);

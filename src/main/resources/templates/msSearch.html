@@ -5,7 +5,7 @@
 	  layout:decorate="~{layout.html}">
 <head>
 	<meta charset="UTF-8">
-	<title>MS search engine - MS search</title>
+	<title>MS search - MS search</title>
 	<link rel="stylesheet" th:href="@{/css/msSearch.css}">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -15,7 +15,7 @@
 	<div class="search_div">
 		<div class="search_param_div">
 			<div class="search_button_div">
-				<button class="search_button">Search</button>
+				<button class="search_button" id="search_button">Search</button>
 			</div>
 
 			<div class="compound_name_para_div">
@@ -61,61 +61,19 @@
 				" style="white-space: pre-line;"></textarea>
 
 			</div>
+			<div class="ms2_para_div">
+				<label for="ms2_para">MS/MS similarity tolerance</label>
+				<input class="ms2_para_input" type="text" name="ms2_para" id="ms2_para" placeholder="please input 0.00-1.00">
+			</div>
 		</div>
 
 	</div>
 
 
 	<div class="spectrum_container_div" id="spectrum_container_div">
-<!--		<div class="spectrum_item_div">-->
-<!--			<div class="spectrum_canvas_div">-->
-<!--				<canvas class="spectrumChart"></canvas>-->
-<!--			</div>-->
-<!--			<div class="spectrum_info_div">-->
-<!--				<table>-->
-<!--					<tr>-->
-<!--						<th>Compound Name：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Exact Mass：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Formula：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>InChi key</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Charge：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Collision Energy：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Precursor m/z：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Adduct ion：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>Tool type：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--					<tr>-->
-<!--						<th>SMILE：</th>-->
-<!--						<td>NA</td>-->
-<!--					</tr>-->
-<!--				</table>-->
-<!--			</div>-->
-<!--		</div>-->
+		<div class="spectrum_item_div">
+			<h1>Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.</h1>
+		</div>
 <!--		<div class="spectrum_item_div">-->
 <!--			<div class="spectrum_canvas_div">-->
 <!--				<canvas class="spectrumChart"></canvas>-->
