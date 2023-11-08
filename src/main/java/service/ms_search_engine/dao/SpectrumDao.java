@@ -9,7 +9,7 @@ import java.util.List;
 public interface SpectrumDao {
     public SpectrumDataModel getSpectrumByID(int id);
 
-    public List<SpectrumDataModel>  getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto);
+    public List<SpectrumDataModel>  getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException;
     public List<SpectrumDataModel>  getSpectrumByFuzzySearch(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException;
 
 }

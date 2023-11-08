@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.SpectrumDataModel;
+import service.ms_search_engine.utility.MS2spectrumDataTransFormation;
+import service.ms_search_engine.utility.MS2spectrumSimilarityCalculator;
 import service.ms_search_engine.utility.SpectrumDataRowMapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
@@ -34,7 +34,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
     }
 
     @Override
-    public List<SpectrumDataModel> getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) {
+    public List<SpectrumDataModel> getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException {
 
 
         String sqlString = "SELECT compound_data_id, sd.compound_classification_id, sd.id, author_id, ms_level, precursor_mz, sd.exact_mass" +
@@ -61,7 +61,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
 //            map.put("precursorType", "%"+spectrumQueryParaDto.getPrecursorType()+"%");
 //        }
 
-        if (spectrumQueryParaDto.getFormula()!= null) {
+        if (spectrumQueryParaDto.getFormula() != null) {
             sqlString = sqlString + " AND cd.formula = :formula ";
             map.put("formula", spectrumQueryParaDto.getFormula());
         }
@@ -78,22 +78,53 @@ public class SpectrumDaoImpl implements SpectrumDao {
 
         if (spectrumQueryParaDto.getCompoundName() != null) {
             sqlString = sqlString + " AND cd.name LIKE :compoundName ";
-            map.put("compoundName", "['"+ spectrumQueryParaDto.getCompoundName() + "%");
+            map.put("compoundName", "['" + spectrumQueryParaDto.getCompoundName() + "%");
         }
 
-
         //如果不需要 ms2 spectrum 比對, 再限制數據的比數
-        if (spectrumQueryParaDto.getMs2Spectrum() == null
-        ) {
+        if (spectrumQueryParaDto.getMs2Spectrum() == null) {
             sqlString = sqlString + " LIMIT :spectrumInit,:spectrumOffSet";
             map.put("spectrumInit", spectrumQueryParaDto.getSpectrumInit());
             map.put("spectrumOffSet", spectrumQueryParaDto.getSpectrumOffSet());
+        }else{
+            if (spectrumQueryParaDto.getMaxPrecursorMz()==null || spectrumQueryParaDto.getMinPrecursorMz()==null){
+                throw new QueryParameterException("MaxPrecursorMz or MinPrecursorMz can not be null when ms2 spectrum similarity is needed");
+            }
         }
 
-        //如需要ms2 spectrum 比對, 先不限制比數，後端比對ms2 spectrum 相似性後
-
-
         List<SpectrumDataModel> spectrumDataList = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
+        if (spectrumQueryParaDto.getMs2Spectrum() != null) {
+
+            MS2spectrumSimilarityCalculator ms2spectrumSimilarityCalculator = new MS2spectrumSimilarityCalculator();
+            MS2spectrumDataTransFormation ms2spectrumDataTransFormation = new MS2spectrumDataTransFormation();
+            final List<Double[]> expMs2Spectrum = ms2spectrumDataTransFormation.ms2SpectrumStringToNestedArray(spectrumQueryParaDto.getMs2Spectrum());
+            //如需要ms2 spectrum 比對, 先不限制比數，後端比對ms2 spectrum 相似性後，再限制數據的比數
+            for (int i = 0; i < spectrumDataList.size(); i++) {
+
+                List<Double[]> refMs2Spectrum = ms2spectrumDataTransFormation.ms2SpectrumStringToNestedArray(spectrumDataList.get(i).getMs2Spectrum());
+                double similarity = ms2spectrumSimilarityCalculator.calculateMS2SpectrumSimilarity(
+                        expMs2Spectrum,
+                        refMs2Spectrum,
+                        spectrumQueryParaDto.getForwardWeight(),
+                        spectrumQueryParaDto.getReverseWeight(),
+                        spectrumQueryParaDto.getMs2SimilarityAlgorithm(),
+                        spectrumQueryParaDto.getMs2SpectrumSimilarityTolerance()
+                );
+                spectrumDataList.get(i).setMs2SpectrumSimilarity(similarity);
+
+            }
+            Collections.sort(spectrumDataList, new Comparator<SpectrumDataModel>() {
+                @Override
+                public int compare(SpectrumDataModel o1, SpectrumDataModel o2) {
+                    return o2.getMs2SpectrumSimilarity().compareTo(o1.getMs2SpectrumSimilarity());
+                }
+            });
+        }
+
+
+
+
+
 
         return spectrumDataList;
     }
@@ -106,7 +137,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
                 " precursor_type, cd.name, cd.formula, cd.inchi_key, cd.inchi, cd.cas, cd.kind, cd.smile from spectrum_data sd left join ms_search_library.compound_data cd on sd.compound_data_id = cd.id where ";
         Map<String, Object> map = new HashMap<>();
 
-        if (spectrumQueryParaDto.getKeyWord()== null || spectrumQueryParaDto.getKeyWord() == "") {
+        if (spectrumQueryParaDto.getKeyWord() == null || spectrumQueryParaDto.getKeyWord() == "") {
             throw new QueryParameterException("KeyWord is empty");
         }
         //process keyWord
@@ -118,18 +149,20 @@ public class SpectrumDaoImpl implements SpectrumDao {
         }
         for (int i = 0; i < keyWordArray.length; i++) {
             //當是數字
-            if (keyWordArray[i] == ""){continue;}
-            if (keyWordArray[i].matches("-?\\d+(\\.\\d+)?")){
+            if (keyWordArray[i] == "") {
+                continue;
+            }
+            if (keyWordArray[i].matches("-?\\d+(\\.\\d+)?")) {
                 System.out.println("is number");
                 double paraDouble = Double.parseDouble(keyWordArray[i]);
                 sqlString = sqlString + " `precursor_mz` >= :minPrecursorMz AND `precursor_mz` <= :maxPrecursorMz ";
                 map.put("minPrecursorMz", Double.toString(paraDouble - 0.2));
                 map.put("maxPrecursorMz", Double.toString(paraDouble + 0.2));
-            }else {
+            } else {
                 //if is string
                 sqlString = sqlString + "cd.formula = :formula or cd.name LIKE :compoundName or cd.inchi like :inChiKey ";
                 map.put("formula", keyWordArray[i]);
-                map.put("compoundName", "['"+ keyWordArray[i] + "%");
+                map.put("compoundName", "['" + keyWordArray[i] + "%");
                 map.put("inChiKey", keyWordArray[i] + "%");
             }
             sqlString = sqlString + " LIMIT :spectrumInit,:spectrumOffSet";
@@ -139,17 +172,9 @@ public class SpectrumDaoImpl implements SpectrumDao {
         }
 
 
-        System.out.println(sqlString);
-
-
         List<SpectrumDataModel> spectrumDataList = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
         return spectrumDataList;
     }
 
 
-    private SpectrumDataModel calculateMS2SpectrumSimilarity(SpectrumDataModel spectrumDataModel, String ms2Spectrum) {
-        //calculate ms2 spectrum similarity by 2D array cosine similarity
-
-        return spectrumDataModel;
-    }
 }

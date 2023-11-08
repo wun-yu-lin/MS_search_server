@@ -22,7 +22,7 @@ public class SpectrumServiceImpl implements SpectrumService{
     }
 
     @Override
-    public List<SpectrumDataModel> getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) {
+    public List<SpectrumDataModel> getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException {
         return spectrumDao.getSpectrumByParameter(spectrumQueryParaDto);
     }
 

@@ -1,50 +1,66 @@
-import SpectrumChart from "./utility/spectrumChart.js"
+import SpectrumChart from "./utility/SpectrumChart.js"
+import FetchAPI from "./utility/FetchAPI.js"
 
 const spectrumCart = new SpectrumChart();
+const fetchAPI = new FetchAPI();
 
 mainAsync();
 
 async function mainAsync() {
     createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
-
-
-
-    document.getElementById("search_button").onclick = async function () {
-        let getParameterObj = getSpectrumQueryParaFromForm()
-        console.log(getParameterObj)
-        let fetchUrl = generateGetUrlByParameter(getParameterObj, "/api/spectrum/")
-        let fetchData = await fetchSpectrumDataByGetMethod(fetchUrl)
+    document.getElementById("search_button").onclick = OnClickFunctionForSearchSpectrum
+    let firstFetchData = await sentUrlParameterToAPI()
+    if (firstFetchData.length === 0) {
+        createMessageIntoSpectrumContainer("No spectrum data found!! Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum. ")
+    } else {
         document.getElementById("spectrum_container_div").innerHTML = ""
-        if (fetchData.length === 0) {
-            createMessageIntoSpectrumContainer("No spectrum data found")
-            return
-        }
-        fetchData.forEach(function (item) {
+        firstFetchData.forEach(function (item) {
+
             let canvasDiv = createSpectrumItemElementBySpectrumData(item)
             spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
         });
+
     }
+
 
 }
 
-function generateGetUrlByParameter(getParameterObj, apiUrl) {
-    if (getParameterObj.isPassCheck === false || apiUrl === null || getParameterObj === null) {
-        alart("Please check your input data")
-        return null
-    }
-
-    apiUrl = apiUrl + "?";
-    let paraArr = Object.keys(getParameterObj)
-    //generate the url
-    for (let i = 0; i < paraArr.length; i++) {
-        if (getParameterObj[paraArr[i]] === null || paraArr[i]==="isPassCheck") {
-            continue
+async function sentUrlParameterToAPI() {
+    function isUrlParameterValid(urlParameter) {
+        if (urlParameter === undefined || urlParameter === null || urlParameter === "") {
+            return false
         }
-        apiUrl += "&"
-        apiUrl += paraArr[i] + "=" + getParameterObj[paraArr[i]]
+        return true
     }
 
-    return apiUrl
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    if (params.size === 0) return
+    let paramObject = {}
+    params.forEach(function (value, key) {
+        if (key === "keyWord" && isUrlParameterValid(value)) {
+            paramObject["keyWord"] = value
+        }
+    })
+    if (Object.keys(paramObject).length === 0) return
+
+    let fetchUrl = fetchAPI.generateGetUrlByParameter(paramObject, "/api/spectrum/fuzzy")
+    return await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+}
+
+async function OnClickFunctionForSearchSpectrum() {
+    let getParameterObj = getSpectrumQueryParaFromForm()
+    let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum/")
+    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    document.getElementById("spectrum_container_div").innerHTML = ""
+    if (fetchData.length === 0) {
+        createMessageIntoSpectrumContainer("No spectrum data found")
+        return
+    }
+    fetchData.forEach(function (item) {
+        let canvasDiv = createSpectrumItemElementBySpectrumData(item)
+        spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
+    });
 }
 
 
@@ -119,7 +135,7 @@ function getSpectrumQueryParaFromForm() {
         }
 
 
-    }catch (e) {
+    } catch (e) {
         console.log(e)
 
         //if any failed data is not valid, then set the isPassCheck to false
@@ -127,24 +143,13 @@ function getSpectrumQueryParaFromForm() {
         return null
     }
 
-    if(getParameterObj.isPassCheck=== false){
+    if (getParameterObj.isPassCheck === false) {
         alert("Please check your input data")
     }
 
     return getParameterObj
 }
 
-
-async function fetchSpectrumDataByGetMethod(url) {
-    let requestParaObj = {
-        "method": "GET",
-    }
-
-    let data = await fetch(url, requestParaObj)
-    let dataParse = await data.json()
-
-    return dataParse
-}
 
 function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
 
