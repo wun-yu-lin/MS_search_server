@@ -2,25 +2,79 @@
 
 class SpectrumChart {
 
-    createComparisonChartBySpectrumData(refSpectrumData, expSpectrumData, canvasElement) {
+    createComparisonChartBySpectrumData(refSpectrumDataArr, expSpectrumDataArr, canvasElement) {
+        if (refSpectrumDataArr.length === 0 || refSpectrumDataArr === undefined ||refSpectrumDataArr === null ||typeof(refSpectrumDataArr) !== 'object'){return;}
+        if (expSpectrumDataArr.length === 0 || expSpectrumDataArr === undefined ||expSpectrumDataArr === null ||typeof(expSpectrumDataArr) !== 'object'){return;}
+        let dataRefArray, dataExpArray
+        function prepareDataForChart() {
+            let dataDev = 0.8; //定義每隔多少放一個空值
+            let arrRefMax = Math.max(...refSpectrumDataArr.map(e=>e[0]));
+            let arrRefMin =Math.min(...refSpectrumDataArr.map(e=>e[0]));
+            let arrExpMax = Math.max(...expSpectrumDataArr.map(e=>e[0]));
+            let arrExpMin = Math.min(...expSpectrumDataArr.map(e=>e[0]));
+            let arrMax = Math.max(arrRefMax,arrExpMax);
+            let arrRefLen = refSpectrumDataArr.length;
+            let arrExpLen = expSpectrumDataArr.length;
+            refSpectrumDataArr.sort(function (a,b){return a[0] - b[0]})
+            expSpectrumDataArr.sort(function (a,b){return a[0] - b[0]})
+            dataExpArray = new Array(  Math.ceil(arrMax/dataDev)+arrRefLen+arrExpLen)
+            dataRefArray = new Array(  Math.ceil(arrMax/dataDev)+arrRefLen+arrExpLen)
 
 
+            let refDataPointer = 0;
+            let expDataPointer = 0;
+            let xData = 0.0;
+            for (let i=0; i < dataRefArray.length; i++){
+                console.log(xData, i)
+                if (xData < refSpectrumDataArr[refDataPointer][0] && xData < expSpectrumDataArr[expDataPointer][0]){
+                    // < 放入 空值
+                    dataRefArray[i] = [xData.toFixed(4),0]
+                    dataExpArray[i] = [xData.toFixed(4),0]
+                    xData+=dataDev
+                }else if( expSpectrumDataArr[expDataPointer][0]< refSpectrumDataArr[refDataPointer][0] && expDataPointer+1 < expSpectrumDataArr.length){
+                    //放入實驗值
+                    dataExpArray[i] = expSpectrumDataArr[expDataPointer]
+                    dataExpArray[i][0] = dataExpArray[i][0]
+                    dataExpArray[i][1] = (dataExpArray[i][1]*-1)
+                    dataRefArray[i] = []
+                    dataRefArray[i][0] = expSpectrumDataArr[expDataPointer][0]
+                    dataRefArray[i][1] = 0
+                    expDataPointer++
 
-        let xArray, yRefArray, yExpArray = prepareArray(refSpectrumData, expSpectrumData);
+                }else if(refDataPointer+1 < refSpectrumDataArr.length) {
 
-        let chartObject = new Chart(canvasElement, {
+                    dataRefArray[i] = refSpectrumDataArr[refDataPointer]
+                    dataRefArray[i][0] = dataRefArray[i][0]
+                    dataRefArray[i][1] = dataRefArray[i][1]
+                    dataExpArray[i] = []
+                    dataExpArray[i][0] = refSpectrumDataArr[refDataPointer][0]
+                    dataExpArray[i][1] = 0
+                    refDataPointer++
+                }
+                else{
+                    dataRefArray[i] = [xData.toFixed(4),0] //剩餘放入空值
+                    dataExpArray[i] = [xData.toFixed(4),0] //剩餘放入空值
+                }
+
+            }
+
+        }
+        prepareDataForChart()
+        let chartExpData = dataRefArray
+        let chartRefData = dataExpArray
+        new Chart(canvasElement, {
             type: 'bar',
             data: {
-                labels: testData.map(row => row[0]),
+                labels: chartExpData.map(row => row[0]),
                 datasets: [
                     {
                         label: `Reference MS/MS spectrum`,
-                        data: testData.map(row => row[1]),
+                        data: chartRefData.map(row => row[1]),
                     },
                     {
                         label: `Experiment MS/MS spectrum`,
-                        data: testData.map(row => row[1] * -1),
-                    },
+                        data: chartExpData.map(row => row[1]),
+                    }
                 ]
             },
             options: {
@@ -31,7 +85,7 @@ class SpectrumChart {
                     },
                     title: {
                         display: true,
-                        text: 'MS/MS spectrum comparison'
+                        text: 'MS/MS spectrum'
                     }
                 },
                 scales: {
@@ -72,18 +126,6 @@ class SpectrumChart {
                 }
             }
         });
-
-        function prepareArray(refSpectrumData, expSpectrumData) {
-            let xArray = [];
-            let yRefArray = [];
-            let yExpArray = [];
-
-            ///not implemented yet
-
-
-            return xArray, yRefArray, yExpArray;
-        }
-
 
     }
 
@@ -195,13 +237,6 @@ class SpectrumChart {
 }
 
 
-
-// let spectrumCart = new SpectrumChart();
-//
-//
-// document.querySelectorAll('.spectrumChart').forEach(e => {
-//     spectrumCart.createChartBySpectrumData(data,e)
-// });
 
 
 export default SpectrumChart;
