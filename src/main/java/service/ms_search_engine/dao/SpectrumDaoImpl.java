@@ -113,12 +113,21 @@ public class SpectrumDaoImpl implements SpectrumDao {
                 spectrumDataList.get(i).setMs2SpectrumSimilarity(similarity);
 
             }
+
+            for (int i = spectrumDataList.size() - 1; i >=0; i--) {
+                if (spectrumDataList.get(i).getMs2SpectrumSimilarity() < spectrumQueryParaDto.getMs2SpectrumSimilarityTolerance()) {
+                    spectrumDataList.remove(i);
+                }
+            }
             Collections.sort(spectrumDataList, new Comparator<SpectrumDataModel>() {
                 @Override
                 public int compare(SpectrumDataModel o1, SpectrumDataModel o2) {
                     return o2.getMs2SpectrumSimilarity().compareTo(o1.getMs2SpectrumSimilarity());
                 }
             });
+            
+            
+            
         }
 
 
