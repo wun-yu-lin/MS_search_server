@@ -10,8 +10,8 @@ class FetchAPI {
         // }
         //  type apiUrl:string
 
-        if (getParameterObj.isPassCheck === false || apiUrl === null || getParameterObj === null) {
-            alart("Please check your input data")
+        if (getParameterObj === null || apiUrl === null || getParameterObj.isPassCheck === false){
+            alert("Please check your input data")
             return null
         }
 
