@@ -38,6 +38,7 @@ public class SpectrumDataModel {
     private List<Double[]> ms2SpectrumList;
     private String precursorType;
     private Double ms2SpectrumSimilarity;
+    private String dataSource;
 
     //compound info
     private String formula;

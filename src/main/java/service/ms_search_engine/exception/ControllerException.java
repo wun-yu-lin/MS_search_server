@@ -28,4 +28,10 @@ public class ControllerException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("QueryParameterException: " + exception.getMessage());
     }
+
+    @ExceptionHandler(DatabaseInsertErrorException.class)
+    public ResponseEntity<String> prepareResponseForDatabaseInsertErrorException(DatabaseInsertErrorException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("DatabaseInsertErrorException: " + exception.getMessage());
+    }
 }

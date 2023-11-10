@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
+import service.ms_search_engine.exception.DatabaseInsertErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.service.SpectrumService;
@@ -119,6 +120,16 @@ public class SpectrumController {
         System.out.println("spectrumDataModel1 的IonMode值為：" + spectrumDataModel1.getIonMode());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModel);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<String> postSpectrum(@RequestBody SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException{
+        log.info("Post request for spectrum");
+        Boolean isPostSuccess = spectrumService.postSpectrum(spectrumDataModel);
+        if (!isPostSuccess) {
+            throw new DatabaseInsertErrorException("post spectrum failed");
+        }
+        return ResponseEntity.status(HttpStatus.OK.value()).body("post spectrum success");
     }
 
 

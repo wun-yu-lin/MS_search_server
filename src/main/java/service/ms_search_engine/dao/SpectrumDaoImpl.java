@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
+import service.ms_search_engine.exception.DatabaseInsertErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.utility.MS2spectrumDataTransFormation;
@@ -22,8 +23,9 @@ public class SpectrumDaoImpl implements SpectrumDao {
 
     @Override
     public SpectrumDataModel getSpectrumByID(int id) {
-        String sqlString = "SELECT compound_data_id, compound_classification_id, id, author_id, ms_level, precursor_mz, exact_mass" +
-                ", collision_energy, mz_error, last_modify, date_created, data_source, tool_type, instrument, ion_mode, ms2_spectrum, precursor_type  from spectrum_data WHERE id = :id";
+        String sqlString = "SELECT compound_data_id, sd.compound_classification_id, sd.id, author_id, ms_level, precursor_mz, sd.exact_mass" +
+                ", collision_energy, mz_error, last_modify, date_created, data_source, tool_type, instrument, ion_mode, ms2_spectrum," +
+                " precursor_type, cd.name, cd.formula, cd.inchi_key, cd.inchi, cd.cas, cd.kind, cd.smile from spectrum_data sd left join ms_search_library.compound_data cd on sd.compound_data_id = cd.id WHERE sd.id = :id";
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
         List<SpectrumDataModel> spectrumDataList = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
@@ -183,6 +185,34 @@ public class SpectrumDaoImpl implements SpectrumDao {
 
         List<SpectrumDataModel> spectrumDataList = namedParameterJdbcTemplate.query(sqlString, map, new SpectrumDataRowMapper());
         return spectrumDataList;
+    }
+
+    @Override
+    public Boolean postSpectrum(SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException {
+
+
+        String sqlString = "INSERT INTO ms_search_library.spectrum_data (compound_data_id, compound_classification_id, author_id, ms_level, precursor_mz, exact_mass, collision_energy, mz_error, data_source, tool_type, instrument, ion_mode, ms2_spectrum, precursor_type)  " +
+                " values (:compoundDataId, :compoundClassificationId, :authorId, :msLevel, " +
+                "  :precursorMz, :exactMass, :collisionEnergy, :mzError, :dataSource, :toolType, "+
+                " :instrument, :ionMode, :ms2Spectrum, :precursorType) ;";
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("compoundDataId", spectrumDataModel.getCompoundDataId());
+        map.put("compoundClassificationId", spectrumDataModel.getCompoundClassificationId());
+        map.put("authorId", spectrumDataModel.getAuthorId());
+        map.put("msLevel", spectrumDataModel.getMsLevel());
+        map.put("precursorMz", spectrumDataModel.getPrecursorMz());
+        map.put("exactMass", spectrumDataModel.getExactMass());
+        map.put("collisionEnergy", spectrumDataModel.getCollisionEnergy());
+        map.put("mzError", spectrumDataModel.getMzError());
+        map.put("dataSource", spectrumDataModel.getDataSource());
+        map.put("toolType", spectrumDataModel.getToolType());
+        map.put("instrument", spectrumDataModel.getInstrument());
+        map.put("ionMode", spectrumDataModel.getIonMode());
+        map.put("ms2Spectrum", spectrumDataModel.getMs2Spectrum());
+        map.put("precursorType", spectrumDataModel.getPrecursorType());
+
+        int insertResult = namedParameterJdbcTemplate.update(sqlString, map);
+        return insertResult==1;
     }
 
 

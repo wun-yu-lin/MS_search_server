@@ -1,6 +1,7 @@
 package service.ms_search_engine.dao;
 
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
+import service.ms_search_engine.exception.DatabaseInsertErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.SpectrumDataModel;
 
@@ -11,5 +12,6 @@ public interface SpectrumDao {
 
     public List<SpectrumDataModel>  getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException;
     public List<SpectrumDataModel>  getSpectrumByFuzzySearch(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException;
+    public Boolean postSpectrum(SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException;
 
 }
