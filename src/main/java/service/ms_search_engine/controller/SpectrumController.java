@@ -50,7 +50,7 @@ public class SpectrumController {
 
 
     @Operation(summary = "Get a spectrum by parameter")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<SpectrumDataModel>> getSpectrumList(
             @RequestParam(defaultValue = "0", required = true) int spectrumInit,
             @RequestParam(defaultValue = "10", required = true) int spectrumOffSet,
@@ -122,7 +122,7 @@ public class SpectrumController {
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModel);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<String> postSpectrum(@RequestBody SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException{
         log.info("Post request for spectrum");
         Boolean isPostSuccess = spectrumService.postSpectrum(spectrumDataModel);

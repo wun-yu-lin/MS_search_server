@@ -38,3 +38,7 @@ build/
 
 ##.json
 *.json
+*.zip
+*.tar.gz
+*.out
+*.sql

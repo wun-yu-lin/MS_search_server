@@ -24,9 +24,12 @@ async function mainAsync() {
 
             let canvasDiv = createSpectrumItemElementBySpectrumData(item)
             spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
+
         });
+        return
 
     }
+    searchDivDeFaultPara();
 
 
 }
@@ -56,7 +59,7 @@ async function sentParameterToFuzzyAPI() {
 
 async function OnClickFunctionForSearchSpectrum() {
     let getParameterObj = getSpectrumQueryParaFromForm()
-    let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum/")
+    let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum")
     let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
     document.getElementById("spectrum_container_div").innerHTML = ""
     if (fetchData.length === 0 || fetchData === undefined || fetchData === null){
@@ -259,4 +262,69 @@ function createMessageIntoSpectrumContainer(message) {
     containerDiv.innerHTML = `<div class="spectrum_item_div">
 			<h1>${message}</h1>
 		</div>`
+}
+
+function searchDivDeFaultPara() {
+    document.getElementById("compound_name_para").value = "tetracycline"
+    document.getElementById("formula").value = "C22H24N2O8"
+    document.getElementById("exact_mass").value = "444.153"
+    document.getElementById("precursor_mz").value = "443.146"
+    document.getElementById("tolerance").value = "20"
+    document.getElementById("ms2Spectrum").innerHTML = `65.0397:1.632979
+65.9986:5.718588 
+68.9982:4.494347 
+83.0503:1.145107 
+84.0091:30.786080 
+86.0248:5.028993 
+87.0088:3.734123 
+93.0346:2.106641 
+96.0091:2.026262 
+96.9931:5.828214 
+99.0087:6.859444 
+100.0767:5.077220 
+109.0295:13.387728 
+111.0088:2.607061 
+111.0452:19.154336 
+119.0137:1.196135 
+119.0499:1.102481 
+121.0294:2.041301 
+123.0451:4.538011 
+124.0041:1.070952 
+124.0164:4.551079 
+125.072:29.207033 
+126.0196:4.483457 
+126.0561:19.839471 
+133.0297:8.994295 
+134.0248:3.681851 
+135.0088:15.641228 
+135.0452:100.000000 
+136.0402:5.006176 
+137.0246:1.794358 
+139.0149:6.120792 
+142.0146:8.569897 
+142.9986:6.951542 
+145.0294:6.189243 
+146.0371:1.454694 
+147.0451:5.466045 
+149.0242:6.463048 
+152.0353:2.061422 
+153.0194:1.124572 
+159.0451:1.176533 
+161.0243:98.135324 
+162.0197:10.310012 
+163.0034:4.047547 
+163.0399:7.390252 
+169.0619:3.738271 
+172.053:1.462058 
+173.0606:7.535037 
+175.0399:3.544844 
+180.0301:6.426437 
+183.0815:1.350980 
+187.0402:1.771229 
+187.0766:18.960494 
+189.0552:1.255252 
+201.0923:3.768867 
+211.0758:1.848289 
+214.0634:2.049080`
+    document.getElementById("ms2_para").value = "0.5"
 }
