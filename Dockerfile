@@ -5,4 +5,4 @@ ADD src/main/resources/application.properties /app/config/develop/application.pr
 ADD src/main/resources/application-production.properties /app/config/production/application.properties
 EXPOSE 8080
 LABEL authors="linwunyu"
-ENTRYPOINT ["java","-jar","app.jar", "--spring.config.name=application", "--spring.config.location=/app/config/develop/"]
+ENTRYPOINT ["java","-jar","app.jar", "--spring.config.name=application", "--spring.config.location=/app/config/production/"]
