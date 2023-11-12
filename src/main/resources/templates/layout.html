@@ -31,7 +31,12 @@
 
 </header>
 <body>
+<div id="loadingScreen" class="loadingScreen">
+	<div class="loadingioMask">
+		<img class="loadingImg" th:src="@{/icon/loading.gif}" alt="loading icon">
 
+	</div>
+</div>
 <div class="wrapper">
 	<div class="container" layout:fragment="content"></div>
 </div>

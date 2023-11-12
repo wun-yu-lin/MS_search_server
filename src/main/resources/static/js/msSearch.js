@@ -11,11 +11,13 @@ mainAsync();
 // spectrumCart.createComparisonChartBySpectrumData(test,test1, canvasDiv)
 
 async function mainAsync() {
+    document.getElementById("loadingScreen").classList.remove("hidden")
+
     createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
     document.getElementById("search_button").onclick = OnClickFunctionForSearchSpectrum
     let firstFetchData = await sentParameterToFuzzyAPI()
     if (firstFetchData == null) {
-    }else if (firstFetchData.length===0){
+    } else if (firstFetchData.length === 0) {
 
         createMessageIntoSpectrumContainer("No spectrum data found!! Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum. ")
     } else {
@@ -26,10 +28,13 @@ async function mainAsync() {
             spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
 
         });
+        document.getElementById("loadingScreen").classList.add("hidden")
+
         return
 
     }
     searchDivDeFaultPara();
+    document.getElementById("loadingScreen").classList.add("hidden")
 
 
 }
@@ -58,25 +63,27 @@ async function sentParameterToFuzzyAPI() {
 }
 
 async function OnClickFunctionForSearchSpectrum() {
+    document.getElementById("loadingScreen").classList.remove("hidden")
     let getParameterObj = getSpectrumQueryParaFromForm()
     let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum")
     let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
     document.getElementById("spectrum_container_div").innerHTML = ""
-    if (fetchData.length === 0 || fetchData === undefined || fetchData === null){
+    if (fetchData.length === 0 || fetchData === undefined || fetchData === null || getParameterObj === null) {
         createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
+        document.getElementById("loadingScreen").classList.add("hidden")
         return
     }
 
-    if (getParameterObj.ms2Spectrum!=null && getParameterObj.ms2Spectrum!==""){
+    if (getParameterObj.ms2Spectrum != null && getParameterObj.ms2Spectrum !== "") {
         let expMS2spectrum = ms2SpectrumStringToNestArr(getParameterObj.ms2Spectrum)
         //ms2 spectrum search
-        let newExpMS2spectrum =  Array.from(expMS2spectrum)
+        let newExpMS2spectrum = Array.from(expMS2spectrum)
         fetchData.forEach(function (item) {
             let expMS2spectrum = ms2SpectrumStringToNestArr(getParameterObj.ms2Spectrum)
             let canvasDiv = createSpectrumItemElementBySpectrumData(item)
-            spectrumCart.createComparisonChartBySpectrumData(newExpMS2spectrum,item["ms2SpectrumList"], canvasDiv)
+            spectrumCart.createComparisonChartBySpectrumData(newExpMS2spectrum, item["ms2SpectrumList"], canvasDiv)
         });
-    }else{
+    } else {
         //no ms2 spectrum search
         fetchData.forEach(function (item) {
             let canvasDiv = createSpectrumItemElementBySpectrumData(item)
@@ -84,6 +91,7 @@ async function OnClickFunctionForSearchSpectrum() {
         });
 
     }
+    document.getElementById("loadingScreen").classList.add("hidden")
 }
 
 
@@ -109,15 +117,13 @@ function getSpectrumQueryParaFromForm() {
         isPassCheck: true
     }
     try {
-
+        //base parameter
         getParameterObj.compoundName = document.getElementById("compound_name_para").value
         getParameterObj.formula = document.getElementById("formula").value
         getParameterObj.ionMode = document.getElementById("charge").value
         getParameterObj.ms2Spectrum = document.getElementById("ms2Spectrum").value
-
         let tolerance_unit = document.getElementById("tolerance_unit").value
         let tolerance_value = parseFloat(document.getElementById("tolerance").value)
-        let ms2_tolerance_value = parseFloat(document.getElementById("ms2_para").value)
         let exactMass = parseFloat(document.getElementById("exact_mass").value)
         let precursorMz = parseFloat(document.getElementById("precursor_mz").value)
 
@@ -137,7 +143,20 @@ function getSpectrumQueryParaFromForm() {
             }
         }
 
-        //計算出tolerance的值 - precursor mz
+        //if tolerance too large, is not allow to search
+        if (tolerance_value > 100 && tolerance_unit === "ppm") {
+            alert("Tolerance not allow to larger than 100 ppm")
+            getParameterObj.isPassCheck = false
+            return null
+        }
+        if (tolerance_value > 2 && tolerance_unit === "Da") {
+            alert("Tolerance not allow to larger than 2 Da")
+            getParameterObj.isPassCheck = false
+            return null
+        }
+
+
+        //計算出ms tolerance的值 - precursor mz
         if (isNaN(precursorMz) || precursorMz === null || precursorMz === undefined) {
             getParameterObj.maxPrecursorMz = null
             getParameterObj.minPrecursorMz = null
@@ -158,15 +177,57 @@ function getSpectrumQueryParaFromForm() {
             if (getParameterObj[keys[i]] === "" || getParameterObj[keys[i]] === undefined) {
                 getParameterObj[keys[i]] = null
             }
-            if(typeof(getParameterObj[keys[i]])=="number" && isNaN(getParameterObj[keys[i]])){
+            if (typeof (getParameterObj[keys[i]]) == "number" && isNaN(getParameterObj[keys[i]])) {
                 getParameterObj[keys[i]] = null
             }
         }
 
         //整理 MS2 spectrum 給後端做使用
-        if (getParameterObj.ms2Spectrum!=null){
+        if (getParameterObj.ms2Spectrum != null) {
             getParameterObj.ms2Spectrum = getParameterObj.ms2Spectrum.replaceAll(" ", "")
             getParameterObj.ms2Spectrum = getParameterObj.ms2Spectrum.replaceAll("\n", " ").trim()
+            //get ms2 spectrum similarity related parameter
+            getParameterObj.ms2SpectrumSimilarityTolerance = parseFloat(document.getElementById("ms2_para").value)
+            getParameterObj.forwardWeight = parseFloat(document.getElementById("forward_para").value)
+            getParameterObj.reverseWeight = parseFloat(document.getElementById("reverse_para").value)
+            getParameterObj.ms2SimilarityAlgorithm = document.getElementById("algorithm_para").value
+            if (!isNaN(getParameterObj.ms2SpectrumSimilarityTolerance) && getParameterObj.ms2SpectrumSimilarityTolerance > 1){
+                alert("MS2 spectrum similarity tolerance not allow to larger than 1")
+                getParameterObj.isPassCheck = false
+                return null}
+            if (!isNaN(getParameterObj.forwardWeight) && getParameterObj.forwardWeight >1) {
+                alert("sum of weight not allow to larger than 1")
+                getParameterObj.isPassCheck = false
+                return null
+            }
+            if (!isNaN(getParameterObj.reverseWeight) && getParameterObj.reverseWeight >1) {
+                alert("sum of weight not allow to larger than 1")
+                getParameterObj.isPassCheck = false
+                return null
+            }
+
+            if (isNaN(getParameterObj.ms2SpectrumSimilarityTolerance)) getParameterObj.ms2SpectrumSimilarityTolerance = null
+            if (isNaN(getParameterObj.forwardWeight)) getParameterObj.forwardWeight = null
+            if (isNaN(getParameterObj.reverseWeight)) getParameterObj.reverseWeight = null
+            //判斷 forward weight 與 reverse weight 相加是否為 1
+
+            if (getParameterObj.forwardWeight === null && parseInt(getParameterObj.reverseWeight) === 1) {
+                getParameterObj.forwardWeight = 0
+                getParameterObj.reverseWeight = 1
+            }
+            if (getParameterObj.reverseWeight === null && parseInt(getParameterObj.forwardWeight) === 1) {
+                getParameterObj.forwardWeight = 1
+                getParameterObj.reverseWeight = 0
+            }
+            if (getParameterObj.forwardWeight !== null || getParameterObj.reverseWeight !== null) {
+                if ((getParameterObj.forwardWeight + getParameterObj.reverseWeight) !== 1) {
+                    alert("forward weight and reverse weight must be 1")
+                    getParameterObj.isPassCheck = false
+                    return null
+                }
+            }
+
+
 
         }
 
@@ -181,21 +242,22 @@ function getSpectrumQueryParaFromForm() {
     if (getParameterObj.isPassCheck === false) {
         alert("Please check your input data")
     }
-
+    console.log(getParameterObj)
     return getParameterObj
 }
 
-function ms2SpectrumStringToNestArr(ms2SpectrumString){
+function ms2SpectrumStringToNestArr(ms2SpectrumString) {
     let resultArr = []
     let ms2SpectrumStringArr = ms2SpectrumString.split(" ")
     for (let i = 0; i < ms2SpectrumStringArr.length; i++) {
         let ms2SpectrumStringArrElement = ms2SpectrumStringArr[i].split(":")
         let mz = parseFloat(ms2SpectrumStringArrElement[0])
         let intensity = parseFloat(ms2SpectrumStringArrElement[1])
-        resultArr.push([mz,intensity])
+        resultArr.push([mz, intensity])
     }
     return resultArr
 }
+
 function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
 
 
@@ -223,10 +285,16 @@ function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
         if (spectrumDataObj[spectrumDataObjKeys[i]] == null || spectrumDataObj[spectrumDataObjKeys[i]] === undefined) {
             spectrumDataObj[spectrumDataObjKeys[i]] = "N/A"
         }
+        if (spectrumDataObjKeys[i] === "ms2SpectrumSimilarity") {
+            typeof (spectrumDataObj[spectrumDataObjKeys[i]]) === "number" ? spectrumDataObj[spectrumDataObjKeys[i]] = spectrumDataObj[spectrumDataObjKeys[i]].toFixed(4) : spectrumDataObj[spectrumDataObjKeys[i]] = "N/A"
+        }
     }
+    spectrumDataObj.name = JSON.parse(spectrumDataObj.name.replace(/'/g, '"'))
 
     let tableContent = [
-        ["Compound Name:", `${spectrumDataObj.name}`],
+        ["Compound Name:", `${spectrumDataObj.name[0]}`],
+        ["CAS No.:", `${spectrumDataObj.cas}`],
+        ["MS Level:", `${spectrumDataObj.msLevel}`],
         ["Exact Mass:", `${spectrumDataObj.exactMass}`],
         ["Formula:", `${spectrumDataObj.formula}`],
         ["InChi key", `${spectrumDataObj.inChiKey}`],
@@ -234,8 +302,11 @@ function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
         ["Collision Energy:", `${spectrumDataObj.collisionEnergy}`],
         ["Precursor m/z:", `${spectrumDataObj.precursorMz}`],
         ["Adduct ion:", `${spectrumDataObj.precursorType}`],
+        ["Data source:", `${spectrumDataObj.dataSourceArrayList}`],
         ["Tool type:", `${spectrumDataObj.toolType}`],
-        ["SMILE:", `${spectrumDataObj.smile}`]
+        ["SMILE:", `${spectrumDataObj.smile}`],
+        ["Kind:", `${spectrumDataObj.kind}`],
+        ["MS2 similarity:", `${spectrumDataObj.ms2SpectrumSimilarity}`]
     ];
 
     for (let i = 0; i < tableContent.length; i++) {
@@ -326,5 +397,5 @@ function searchDivDeFaultPara() {
 201.0923:3.768867 
 211.0758:1.848289 
 214.0634:2.049080`
-    document.getElementById("ms2_para").value = "0.5"
+    // document.getElementById("ms2_para").value = "0.5"
 }

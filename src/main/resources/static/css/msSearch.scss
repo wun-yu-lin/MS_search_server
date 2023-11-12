@@ -19,7 +19,6 @@
       background-color: #D9D9D9;
       display: flex;
       flex-direction: column;
-      gap: 5px;
       position: fixed;
     }
   .search_button_div,
@@ -30,18 +29,26 @@
   .tolerance_para_div,
   .charge_para_div,
   .ms2Spectrum_para_div,
-  .ms2_para_div{
+  .ms2_para_div,
+  .weight_para_div,
+  .algorithm_para_div
+  {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    padding: 10px;
+    padding: 7px;
     input, select {
       width: 200px;
       height: 30px;
       border-radius: 10px;
       padding: 0 10px;
     }
+  }
+  .weight_para_div_div{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
   .search_button_div {
     display: flex;

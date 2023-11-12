@@ -27,7 +27,8 @@ public class SpectrumDataRowMapper implements RowMapper<SpectrumDataModel> {
         spectrumData.setDateCreated(rs.getTimestamp("date_created"));
 
         //原本為字串，先拆為ArrayList，並將賦予給spectrumData內部屬性
-        ArrayList<String> dataSourceArrList = new ArrayList<String>(Arrays.asList(rs.getString("data_source").split("','")));
+        ArrayList<String> dataSourceArrList = new ArrayList<String>(Arrays.asList(rs.getString("data_source").replace("[","").replace("]","") .replaceAll("'", "").split(", ")));
+
         spectrumData.setDataSourceArrayList(dataSourceArrList);
         spectrumData.setToolType(rs.getString("tool_type"));
         spectrumData.setInstrument(rs.getString("instrument"));

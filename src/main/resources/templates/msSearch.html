@@ -27,7 +27,7 @@
 				<input class="formula_para" type="text" name="formula_para" id="formula">
 			</div>
 			<div class="exact_mass_para_div">
-				<label for="exact_mass">Exact Mass</label>
+				<label for="exact_mass">Exact mass</label>
 				<input class="exact_mass" type="text" name="exact_mass" id="exact_mass">
 			</div>
 			<div class="precursor_mz_para_div">
@@ -35,7 +35,7 @@
 				<input class="precursor_mz" type="text" name="precursor_mz" id="precursor_mz">
 			</div>
 			<div class="tolerance_para_div">
-				<label for="tolerance">Tolerance</label>
+				<label for="tolerance">MS tolerance</label>
 				<div class="tolerance_para_div_div">
 					<input class="tolerance_input" type="text" name="tolerance" id="tolerance">
 					<select name="tolerance" id="tolerance_unit" class="tolerance_para_select">
@@ -53,7 +53,7 @@
 				</select>
 			</div>
 			<div class="ms2Spectrum_para_div">
-				<label for="ms2Spectrum">MS2 Spectrum</label>
+				<label for="ms2Spectrum">MS2 spectrum</label>
 				<textarea name="ms2Spectrum" class="ms2Spectrum" rows="10" id="ms2Spectrum" placeholder=" m/z:abundance(%)
 				445.16:80.2
 				330.2:10.1
@@ -63,7 +63,30 @@
 			</div>
 			<div class="ms2_para_div">
 				<label for="ms2_para">MS/MS similarity tolerance</label>
-				<input class="ms2_para_input" type="text" name="ms2_para" id="ms2_para" placeholder="please input 0.00-1.00">
+				<input class="ms2_para_input" type="text" name="ms2_para" id="ms2_para" placeholder="0.00-1.00, default 0.5">
+			</div>
+
+<!--			<div class="weight_para_div">-->
+<!--				<label for="forward_para">MS/MS similarity tolerance</label>-->
+<!--				<input class="forward_para_input" type="text" name="forward_para" id="forward_para" placeholder="0.00-1.00, default 0.5">-->
+<!--			</div>-->
+<!--			<div class="reverse_para_div">-->
+<!--				<label for="reverse_para">MS/MS similarity tolerance</label>-->
+<!--				<input class="reverse_para_input" type="text" name="reverse_para" id="reverse_para" placeholder="0.00-1.00, default 0.5">-->
+<!--			</div>-->
+			<div class="weight_para_div">
+				<p>Similarity score weight<br><span style="font-size: 14px; font-weight: 300; color: #4D4D4D">(sum needs to be 1)</span> </p>
+				<div class="weight_para_div_div">
+					<input class="weight_para_input" type="text" name="forward_para" id="forward_para" placeholder="Forward, default 0.5">
+					<input class="weight_para_input" type="text" name="reverse_para" id="reverse_para" placeholder="Reverse, default 0.5">
+				</div>
+			</div>
+			<div class="algorithm_para_div">
+				<label for="algorithm_para">Similarity Algorithm</label>
+				<select name="algorithm_para" id="algorithm_para">
+					<option value="dotPlot">Dot plot</option>
+					<option value="intensityDeviation">Intensity Deviation</option>
+				</select>
 			</div>
 		</div>
 

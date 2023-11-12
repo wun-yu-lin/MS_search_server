@@ -5,8 +5,10 @@ const fetchAPI = new FetchAPI();
 baseMain();
 
 async function baseMain() {
+    document.getElementById("loadingScreen").classList.remove("hidden")
     document.getElementById("msSearch").onkeydown = sentSearchKeyToAPI;
     document.getElementById("header_search_button").onclick = sentSearchKeyToAPI;
+    document.getElementById("loadingScreen").classList.add("hidden")
 }
 
 async function sentSearchKeyToAPI(event) {

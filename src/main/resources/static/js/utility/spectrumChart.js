@@ -7,7 +7,7 @@ class SpectrumChart {
         if (expSpectrumDataArr.length === 0 || expSpectrumDataArr === undefined ||expSpectrumDataArr === null ||typeof(expSpectrumDataArr) !== 'object'){return;}
         let dataRefArray, dataExpArray
         function prepareDataForChart() {
-            let dataDev = 2.0; //定義每隔多少放一個空值
+            let dataDev = 1; //定義每隔多少放一個空值
             let arrRefMax = Math.max(...refSpectrumDataArr.map(e=>e[0]));
             let arrRefMin =Math.min(...refSpectrumDataArr.map(e=>e[0]));
             let arrExpMax = Math.max(...expSpectrumDataArr.map(e=>e[0]));
@@ -75,12 +75,12 @@ class SpectrumChart {
                 labels: chartExpData.map(row => row[0]),
                 datasets: [
                     {
-                        label: `Reference MS/MS spectrum`,
-                        data: chartRefData.map(row => row[1]),
-                    },
-                    {
                         label: `Experiment MS/MS spectrum`,
                         data: chartExpData.map(row => row[1]),
+                    },
+                    {
+                        label: `Reference MS/MS spectrum`,
+                        data: chartRefData.map(row => row[1]),
                     }
                 ]
             },

@@ -204,7 +204,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
         map.put("exactMass", spectrumDataModel.getExactMass());
         map.put("collisionEnergy", spectrumDataModel.getCollisionEnergy());
         map.put("mzError", spectrumDataModel.getMzError());
-        map.put("dataSource", spectrumDataModel.getDataSource());
+        map.put("dataSource", spectrumDataModel.getDataSourceArrayList().toString());
         map.put("toolType", spectrumDataModel.getToolType());
         map.put("instrument", spectrumDataModel.getInstrument());
         map.put("ionMode", spectrumDataModel.getIonMode());

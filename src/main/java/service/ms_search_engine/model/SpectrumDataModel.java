@@ -15,7 +15,6 @@ import java.util.List;
 
 @Component
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class SpectrumDataModel {
     //spectrum info
@@ -38,7 +37,7 @@ public class SpectrumDataModel {
     private List<Double[]> ms2SpectrumList;
     private String precursorType;
     private Double ms2SpectrumSimilarity;
-    private String dataSource;
+//    private String dataSource;
 
     //compound info
     private String formula;
