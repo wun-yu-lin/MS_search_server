@@ -29,8 +29,8 @@ class SpectrumChart {
             for (let i=0; i < dataRefArray.length; i++){
                 if (xData < currRefX && xData < currExpX){
                     // < 放入 空值
-                    dataRefArray[i] = [xData.toFixed(4),0]
-                    dataExpArray[i] = [xData.toFixed(4),0]
+                    dataRefArray[i] = [xData,0]
+                    dataExpArray[i] = [xData,0]
                     xData+=dataDev
                 }else if( currExpX<= currRefX && expDataPointer+1 <= expSpectrumDataArr.length){
                     //放入實驗值
@@ -52,15 +52,15 @@ class SpectrumChart {
                     dataRefArray[i][1] = (dataRefArray[i][1]*-1)
                     dataExpArray[i] = []
                     dataExpArray[i][0] = refSpectrumDataArr[refDataPointer][0]
-                    dataExpArray[i][1] = (0).toFixed(4)
+                    dataExpArray[i][1] = (0)
                     refDataPointer++
                     if(refDataPointer < refSpectrumDataArr.length){
                         currRefX = refSpectrumDataArr[refDataPointer][0]
                     }
                 }
                 else{
-                    dataRefArray[i] = [xData.toFixed(4),0] //剩餘放入空值
-                    dataExpArray[i] = [xData.toFixed(4),0] //剩餘放入空值
+                    dataRefArray[i] = [xData,0] //剩餘放入空值
+                    dataExpArray[i] = [xData,0] //剩餘放入空值
                 }
 
             }
@@ -72,15 +72,15 @@ class SpectrumChart {
         new Chart(canvasElement, {
             type: 'bar',
             data: {
-                labels: chartExpData.map(row => row[0]),
+                labels: chartExpData.map(row => row[0].toFixed(2)),
                 datasets: [
                     {
                         label: `Experiment MS/MS spectrum`,
-                        data: chartExpData.map(row => row[1]),
+                        data: chartExpData.map(row => row[1].toFixed(2)),
                     },
                     {
                         label: `Reference MS/MS spectrum`,
-                        data: chartRefData.map(row => row[1]),
+                        data: chartRefData.map(row => row[1].toFixed(2)),
                     }
                 ]
             },

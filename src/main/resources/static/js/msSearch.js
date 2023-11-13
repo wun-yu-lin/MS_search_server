@@ -44,12 +44,18 @@ async function sentParameterToFuzzyAPI() {
         if (urlParameter === undefined || urlParameter === null || urlParameter === "") {
             return false
         }
+        //if exist keyword parameter, then set the keyword parameter to the search bar
+
         return true
     }
 
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
-    if (params.size === 0) return
+    if (params.size === 0) {
+        document.getElementById("msSearch").value = ""
+        return
+    }
+    document.getElementById("msSearch").value = params.get("keyWord")
     let paramObject = {}
     params.forEach(function (value, key) {
         if (key === "keyWord" && isUrlParameterValid(value)) {
