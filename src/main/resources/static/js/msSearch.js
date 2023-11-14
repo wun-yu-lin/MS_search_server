@@ -1,14 +1,33 @@
 import SpectrumChart from "./utility/SpectrumChart.js"
 import FetchAPI from "./utility/FetchAPI.js"
+let scrollDownObserver;
+//global variable for record page status
+let _pageStatusObj = {
+    "isFirstLoad": false,
+    "isNextPage": false,
+    "nextPageSpectrumInit": 0,
+    "fetchUrl": null,
+    "isFetching": false,
+    initialPara(){
+        this.isFirstLoad = false
+        this.isNextPage = false
+        this.nextPageSpectrumInit = 0
+        this.fetchUrl = null
+        this.isFetching = false
+
+    }
+};
+
 
 const spectrumCart = new SpectrumChart();
 const fetchAPI = new FetchAPI();
 
-mainAsync();
 
+mainAsync();
 
 // let canvasDiv = createSpectrumItemElementBySpectrumData(test2)
 // spectrumCart.createComparisonChartBySpectrumData(test,test1, canvasDiv)
+
 
 async function mainAsync() {
     document.getElementById("loadingScreen").classList.remove("hidden")
@@ -16,6 +35,8 @@ async function mainAsync() {
     createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
     document.getElementById("search_button").onclick = OnClickFunctionForSearchSpectrum
     let firstFetchData = await sentParameterToFuzzyAPI()
+
+    //處理Fuzzy API的回傳結果
     if (firstFetchData == null) {
     } else if (firstFetchData.length === 0) {
 
@@ -29,17 +50,19 @@ async function mainAsync() {
 
         });
         document.getElementById("loadingScreen").classList.add("hidden")
-
+        if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("no more data.")
+        createScrollDownObserverForNextPage();
         return
 
     }
     searchDivDeFaultPara();
     document.getElementById("loadingScreen").classList.add("hidden")
-
+    createScrollDownObserverForNextPage();
 
 }
 
 async function sentParameterToFuzzyAPI() {
+    _pageStatusObj.initialPara();
     function isUrlParameterValid(urlParameter) {
         if (urlParameter === undefined || urlParameter === null || urlParameter === "") {
             return false
@@ -65,14 +88,47 @@ async function sentParameterToFuzzyAPI() {
     if (Object.keys(paramObject).length === 0) return
 
     let fetchUrl = fetchAPI.generateGetUrlByParameter(paramObject, "/api/spectrum/fuzzy")
-    return await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    _pageStatusObj.fetchUrl = fetchUrl
+    _pageStatusObj.isFetching = true
+    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    _pageStatusObj.isFetching = false
+    _pageStatusObj.isFirstLoad = true
+    if (typeof(fetchData) === "object") {
+        _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
+        if (fetchData.length >=10) {
+            _pageStatusObj.isNextPage = true
+        }else {
+            _pageStatusObj.isNextPage = false
+        }
+    }
+
+    return fetchData
+
+
 }
 
 async function OnClickFunctionForSearchSpectrum() {
+    _pageStatusObj.initialPara();
     document.getElementById("loadingScreen").classList.remove("hidden")
     let getParameterObj = getSpectrumQueryParaFromForm()
     let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum")
+    _pageStatusObj.fetchUrl = fetchUrl
+    _pageStatusObj.isFetching = true
     let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    _pageStatusObj.isFetching = false
+    _pageStatusObj.isFirstLoad = true
+    if (typeof(fetchData) === "object") {
+        _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
+        if (fetchData.length >=10) {
+            _pageStatusObj.isNextPage = true
+        }else {
+            _pageStatusObj.isNextPage = false
+        }
+    }
+
+
+
+
     document.getElementById("spectrum_container_div").innerHTML = ""
     if (fetchData.length === 0 || fetchData === undefined || fetchData === null || getParameterObj === null) {
         createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
@@ -132,7 +188,6 @@ function getSpectrumQueryParaFromForm() {
         let tolerance_value = parseFloat(document.getElementById("tolerance").value)
         let exactMass = parseFloat(document.getElementById("exact_mass").value)
         let precursorMz = parseFloat(document.getElementById("precursor_mz").value)
-
         //計算出tolerance的值 - exact mass
         if (isNaN(exactMass) || exactMass === null || exactMass === undefined) {
             getParameterObj.maxExactMass = null
@@ -248,7 +303,6 @@ function getSpectrumQueryParaFromForm() {
     if (getParameterObj.isPassCheck === false) {
         alert("Please check your input data")
     }
-    console.log(getParameterObj)
     return getParameterObj
 }
 
@@ -295,7 +349,11 @@ function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
             typeof (spectrumDataObj[spectrumDataObjKeys[i]]) === "number" ? spectrumDataObj[spectrumDataObjKeys[i]] = spectrumDataObj[spectrumDataObjKeys[i]].toFixed(4) : spectrumDataObj[spectrumDataObjKeys[i]] = "N/A"
         }
     }
-    spectrumDataObj.name = JSON.parse(spectrumDataObj.name.replace(/'/g, '"'))
+    try{
+        spectrumDataObj.name = JSON.parse(spectrumDataObj.name.replace(/'/g, '"'))
+    }catch (e) {
+        console.log(e)
+    }
 
     let tableContent = [
         ["Compound Name:", `${spectrumDataObj.name[0]}`],
@@ -339,6 +397,13 @@ function createMessageIntoSpectrumContainer(message) {
     containerDiv.innerHTML = `<div class="spectrum_item_div">
 			<h1>${message}</h1>
 		</div>`
+}
+function insertMessageIntoSpectrumContainer(message) {
+    let containerDiv = document.getElementById("spectrum_container_div");
+    let item_div = document.createElement("div");
+    item_div.className = "spectrum_item_div";
+    item_div.innerHTML = `<h1>${message}</h1>`
+    containerDiv.appendChild(item_div)
 }
 
 function searchDivDeFaultPara() {
@@ -404,4 +469,54 @@ function searchDivDeFaultPara() {
 211.0758:1.848289 
 214.0634:2.049080`
     // document.getElementById("ms2_para").value = "0.5"
+}
+
+
+function createScrollDownObserverForNextPage(){
+    let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
+        if(entries[0].intersectionRatio < 0.5 && entries[0].isIntersecting > 0.1){
+            console.log(_pageStatusObj)
+            console.log("scroll down");
+            let targetElement = entries[0].target;
+            observe.unobserve(entries[0].target);
+            if(_pageStatusObj.isFetching === true) return observe.observe(targetElement);
+            if(_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
+            if(_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
+            //add action of loading
+
+            let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(_pageStatusObj.fetchUrl + `&spectrumInit=${_pageStatusObj.nextPageSpectrumInit}`, {"method": "GET"})
+            if (typeof(fetchData) === "object") {
+                _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
+                if (fetchData.length >=10) {
+                    _pageStatusObj.isNextPage = true
+                }else {
+                    _pageStatusObj.isNextPage = false
+                }
+            }
+
+            if (fetchData == null) {
+            } else if (fetchData.length === 0) {
+
+                insertMessageIntoSpectrumContainer("no more data.")
+            } else {
+                fetchData.forEach(function (item) {
+
+                    let canvasDiv = createSpectrumItemElementBySpectrumData(item)
+                    spectrumCart.createChartBySpectrumData(item["ms2SpectrumList"], canvasDiv)
+
+                });
+                document.getElementById("loadingScreen").classList.add("hidden")
+                if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("no more data.")
+                return observe.observe(targetElement);
+
+            }
+
+            observe.observe(targetElement);
+            }
+
+
+
+
+    })
+    scrollDownObserver.observe(document.querySelector(".footer"));
 }

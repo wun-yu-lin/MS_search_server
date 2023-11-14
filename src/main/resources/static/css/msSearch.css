@@ -38,6 +38,69 @@
   width: 100%;
   padding: 7px;
 }
+.search_div .search_button_div label, .search_div .search_button_div input, .search_div .search_button_div p, .search_div .search_button_div textarea, .search_div .search_button_div span, .search_div .search_button_div select,
+.search_div .compound_name_para_div label,
+.search_div .compound_name_para_div input,
+.search_div .compound_name_para_div p,
+.search_div .compound_name_para_div textarea,
+.search_div .compound_name_para_div span,
+.search_div .compound_name_para_div select,
+.search_div .formula_para_div label,
+.search_div .formula_para_div input,
+.search_div .formula_para_div p,
+.search_div .formula_para_div textarea,
+.search_div .formula_para_div span,
+.search_div .formula_para_div select,
+.search_div .exact_mass_para_div label,
+.search_div .exact_mass_para_div input,
+.search_div .exact_mass_para_div p,
+.search_div .exact_mass_para_div textarea,
+.search_div .exact_mass_para_div span,
+.search_div .exact_mass_para_div select,
+.search_div .precursor_mz_para_div label,
+.search_div .precursor_mz_para_div input,
+.search_div .precursor_mz_para_div p,
+.search_div .precursor_mz_para_div textarea,
+.search_div .precursor_mz_para_div span,
+.search_div .precursor_mz_para_div select,
+.search_div .tolerance_para_div label,
+.search_div .tolerance_para_div input,
+.search_div .tolerance_para_div p,
+.search_div .tolerance_para_div textarea,
+.search_div .tolerance_para_div span,
+.search_div .tolerance_para_div select,
+.search_div .charge_para_div label,
+.search_div .charge_para_div input,
+.search_div .charge_para_div p,
+.search_div .charge_para_div textarea,
+.search_div .charge_para_div span,
+.search_div .charge_para_div select,
+.search_div .ms2Spectrum_para_div label,
+.search_div .ms2Spectrum_para_div input,
+.search_div .ms2Spectrum_para_div p,
+.search_div .ms2Spectrum_para_div textarea,
+.search_div .ms2Spectrum_para_div span,
+.search_div .ms2Spectrum_para_div select,
+.search_div .ms2_para_div label,
+.search_div .ms2_para_div input,
+.search_div .ms2_para_div p,
+.search_div .ms2_para_div textarea,
+.search_div .ms2_para_div span,
+.search_div .ms2_para_div select,
+.search_div .weight_para_div label,
+.search_div .weight_para_div input,
+.search_div .weight_para_div p,
+.search_div .weight_para_div textarea,
+.search_div .weight_para_div span,
+.search_div .weight_para_div select,
+.search_div .algorithm_para_div label,
+.search_div .algorithm_para_div input,
+.search_div .algorithm_para_div p,
+.search_div .algorithm_para_div textarea,
+.search_div .algorithm_para_div span,
+.search_div .algorithm_para_div select {
+  font-size: 12px;
+}
 .search_div .search_button_div input, .search_div .search_button_div select,
 .search_div .compound_name_para_div input,
 .search_div .compound_name_para_div select,
@@ -60,7 +123,7 @@
 .search_div .algorithm_para_div input,
 .search_div .algorithm_para_div select {
   width: 200px;
-  height: 30px;
+  height: 25px;
   border-radius: 10px;
   padding: 0 10px;
 }
@@ -112,7 +175,7 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   background-color: #D9D9D9;
   border-radius: 10px;
   gap: 10px;
