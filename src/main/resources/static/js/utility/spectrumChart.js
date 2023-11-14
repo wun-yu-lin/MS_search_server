@@ -2,6 +2,7 @@
 
 class SpectrumChart {
 
+
     createComparisonChartBySpectrumData(expSpectrumDataArr,refSpectrumDataArr, canvasElement) {
         if (refSpectrumDataArr.length === 0 || refSpectrumDataArr === undefined ||refSpectrumDataArr === null ||typeof(refSpectrumDataArr) !== 'object'){return;}
         if (expSpectrumDataArr.length === 0 || expSpectrumDataArr === undefined ||expSpectrumDataArr === null ||typeof(expSpectrumDataArr) !== 'object'){return;}
