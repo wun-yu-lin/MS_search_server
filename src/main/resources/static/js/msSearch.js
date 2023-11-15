@@ -474,7 +474,7 @@ function searchDivDeFaultPara() {
 
 function createScrollDownObserverForNextPage(){
     let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
-        if(entries[0].intersectionRatio < 1 && entries[0].isIntersecting > 0.1){
+        if(entries[0].intersectionRatio < 2 && entries[0].isIntersecting > 0.1){
             console.log(_pageStatusObj)
             console.log("scroll down");
             let targetElement = entries[0].target;
