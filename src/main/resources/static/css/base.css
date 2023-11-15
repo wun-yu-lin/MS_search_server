@@ -100,7 +100,7 @@ body {
   height: 34px;
   width: calc(100% - 100px);
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin: 10px;
 }
 .div_header .header_div {
@@ -148,13 +148,55 @@ body {
 .div_header .header_div_other {
   display: flex;
   gap: 20px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
-.div_header .header_div_other .header_div_other_li_a {
-  font-size: 20px;
+.div_header .header_div_other .header_other_item {
+  width: 300px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.div_header .header_div_other .header_other_item .header_other_button {
+  position: relative;
+  text-align: end;
   color: white;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 34px;
+  font-size: 24px;
+  background-color: rgba(255, 255, 255, 0);
+}
+.div_header .header_div_other .header_other_item .dropDown_bg_div {
+  position: absolute;
+  display: none;
+  top: 30px;
+  right: 0;
+  padding-top: 10px;
+  width: 130%;
+}
+.div_header .header_div_other .header_other_item .dropDown_div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  padding: 10px;
+  background-color: rgba(26, 26, 26, 0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: #4D4D4D 2px solid;
+  border-radius: 4px;
+}
+.div_header .header_div_other .header_other_item .dropDown_div ul > li {
+  display: flex;
+  justify-content: flex-end;
+}
+.div_header .header_div_other .header_other_item .dropDown_div ul > li a {
+  font-size: 20px;
+}
+.div_header .header_div_other .header_other_item .header_other_button:hover + .dropDown_bg_div {
+  display: flex;
+}
+.div_header .header_div_other .header_other_item .dropDown_bg_div:hover {
+  display: flex;
 }
 
 .hidden {

@@ -26,4 +26,10 @@ public class HtmlController {
 
         return "batchSearch";
     }
+
+    @GetMapping("/taskView")
+    public String taskView(){
+
+        return "taskView";
+    }
 }

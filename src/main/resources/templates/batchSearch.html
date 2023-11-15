@@ -13,31 +13,68 @@
 <body>
 <div layout:fragment="content">
 	<div class="batchSearch_div">
-		<h1>Upload file for multiple MS/MS spectrum batch search</h1>
+		<h1>Upload file for multiple MS/MS spectrum search</h1>
 		<form id="myForm" enctype="multipart/form-data">
 			<div class="dataInput_div">
-				<label for="ms1FileInput">選擇檔案 (MS1 peak list):</label>
+				<label for="ms1FileInput">Input file (MS1 peak list):</label>
 				<input type="file" id="ms1FileInput" name="ms1FileInput" accept=".csv">
-				<label for="ms2FileInput">選擇檔案 (MS2 spectrum file):</label>
+				<label for="ms2FileInput">Input file (MS2 spectrum file):</label>
 				<input type="file" id="ms2FileInput" name="ms2FileInput" accept=".mgf">
+				<label for="ms2FileDataSource">MS2 spectrum data source:</label>
+				<select name="ms2FileDataSource" id="ms2FileDataSource">
+					<option value="xcms3">xcms3-mgf</option>
+					<option value="sciex_msconvert">Sciex-wiff+MS-Convert-mgf</option>
+				</select>
+				<label for="mail">Contact mail:</label>
+				<input type="email" id="mail" name="mail" placeholder="xxx@xxx.com">
+				<button type="button">Upload file</button>
+				<div class="submitResult">Upload results</div>
 			</div>
-
-			<h3>MS/MS search parameter</h3>
 			<hr>
+			<h3>MS/MS search parameter</h3>
+
 			<div class="msToleranceParameter_div">
 				<label for="msTolerance">MS tolerance:</label>
 				<input type="text" id="msTolerance" name="msTolerance" placeholder="Require, 0-100 ppm">
 			</div>
 			<div class="msmsToleranceParameter_div">
-				<label for="msmsTolerance">MS tolerance:</label>
+				<label for="msmsTolerance">MS/MS tolerance:</label>
 				<input type="text" id="msmsTolerance" name="msmsTolerance" placeholder="Require, 0-100 ppm">
+			</div>
+			<div class="charge_para_div">
+				<label for="charge">Charge</label>
+				<select name="charge" id="charge">
+					<option value="">All</option>
+					<option value="positive">Positive</option>
+					<option value="negative">Negative</option>
+				</select>
+			</div>
+			<div class="weight_para_div">
+				<p>Similarity score weight<br><span style="font-weight: 300; color: #4D4D4D">(sum needs to be 1)</span> </p>
+				<div class="weight_para_div_div">
+					<input class="weight_para_input" type="text" name="forward_para" id="forward_para" placeholder="Forward, default 0.5">
+					<input class="weight_para_input" type="text" name="reverse_para" id="reverse_para" placeholder="Reverse, default 0.5">
+				</div>
+			</div>
+			<div class="algorithm_para_div">
+				<label for="algorithm_para">MS/MS similarity algorithm</label>
+				<select name="algorithm_para" id="algorithm_para">
+					<option value="dotPlot">Dot plot</option>
+					<option value="intensityDeviation">Intensity deviation</option>
+				</select>
+			</div>
+			<div class="ms2_similarity_para_div">
+				<label for="ms2_similarity_para">MS/MS similarity tolerance</label>
+				<input class="ms2_para_input" type="text" name="ms2_similarity_para" id="ms2_similarity_para" placeholder="0.00-1.00, default 0.5">
 			</div>
 
 
-			<button type="button" onclick="submitForm()">送出</button>
+
+
+			<button type="button">submit</button>
 		</form>
 
-		<div id="result">submit results message</div>
+		<div id="submitResult">submit status:</div>
 	</div>
 </div>
 </body>

@@ -1,3 +1,72 @@
-
+body .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  background-color: #212124;
+}
+body .batchSearch_div {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 70%;
+}
+body .batchSearch_div h1 {
+  color: #333;
+  text-align: center;
+}
+body .batchSearch_div form {
+  margin-top: 20px;
+}
+body .batchSearch_div form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+}
+body .batchSearch_div form input,
+body .batchSearch_div form select {
+  border: #cbcbcb 1px solid;
+  border-radius: 5px;
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 12px;
+}
+body .batchSearch_div form hr {
+  border: 1px solid #ddd;
+  margin: 20px 0;
+}
+body .batchSearch_div form h3 {
+  color: #333;
+}
+body .batchSearch_div form .weight_para_div {
+  margin-bottom: 20px;
+}
+body .batchSearch_div form .weight_para_input {
+  width: calc(50% - 5px);
+}
+body .batchSearch_div form .weight_para_div_div {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+body .batchSearch_div button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+}
+body .batchSearch_div button:hover {
+  background-color: #45a049;
+}
+body .batchSearch_div #result {
+  text-align: center;
+  margin-top: 20px;
+}
 
 /*# sourceMappingURL=batchSearch.css.map */
