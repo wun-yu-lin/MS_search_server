@@ -21,9 +21,9 @@ public class HtmlController {
         return "msSearch";
     }
 
-    @GetMapping("/ms2Search")
-    public String ms2Search(){
+    @GetMapping("/batchSearch")
+    public String batchSearch(){
 
-        return "ms2Search";
+        return "batchSearch";
     }
 }

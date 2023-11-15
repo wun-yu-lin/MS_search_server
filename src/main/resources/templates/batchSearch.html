@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="en"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	  layout:decorate="~{layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>MS search - batch search uploader</title>
+	<link rel="stylesheet" th:href="@{/css/batchSearch.css}">
+	<!--  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="batchSearch_div">
+		<h1>Upload file for multiple MS/MS spectrum batch search</h1>
+		<form id="myForm" enctype="multipart/form-data">
+			<div class="dataInput_div">
+				<label for="ms1FileInput">選擇檔案 (MS1 peak list):</label>
+				<input type="file" id="ms1FileInput" name="ms1FileInput" accept=".csv">
+				<label for="ms2FileInput">選擇檔案 (MS2 spectrum file):</label>
+				<input type="file" id="ms2FileInput" name="ms2FileInput" accept=".mgf">
+			</div>
+
+			<h3>MS/MS search parameter</h3>
+			<hr>
+			<div class="msToleranceParameter_div">
+				<label for="msTolerance">MS tolerance:</label>
+				<input type="text" id="msTolerance" name="msTolerance" placeholder="Require, 0-100 ppm">
+			</div>
+			<div class="msmsToleranceParameter_div">
+				<label for="msmsTolerance">MS tolerance:</label>
+				<input type="text" id="msmsTolerance" name="msmsTolerance" placeholder="Require, 0-100 ppm">
+			</div>
+
+
+			<button type="button" onclick="submitForm()">送出</button>
+		</form>
+
+		<div id="result">submit results message</div>
+	</div>
+</div>
+</body>
+<div layout:fragment="script">
+	<!--	<script type="module" th:src="@{/js/utility/spectrumChart.js}"></script>-->
+	<script type="module" th:src="@{/js/batchSearch.js}"></script>
+</div>
+</html>

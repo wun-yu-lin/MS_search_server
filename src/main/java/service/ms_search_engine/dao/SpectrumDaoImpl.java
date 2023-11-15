@@ -110,7 +110,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
                         spectrumQueryParaDto.getForwardWeight(),
                         spectrumQueryParaDto.getReverseWeight(),
                         spectrumQueryParaDto.getMs2SimilarityAlgorithm(),
-                        spectrumQueryParaDto.getMs2SpectrumSimilarityTolerance()
+                        spectrumQueryParaDto.getMs2PeakMatchTolerance()
                 );
                 spectrumDataList.get(i).setMs2SpectrumSimilarity(similarity);
 

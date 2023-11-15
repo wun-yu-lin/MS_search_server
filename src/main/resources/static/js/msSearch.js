@@ -33,7 +33,7 @@ async function mainAsync() {
     document.getElementById("loadingScreen").classList.remove("hidden")
 
     createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
-    document.getElementById("search_button").onclick = OnClickFunctionForSearchSpectrum
+    document.getElementById("search_button").onclick = onClickFunctionForSearchSpectrum
     let firstFetchData = await sentParameterToFuzzyAPI()
 
     //處理Fuzzy API的回傳結果
@@ -50,7 +50,7 @@ async function mainAsync() {
 
         });
         document.getElementById("loadingScreen").classList.add("hidden")
-        if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("no more data.")
+        if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("No more data.")
         createScrollDownObserverForNextPage();
         return
 
@@ -107,7 +107,7 @@ async function sentParameterToFuzzyAPI() {
 
 }
 
-async function OnClickFunctionForSearchSpectrum() {
+async function onClickFunctionForSearchSpectrum() {
     _pageStatusObj.initialPara();
     document.getElementById("loadingScreen").classList.remove("hidden")
     let getParameterObj = getSpectrumQueryParaFromForm()
@@ -153,6 +153,7 @@ async function OnClickFunctionForSearchSpectrum() {
         });
 
     }
+    if (_pageStatusObj.isNextPage == false) insertMessageIntoSpectrumContainer("No more data.")
     document.getElementById("loadingScreen").classList.add("hidden")
 }
 
@@ -172,6 +173,7 @@ function getSpectrumQueryParaFromForm() {
         precursorType: null,
         ionMode: null,
         ms2Spectrum: null,
+        ms2PeakMatchTolerance: null,
         ms2SpectrumSimilarityTolerance: null,
         forwardWeight: null,
         reverseWeight: null,
@@ -248,7 +250,8 @@ function getSpectrumQueryParaFromForm() {
             getParameterObj.ms2Spectrum = getParameterObj.ms2Spectrum.replaceAll(" ", "")
             getParameterObj.ms2Spectrum = getParameterObj.ms2Spectrum.replaceAll("\n", " ").trim()
             //get ms2 spectrum similarity related parameter
-            getParameterObj.ms2SpectrumSimilarityTolerance = parseFloat(document.getElementById("ms2_para").value)
+            getParameterObj.ms2SpectrumSimilarityTolerance = parseFloat(document.getElementById("ms2_similarity_para").value)
+            getParameterObj.ms2PeakMatchTolerance = parseFloat(document.getElementById("ms2_tolerance_para").value)
             getParameterObj.forwardWeight = parseFloat(document.getElementById("forward_para").value)
             getParameterObj.reverseWeight = parseFloat(document.getElementById("reverse_para").value)
             getParameterObj.ms2SimilarityAlgorithm = document.getElementById("algorithm_para").value
@@ -266,10 +269,17 @@ function getSpectrumQueryParaFromForm() {
                 getParameterObj.isPassCheck = false
                 return null
             }
+            if (!isNaN(getParameterObj.ms2PeakMatchTolerance) && getParameterObj.ms2PeakMatchTolerance > 100){
+                alert("MS2 peak match tolerance not allow to larger than 100")
+                getParameterObj.isPassCheck = false
+                return null
+            }
+
 
             if (isNaN(getParameterObj.ms2SpectrumSimilarityTolerance)) getParameterObj.ms2SpectrumSimilarityTolerance = null
             if (isNaN(getParameterObj.forwardWeight)) getParameterObj.forwardWeight = null
             if (isNaN(getParameterObj.reverseWeight)) getParameterObj.reverseWeight = null
+            if (isNaN(getParameterObj.ms2PeakMatchTolerance)) getParameterObj.ms2PeakMatchTolerance = null
             //判斷 forward weight 與 reverse weight 相加是否為 1
 
             if (getParameterObj.forwardWeight === null && parseInt(getParameterObj.reverseWeight) === 1) {
@@ -303,6 +313,7 @@ function getSpectrumQueryParaFromForm() {
     if (getParameterObj.isPassCheck === false) {
         alert("Please check your input data")
     }
+    console.log(getParameterObj)
     return getParameterObj
 }
 
@@ -474,9 +485,7 @@ function searchDivDeFaultPara() {
 
 function createScrollDownObserverForNextPage(){
     let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
-        if(entries[0].intersectionRatio < 2 && entries[0].isIntersecting > 0.1){
-            console.log(_pageStatusObj)
-            console.log("scroll down");
+        if(entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1){
             let targetElement = entries[0].target;
             observe.unobserve(entries[0].target);
             if(_pageStatusObj.isFetching === true) return observe.observe(targetElement);
@@ -497,7 +506,7 @@ function createScrollDownObserverForNextPage(){
             if (fetchData == null) {
             } else if (fetchData.length === 0) {
 
-                insertMessageIntoSpectrumContainer("no more data.")
+                insertMessageIntoSpectrumContainer("No more data.")
             } else {
                 fetchData.forEach(function (item) {
 
@@ -506,7 +515,7 @@ function createScrollDownObserverForNextPage(){
 
                 });
                 document.getElementById("loadingScreen").classList.add("hidden")
-                if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("no more data.")
+                if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("No more data.")
                 return observe.observe(targetElement);
 
             }

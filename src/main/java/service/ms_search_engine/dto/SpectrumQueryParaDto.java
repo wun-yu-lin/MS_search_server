@@ -22,4 +22,6 @@ public class SpectrumQueryParaDto {
     private Double forwardWeight;
     private Double reverseWeight;
     private String ms2SimilarityAlgorithm;
+    private Double ms2PeakMatchTolerance;
+
 }

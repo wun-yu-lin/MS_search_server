@@ -68,6 +68,7 @@ public class SpectrumController {
             @RequestParam(defaultValue = "0.5") Double forwardWeight,
             @RequestParam(defaultValue = "0.5") Double reverseWeight,
             @RequestParam(defaultValue = "dotPlot") String ms2SimilarityAlgorithm,
+            @RequestParam(defaultValue = "20") Double ms2PeakMatchTolerance,
             @RequestParam(defaultValue = "0.5", required = false) Double ms2SpectrumSimilarityTolerance
     ) throws QueryParameterException {
         log.info("Get request for spectrum list");
@@ -89,6 +90,7 @@ public class SpectrumController {
         spectrumQueryParaDto.setReverseWeight(reverseWeight);
         spectrumQueryParaDto.setMs2SpectrumSimilarityTolerance(ms2SpectrumSimilarityTolerance);
         spectrumQueryParaDto.setMs2SimilarityAlgorithm(ms2SimilarityAlgorithm);
+        spectrumQueryParaDto.setMs2PeakMatchTolerance(ms2PeakMatchTolerance);
 
         List<SpectrumDataModel> spectrumDataModelList = spectrumService.getSpectrumByParameter(spectrumQueryParaDto);
         return ResponseEntity.status(HttpStatus.OK.value()).body(spectrumDataModelList);
