@@ -34,4 +34,28 @@ public class ControllerException {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("DatabaseInsertErrorException: " + exception.getMessage());
     }
+
+    @ExceptionHandler(DatabaseDeleteErrorException.class)
+    public ResponseEntity<String> prepareResponseForDatabaseDeleteErrorException(DatabaseDeleteErrorException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("DatabaseDeleteErrorException: " + exception.getMessage());
+    }
+
+    @ExceptionHandler(S3DataUploadException.class)
+    public ResponseEntity<String> prepareResponseForS3DataUploadException(S3DataUploadException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("S3DataUploadException: " + exception.getMessage());
+    }
+    @ExceptionHandler(S3DataDeleteException.class)
+    public ResponseEntity<String> prepareResponseForS3DataDeleteException(S3DataDeleteException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("S3DataDeleteException: " + exception.getMessage());
+    }
+
+    @ExceptionHandler(RedisQueueErrorException.class)
+    public ResponseEntity<String> prepareResponseForRedisQueueErrorException(RedisQueueErrorException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("RedisQueueErrorException: " + exception.getMessage());
+    }
+
 }
