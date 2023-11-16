@@ -35,6 +35,19 @@ class FetchAPI {
         return dataParse
     }
 
+    async sentFormDataByPostMethod(url, formData){
+        try {
+            let response = await fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            return response
+
+        } catch (e) {
+            alert(e.message)
+        }
+    }
+
 }
 
 

@@ -10,6 +10,8 @@
 		<link rel="stylesheet" th:href="@{/css/base.css}">
 	   <link rel="stylesheet" href="../static/css/base.css">
 	<title>Layout</title>
+	<script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+
 
 </head>
 <header class="header">
@@ -29,13 +31,16 @@
 				<div class="dropDown_bg_div">
 					<div class="dropDown_div">
 						<ul>
-							<li><a class="header_div_other_li_a b-16" href="./msSearch">MS/MS search</a></li>
+							<li><a href="./msSearch">MS/MS search</a></li>
 						</ul>
 						<ul>
-							<li><a class="header_div_other_li_a b-16" href="./batchSearch">Multiple MS/MS search</a></li>
+							<li><a href="./batchSearch">Multiple MS/MS search</a></li>
 						</ul>
 						<ul>
-							<li><a class="header_div_other_li_a b-16" href="./taskView">Search task view</a></li>
+							<li><a href="./taskView">Search task view</a></li>
+						</ul>
+						<ul>
+							<li><a href="./swagger-ui/index.html#/">Swagger API Docs</a></li>
 						</ul>
 					</div>
 				</div>

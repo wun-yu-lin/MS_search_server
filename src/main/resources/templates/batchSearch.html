@@ -18,19 +18,19 @@
 		<h1 style="font-size: 12px;color: #4D4D4D">All files will be <span style="color: brown">automatically deleted after seven days</span>. <br>Please make sure to download and save the results upon task completion.</h1>
 		<form id="myForm" enctype="multipart/form-data">
 			<div class="dataInput_div">
-				<label for="ms1FileInput">Input file (MS1 peak list):</label>
-				<input type="file" id="ms1FileInput" name="ms1FileInput" accept=".csv">
-				<label for="ms2FileInput">Input file (MS2 spectrum file):</label>
-				<input type="file" id="ms2FileInput" name="ms2FileInput" accept=".mgf">
-				<label for="ms2FileDataSource">MS2 spectrum data source:</label>
-				<select name="ms2FileDataSource" id="ms2FileDataSource">
+				<label for="peakListFile">Input file (MS1 peak list):</label>
+				<input type="file" id="peakListFile" name="peakListFile" accept=".csv">
+				<label for="ms2File">Input file (MS2 spectrum file):</label>
+				<input type="file" id="ms2File" name="ms2File" accept=".mgf">
+				<label for="ms2spectrumDataSource">MS2 spectrum data source:</label>
+				<select name="ms2spectrumDataSource" id="ms2spectrumDataSource">
 					<option value="XCMS3">xcms3-mgf</option>
 					<option value="SCIEX_MSCONVERT">Sciex-wiff+MS-Convert-mgf</option>
 				</select>
 				<label for="mail">Contact mail:</label>
 				<input type="email" id="mail" name="mail" placeholder="xxx@xxx.com">
-				<button type="button">Upload file</button>
-				<div class="uploadStatus">Upload status:<span id="uploadStatusResult"></span></div>
+				<button type="button" id="uploadFileButton">Upload file</button>
+				<div class="uploadStatus">Upload status:   <img id="uploadStatusLoading" class="hidden" th:src="@{/icon/upload-loading.gif}" alt="" style="width: 20px"><span id="uploadStatusResult"></span></div>
 			</div>
 			<hr>
 			<h3>MS/MS search parameter</h3>
@@ -73,10 +73,10 @@
 
 
 
-			<button type="button">Submit</button>
+			<button type="button" id="submitButton">Submit</button>
 		</form>
 		<div id="taskID">Task ID: <span id="taskIdResult"></span></div>
-		<div id="submitStatus">Submit status: <span id="submitStatusResult"></span></div>
+		<div id="submitStatus">Submit status:   <img id="submitStatusLoading" class="hidden" th:src="@{/icon/upload-loading.gif}" alt="" style="width: 20px"> <span id="submitStatusResult"></span></div>
 	</div>
 </div>
 </body>
