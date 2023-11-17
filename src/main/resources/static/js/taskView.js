@@ -5,6 +5,7 @@ const fetchAPI = new FetchAPI();
 let _pageStatusObj = {
     "isFirstLoad": false,
     "isNextPage": false,
+    "authId": 0,
     "nextPageSpectrumInit": 0,
     "fetchUrl": null,
     "isFetching": false,
@@ -14,6 +15,8 @@ let _pageStatusObj = {
         this.nextPageSpectrumInit = 0
         this.fetchUrl = null
         this.isFetching = false
+        this.authId = 0
+
 
     }
 };
@@ -31,10 +34,10 @@ function main() {
 async function asyncMain() {
     let taskList = await getTaskListByApiAndUpdatePageStatus();
     taskList.forEach((task) => {
-            console.log(task);
             createTableByTaskListData(task)
         }
     )
+    createScrollDownObserverForNextPage();
 
 }
 
@@ -66,6 +69,8 @@ async function getTaskListByApiAndUpdatePageStatus() {
         "taskInit": _pageStatusObj.nextPageSpectrumInit,
         "taskOffset": 30
     }
+    _pageStatusObj.paraObj = paraObj;
+    _pageStatusObj.authId = paraObj.authodId;
     let url = fetchAPI.generateGetUrlByParameter(paraObj, _pageStatusObj.fetchUrl);
     _pageStatusObj.isFetching = true;
     _pageStatusObj.isFirstLoad = true;
@@ -219,4 +224,48 @@ async function onclickDeleteTaskById(event) {
         window.location.reload();
 
     }
+}
+
+
+function createScrollDownObserverForNextPage(){
+    let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
+        if(entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1){
+            let targetElement = entries[0].target;
+            observe.unobserve(entries[0].target);
+            if(_pageStatusObj.isFetching === true) return observe.observe(targetElement);
+            if(_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
+            if(_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
+            //add action of loading
+            let url = fetchAPI.generateGetUrlByParameter({"authId":_pageStatusObj.authId, "taskInit":_pageStatusObj.nextPageSpectrumInit}, _pageStatusObj.fetchUrl);
+            console.log(url)
+            let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(url, {"method": "GET"});
+            if (typeof(fetchData) === "object") {
+                _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
+                console.log(_pageStatusObj.nextPageSpectrumInit)
+                if (fetchData.length >=30) {
+                    _pageStatusObj.isNextPage = true
+                }else {
+                    _pageStatusObj.isNextPage = false
+                }
+            }
+
+            if (fetchData == null) {
+            } else if (fetchData.length === 0) {
+                return
+            } else {
+                fetchData.forEach(function (item) {
+                    createTableByTaskListData(item)
+                });
+                return observe.observe(targetElement);
+
+            }
+
+            observe.observe(targetElement);
+        }
+
+
+
+
+    })
+    scrollDownObserver.observe(document.querySelector(".footer"));
 }
