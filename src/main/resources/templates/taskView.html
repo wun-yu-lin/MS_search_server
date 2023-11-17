@@ -12,12 +12,46 @@
 </head>
 <body>
 <div layout:fragment="content">
-	<h1 style="color: white; font-size: 30px; padding: 10px">Coming soon... </h1>
+
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Data Table</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<body>
+	<div id="data-container">
+		<table class="data-item">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Task Status</th>
+				<th>Peak List Source</th>
+				<th>MS2 File Source</th>
+				<th>Results Source</th>
+				<th>Ion Mode</th>
+				<th>Email</th>
+				<th>MS2 Spectrum Data Source</th>
+				<th>Create Time</th>
+				<th>Finish Time</th>
+				<th>Task Delete</th>
+			</tr>
+			</thead>
+			<tbody class="table-body" id="table-body">
+			<!-- Repeat the above row structure for each data entry -->
+			</tbody>
+		</table>
+	</div>
+
+
+
 
 </div>
 </body>
 <div layout:fragment="script">
 	<!--	<script type="module" th:src="@{/js/utility/spectrumChart.js}"></script>-->
-<!--	<script type="module" th:src="@{/js/msSearch.js}"></script>-->
+	<script type="module" th:src="@{/js/taskView.js}"></script>
 </div>
 </html>

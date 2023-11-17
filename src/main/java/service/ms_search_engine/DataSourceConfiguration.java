@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfiguration {
 
-
     // 連線到 mySQL database datasource and NamedParameterJdbcTemplate
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.mysql-local")

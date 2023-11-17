@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import service.ms_search_engine.constant.Ms2SpectrumDataSource;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
+import service.ms_search_engine.dto.BatchTaskSearchDto;
 import service.ms_search_engine.exception.DatabaseInsertErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.exception.S3DataUploadException;
 import service.ms_search_engine.model.BatchSpectrumSearchModel;
 import service.ms_search_engine.service.BatchSpectrumSearchService;
 
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ import java.util.List;
 public class BatchSpectrumSearchController {
     // post /api/batchSearch/file/upload   -> upload file s3, check file, save file path to db, return task id vv
     // post /api/batchSearch/task/submit -> submit task, check parameter, save task to db, sent to task queue
+    // get /api/batchSearch/task -> get all task status of user by parameter (page, size, sort)
     // get /api/batchSearch/task/{id} -> get task status by id
     // delete /api/batchSearch/task/{id} -> delete task by id, change task status to delete, s3 data delete
     private final BatchSpectrumSearchService batchSpectrumSearchService;
@@ -43,10 +46,12 @@ public class BatchSpectrumSearchController {
             @RequestParam @NotNull Ms2SpectrumDataSource ms2spectrumDataSource,
             @RequestParam(defaultValue = "0") int authorId
             ) throws S3DataUploadException, QueryParameterException, DatabaseInsertErrorException {
+
+        //setting max file size
         int peakListFileMaxSize = 100 * 1024 * 1024; // max 100MB
         int ms2FileMaxSize = 1000 * 1024 * 1024; // max 1000MB
 
-        //checkFile
+        //checkFile size
         if (peakListFile.isEmpty() || ms2File.isEmpty()) {
             throw new S3DataUploadException("File is empty");
         }
@@ -89,9 +94,30 @@ public class BatchSpectrumSearchController {
         return null;
     }
 
+
+    @GetMapping("task")
+    public ResponseEntity<List<BatchSpectrumSearchModel>> getTaskByParameter(
+            @RequestParam(defaultValue = "0") Integer authorId,
+            @RequestParam(defaultValue = "0") Integer taskInit,
+            @RequestParam(defaultValue = "30") Integer taskOffset
+    ) throws QueryParameterException, SQLException {
+
+        //preparation dto
+        BatchTaskSearchDto batchTaskSearchDto = new BatchTaskSearchDto();
+        batchTaskSearchDto.setAuthorId(authorId);
+        batchTaskSearchDto.setTaskInit(taskInit);
+        batchTaskSearchDto.setTaskOffset(taskOffset);
+
+        List<BatchSpectrumSearchModel> batchSpectrumSearchModelList = batchSpectrumSearchService.getTaskInfoByParameter(batchTaskSearchDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(batchSpectrumSearchModelList);
+    }
+
     @DeleteMapping("task/{id}")
-    public ResponseEntity<String> deleteTaskById(@PathVariable @NotNull String id) {
-        return null;
+    public ResponseEntity<String> deleteTaskById(@PathVariable @NotNull int id) throws QueryParameterException, S3DataUploadException, SQLException {
+
+        batchSpectrumSearchService.deleteTaskById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("delete success");
     }
 
 

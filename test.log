@@ -98,3 +98,9 @@
 21:08:40.383 [main] DEBUG s.m.MsSearchEngineApplication - Running with Spring Boot v3.0.1, Spring v6.0.3
 21:08:40.384 [main] INFO  s.m.MsSearchEngineApplication - No active profile set, falling back to 1 default profile: "default"
 21:08:42.720 [main] INFO  s.m.MsSearchEngineApplication - Started MsSearchEngineApplication in 2.632 seconds (process running for 3.253)
+17:53:55.487 [restartedMain] INFO  s.m.MsSearchEngineApplication - Starting MsSearchEngineApplication using Java 17.0.9 with PID 23098 (/Users/linwunyu/Documents/GitHub/MS_search_engine/target/classes started by linwunyu in /Users/linwunyu/Documents/GitHub/MS_search_engine)
+17:53:55.488 [restartedMain] DEBUG s.m.MsSearchEngineApplication - Running with Spring Boot v3.1.0, Spring v6.0.9
+17:53:55.488 [restartedMain] INFO  s.m.MsSearchEngineApplication - No active profile set, falling back to 1 default profile: "default"
+17:53:56.745 [restartedMain] INFO  s.m.MsSearchEngineApplication - Started MsSearchEngineApplication in 1.384 seconds (process running for 1.683)
+18:00:08.892 [http-nio-8080-exec-2] INFO  s.m.controller.SpectrumController - Get request for spectrum list
+18:10:47.936 [http-nio-8080-exec-6] INFO  s.m.controller.SpectrumController - Get request for spectrum list

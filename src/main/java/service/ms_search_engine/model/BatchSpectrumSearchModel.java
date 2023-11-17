@@ -2,7 +2,11 @@ package service.ms_search_engine.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -23,6 +27,8 @@ public class BatchSpectrumSearchModel {
    private String ionMode;
    private String mail;
    private String ms2spectrumDataSource;
+   private Date createTime;
+   private Date finishTime;
 
 
 

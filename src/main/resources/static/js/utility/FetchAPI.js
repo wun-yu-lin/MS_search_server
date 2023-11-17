@@ -30,6 +30,7 @@ class FetchAPI {
     }
 
     async fetchSpectrumDataByGetMethod(url, requestParaObj){
+        requestParaObj["method"] = "GET"
         let data = await fetch(url, requestParaObj)
         let dataParse = await data.json()
         return dataParse
@@ -46,6 +47,10 @@ class FetchAPI {
         } catch (e) {
             alert(e.message)
         }
+    }
+    async sentDeleteRequest(url, requestParaObj){
+        requestParaObj["method"] = "DELETE"
+        return await fetch(url, requestParaObj)
     }
 
 }
