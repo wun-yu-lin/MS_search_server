@@ -146,7 +146,7 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
 
         String sqlStr = "SELECT id, s3_peakList_src, s3_ms2file_src, s3_results_src, author_id, task_status, create_time, finish_time, MS_tolerance, " +
                 "MSMS_tolerance, forward_weight, reverse_weight, similarity_algorithm, ion_mode, mail, similarity_tolerance, ms2spectrumDataSource " +
-                "FROM ms_search_library.batch_task_info bi WHERE bi.author_id=:authorId ORDER BY bi.id limit :taskInit, :taskOffset;";
+                "FROM ms_search_library.batch_task_info bi WHERE bi.author_id=:authorId ORDER BY bi.id DESC limit :taskInit, :taskOffset;";
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("authorId", batchTaskSearchDto.getAuthorId());

@@ -63,8 +63,8 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(batchSpectrumSearchDto);
         redisTaskQueueService.newTask(jsonString);
-        String taskString = redisTaskQueueService.getAndPopLastTask();
-        BatchSpectrumSearchDto batchSpectrumSearchDto1 = mapper.readValue(taskString, BatchSpectrumSearchDto.class);
+//        String taskString = redisTaskQueueService.getAndPopLastTask();
+//        BatchSpectrumSearchDto batchSpectrumSearchDto1 = mapper.readValue(taskString, BatchSpectrumSearchDto.class);
 
 
 
