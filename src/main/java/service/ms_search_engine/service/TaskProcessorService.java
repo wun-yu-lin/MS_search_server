@@ -35,7 +35,7 @@ public class TaskProcessorService {
 
     @PostConstruct
     @Bean
-    public void listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException {
+    public void listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException, InterruptedException {
         while (true) {
             String taskDataStr = redisTaskQueueService.getAndPopLastTask();
             if (taskDataStr != null) {
@@ -46,15 +46,26 @@ public class TaskProcessorService {
                     //change the task status to processing in database
                     batchSpectrumSearchDto.setTaskStatus(TaskStatus.PROCESSING);
                     batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     BatchSpectrumSearchCalculator batchSpectrumSearchCalculator = new BatchSpectrumSearchCalculator(batchSpectrumSearchDto);
                     batchSpectrumSearchCalculator.processTask();
 
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     batchSpectrumSearchDto.setTaskStatus(TaskStatus.FINISH);
                     batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
 
                     System.out.println("Processing task: " + taskDataStr);
                 } catch (RuntimeException e ) {
+                    Thread.sleep(1000);
                     batchSpectrumSearchDto.setTaskStatus(TaskStatus.ERROR);
                     batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
 
@@ -65,7 +76,7 @@ public class TaskProcessorService {
             } else {
                 // Sleep for a while if no tasks are available
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
