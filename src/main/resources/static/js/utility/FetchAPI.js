@@ -36,6 +36,18 @@ class FetchAPI {
         return dataParse
     }
 
+    async fetchDataByPOSTMethod(url, requestParaObj){
+        requestParaObj["method"] = "POST"
+        requestParaObj["headers"] = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        requestParaObj["body"] = JSON.stringify(requestParaObj["body"])
+        return await fetch(url, requestParaObj)
+    }
+
+
+
     async sentFormDataByPostMethod(url, formData){
         try {
             let response = await fetch(url, {

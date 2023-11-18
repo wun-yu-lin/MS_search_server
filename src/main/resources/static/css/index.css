@@ -43,6 +43,9 @@
   width: 100%;
   border-radius: 5px;
 }
+.middle_div .introduction_project_div h1 {
+  padding-top: 20px;
+}
 .middle_div .source_ref_div {
   display: flex;
   flex-direction: column;

@@ -88,7 +88,6 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
                 batchSpectrumSearchDto.getForwardWeight() == null ||
                 batchSpectrumSearchDto.getReverseWeight() == null ||
                 batchSpectrumSearchDto.getSimilarityAlgorithm() == null ||
-                batchSpectrumSearchDto.getIonMode() == null ||
                 batchSpectrumSearchDto.getSimilarityTolerance() == null
         ) {
             throw new QueryParameterException("parameter is not complete");

@@ -49,6 +49,16 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
         }
         dtoAfterUploadS3.setTaskStatus(TaskStatus.NOT_SUBMIT);
         BatchSpectrumSearchModel modelAfterSaveRdb = batchSearchRdbDao.postFileUploadInfo(dtoAfterUploadS3);
+        if (modelAfterSaveRdb.getS3Ms2FileSrc() != null) {
+            modelAfterSaveRdb.setS3Ms2FileSrc(awsCloudFrontEndpoint + modelAfterSaveRdb.getS3Ms2FileSrc());
+        }
+        if (modelAfterSaveRdb.getS3PeakListSrc() != null) {
+            modelAfterSaveRdb.setS3PeakListSrc(awsCloudFrontEndpoint + modelAfterSaveRdb.getS3PeakListSrc());
+        }
+        if (modelAfterSaveRdb.getS3ResultsSrc() != null) {
+            modelAfterSaveRdb.setS3ResultsSrc(awsCloudFrontEndpoint + modelAfterSaveRdb.getS3ResultsSrc());
+        }
+
 
         return modelAfterSaveRdb;
     }
