@@ -82,7 +82,44 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
 
     @Override
     public Boolean updateTaskInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseUpdateErrorException, QueryParameterException {
-        return null;
+        if (    batchSpectrumSearchDto.getTaskId() == null ||
+                batchSpectrumSearchDto.getMsTolerance() == null ||
+                batchSpectrumSearchDto.getMsmsTolerance() == null ||
+                batchSpectrumSearchDto.getForwardWeight() == null ||
+                batchSpectrumSearchDto.getReverseWeight() == null ||
+                batchSpectrumSearchDto.getSimilarityAlgorithm() == null ||
+                batchSpectrumSearchDto.getIonMode() == null ||
+                batchSpectrumSearchDto.getSimilarityTolerance() == null
+        ) {
+            throw new QueryParameterException("parameter is not complete");
+        }
+
+
+        String sqlStr = "UPDATE ms_search_library.batch_task_info SET task_status=:taskStatus, MS_tolerance=:MSTolerance, " +
+                "MSMS_tolerance=:msmsTolerance, forward_weight=:forwardWeight, reverse_weight=:reverseWeight, " +
+                "similarity_algorithm=:similarityAlgorithm, ion_mode=:ionMode, similarity_tolerance=:similarityTolerance, mail=:mail " +
+                "WHERE id=:taskId;";
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("taskStatus", TaskStatus.SUBMIT_IN_WAITING.getStatusCode());
+        map.put("MSTolerance", batchSpectrumSearchDto.getMsTolerance());
+        map.put("msmsTolerance", batchSpectrumSearchDto.getMsmsTolerance());
+        map.put("forwardWeight", batchSpectrumSearchDto.getForwardWeight());
+        map.put("reverseWeight", batchSpectrumSearchDto.getReverseWeight());
+        map.put("similarityAlgorithm", batchSpectrumSearchDto.getSimilarityAlgorithm());
+        map.put("ionMode", batchSpectrumSearchDto.getIonMode());
+        map.put("similarityTolerance", batchSpectrumSearchDto.getSimilarityTolerance());
+        map.put("mail", batchSpectrumSearchDto.getMail());
+        map.put("taskId", batchSpectrumSearchDto.getTaskId());
+
+        int upDataResult =  namedParameterJdbcTemplate.update(sqlStr, map);
+
+        if (upDataResult == 0) {
+            throw new DatabaseUpdateErrorException("update task info failed");
+        }
+
+
+        return true;
     }
 
     @Override

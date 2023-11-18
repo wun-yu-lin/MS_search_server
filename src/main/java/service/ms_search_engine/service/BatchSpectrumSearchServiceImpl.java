@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import service.ms_search_engine.dao.BatchSearchRdbDao;
 import service.ms_search_engine.dao.BatchSearchS3FileDao;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
@@ -51,10 +52,14 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
     }
 
     @Override
+    @Transactional
     public Boolean postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
 
         //save submit to database
-        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+        Boolean isRdbUpdateSuccess = batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+        if (!isRdbUpdateSuccess) {
+            throw new DatabaseUpdateErrorException("update task info failed");
+        }
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(batchSpectrumSearchDto);
         redisTaskQueueService.newTask(jsonString);
