@@ -1,6 +1,7 @@
 package service.ms_search_engine.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import service.ms_search_engine.constant.Ms2SpectrumDataSource;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
 import service.ms_search_engine.dto.BatchTaskSearchDto;
-import service.ms_search_engine.exception.DatabaseInsertErrorException;
-import service.ms_search_engine.exception.QueryParameterException;
-import service.ms_search_engine.exception.S3DataUploadException;
+import service.ms_search_engine.exception.*;
 import service.ms_search_engine.model.BatchSpectrumSearchModel;
 import service.ms_search_engine.service.BatchSpectrumSearchService;
 
@@ -85,8 +84,29 @@ public class BatchSpectrumSearchController {
     }
 
     @PostMapping("task/submit")
-    public ResponseEntity<String> postTaskSubmit() {
-        return null;
+    public ResponseEntity<String> postTaskSubmit(
+            @RequestBody BatchSpectrumSearchModel batchSpectrumSearchModel
+    ) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
+        BatchSpectrumSearchDto batchSpectrumSearchDto = new BatchSpectrumSearchDto();
+        batchSpectrumSearchDto.setPeakListS3FileSrc(batchSpectrumSearchModel.getS3PeakListSrc());
+        batchSpectrumSearchDto.setMs2S3FileSrc(batchSpectrumSearchModel.getS3Ms2FileSrc());
+        batchSpectrumSearchDto.setMail(batchSpectrumSearchModel.getMail());
+        batchSpectrumSearchDto.setMs2spectrumDataSource(Ms2SpectrumDataSource.valueOf(batchSpectrumSearchModel.getMs2spectrumDataSource()));
+        batchSpectrumSearchDto.setTaskId(batchSpectrumSearchModel.getId());
+        batchSpectrumSearchDto.setAuthorId(batchSpectrumSearchModel.getAuthorId());
+        batchSpectrumSearchDto.setMsTolerance(batchSpectrumSearchModel.getMsTolerance());
+        batchSpectrumSearchDto.setMsmsTolerance(batchSpectrumSearchModel.getMsmsTolerance());
+        batchSpectrumSearchDto.setSimilarityTolerance(batchSpectrumSearchModel.getSimilarityTolerance());
+        batchSpectrumSearchDto.setForwardWeight(batchSpectrumSearchModel.getForwardWeight());
+        batchSpectrumSearchDto.setReverseWeight(batchSpectrumSearchModel.getReverseWeight());
+        batchSpectrumSearchDto.setSimilarityAlgorithm(batchSpectrumSearchModel.getSimilarityAlgorithm());
+        batchSpectrumSearchDto.setIonMode(batchSpectrumSearchModel.getIonMode());
+
+        Boolean isSuccessSubmit = batchSpectrumSearchService.postTaskSubmit(batchSpectrumSearchDto);
+        if (!isSuccessSubmit) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("submit task failed");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("submit task success");
     }
 
     @GetMapping("task/{id}")

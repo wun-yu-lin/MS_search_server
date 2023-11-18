@@ -52,10 +52,9 @@ public class ControllerException {
                 .body("S3DataDeleteException: " + exception.getMessage());
     }
 
-    @ExceptionHandler(RedisQueueErrorException.class)
-    public ResponseEntity<String> prepareResponseForRedisQueueErrorException(RedisQueueErrorException exception){
+    @ExceptionHandler(RedisErrorException.class)
+    public ResponseEntity<String> prepareResponseForRedisQueueErrorException(RedisErrorException exception){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("RedisQueueErrorException: " + exception.getMessage());
     }
-
 }

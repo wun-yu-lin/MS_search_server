@@ -14,7 +14,7 @@ public class BatchSpectrumSearchDto {
     private String mail;
     private Ms2SpectrumDataSource ms2spectrumDataSource;
     //Task submit
-    private String taskId;
+    private int taskId;
     private int authorId;
     private Double msTolerance;
     private Double msmsTolerance;

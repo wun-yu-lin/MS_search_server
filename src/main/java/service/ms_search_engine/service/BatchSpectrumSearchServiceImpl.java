@@ -1,5 +1,7 @@
 package service.ms_search_engine.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -7,10 +9,10 @@ import service.ms_search_engine.dao.BatchSearchRdbDao;
 import service.ms_search_engine.dao.BatchSearchS3FileDao;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
 import service.ms_search_engine.dto.BatchTaskSearchDto;
-import service.ms_search_engine.exception.DatabaseInsertErrorException;
-import service.ms_search_engine.exception.QueryParameterException;
-import service.ms_search_engine.exception.S3DataUploadException;
+import service.ms_search_engine.exception.*;
 import service.ms_search_engine.model.BatchSpectrumSearchModel;
+import service.ms_search_engine.redisService.RedisTaskQueueService;
+import service.ms_search_engine.redisService.RedisUtil;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,11 +25,15 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
 
     private final BatchSearchRdbDao batchSearchRdbDao;
     private final BatchSearchS3FileDao batchSearchS3FileDao;
+    private  final RedisTaskQueueService redisTaskQueueService;
 
     @Autowired
-    public BatchSpectrumSearchServiceImpl(BatchSearchRdbDao batchSearchRdbDao, BatchSearchS3FileDao batchSearchS3FileDao) {
+    public BatchSpectrumSearchServiceImpl(BatchSearchRdbDao batchSearchRdbDao,
+                                          BatchSearchS3FileDao batchSearchS3FileDao,
+                                          RedisTaskQueueService redisTaskQueueService) {
         this.batchSearchRdbDao = batchSearchRdbDao;
         this.batchSearchS3FileDao = batchSearchS3FileDao;
+        this.redisTaskQueueService = redisTaskQueueService;
     }
 
     @Override
@@ -45,8 +51,20 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
     }
 
     @Override
-    public BatchSpectrumSearchModel postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) {
-        return null;
+    public Boolean postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
+
+        //save submit to database
+        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(batchSpectrumSearchDto);
+        redisTaskQueueService.newTask(jsonString);
+        String taskString = redisTaskQueueService.getAndPopLastTask();
+        BatchSpectrumSearchDto batchSpectrumSearchDto1 = mapper.readValue(taskString, BatchSpectrumSearchDto.class);
+
+
+
+
+        return true;
     }
 
     @Override
