@@ -26,4 +26,10 @@ public class RedisTaskQueueServiceImpl implements RedisTaskQueueService{
     }
 
 
+    @Override
+    public Boolean queueExists() throws RedisErrorException {
+       return redisUtil.isListExist("taskQueue");
+    }
+
+
 }

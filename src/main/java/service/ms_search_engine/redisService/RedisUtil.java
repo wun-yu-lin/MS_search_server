@@ -286,6 +286,19 @@ public class RedisUtil {
         }
     }
 
+    public Boolean isListExist(String key) throws RedisErrorException {
+        try {
+//            BoundListOperations<String, String> listOps = redisTemplate.boundListOps(yourListKey);
+            long size = redisTemplate.opsForList().size(key);
+            if (size == 0) {
+                return false;
+            }
+            return true;
+        } catch (Exception ex) {
+            throw new RedisErrorException("獲取緩存List中的內容失敗了！" + key);
+        }
+    }
+
 
     /**
      * 刪除List緩存中多個list數據

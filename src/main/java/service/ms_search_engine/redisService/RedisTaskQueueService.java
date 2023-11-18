@@ -6,6 +6,8 @@ public interface RedisTaskQueueService {
     Boolean newTask(String taskString) throws RedisErrorException;
     String getAndPopLastTask() throws RedisErrorException;
 
+    Boolean queueExists() throws RedisErrorException;
+
 
 
 }

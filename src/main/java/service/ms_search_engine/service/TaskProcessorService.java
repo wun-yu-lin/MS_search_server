@@ -37,50 +37,50 @@ public class TaskProcessorService {
     @Bean
     public void listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException, InterruptedException {
         while (true) {
-            String taskDataStr = redisTaskQueueService.getAndPopLastTask();
-            if (taskDataStr != null) {
-                ObjectMapper mapper = new ObjectMapper();
-                BatchSpectrumSearchDto batchSpectrumSearchDto = mapper.readValue(taskDataStr, BatchSpectrumSearchDto.class);
-                //start process task
-                try {
-                    //change the task status to processing in database
-                    batchSpectrumSearchDto.setTaskStatus(TaskStatus.PROCESSING);
-                    batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+            try {
+                if (redisTaskQueueService.queueExists()) {
+
+                    String taskDataStr = redisTaskQueueService.getAndPopLastTask();
+                    ObjectMapper mapper = new ObjectMapper();
+                    BatchSpectrumSearchDto batchSpectrumSearchDto = mapper.readValue(taskDataStr, BatchSpectrumSearchDto.class);
+                    //start process task
                     try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        //change the task status to processing in database
+                        batchSpectrumSearchDto.setTaskStatus(TaskStatus.PROCESSING);
+                        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+
+
+                        Thread.sleep(1000);
+                        BatchSpectrumSearchCalculator batchSpectrumSearchCalculator = new BatchSpectrumSearchCalculator(batchSpectrumSearchDto);
+                        batchSpectrumSearchCalculator.processTask();
+
+
+                        Thread.sleep(1000);
+                        batchSpectrumSearchDto.setTaskStatus(TaskStatus.FINISH);
+                        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+
+                        System.out.println("Processing task: " + taskDataStr);
+                    } catch (RuntimeException e) {
+                        Thread.sleep(1000);
+                        batchSpectrumSearchDto.setTaskStatus(TaskStatus.ERROR);
+                        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+
+                        throw new RedisErrorException("Task server error");
                     }
 
-                    BatchSpectrumSearchCalculator batchSpectrumSearchCalculator = new BatchSpectrumSearchCalculator(batchSpectrumSearchDto);
-                    batchSpectrumSearchCalculator.processTask();
-
+//                processTask(taskData);
+                } else {
+                    // Sleep for a while if no tasks are available
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    batchSpectrumSearchDto.setTaskStatus(TaskStatus.FINISH);
-                    batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
-
-                    System.out.println("Processing task: " + taskDataStr);
-                } catch (RuntimeException e ) {
-                    Thread.sleep(1000);
-                    batchSpectrumSearchDto.setTaskStatus(TaskStatus.ERROR);
-                    batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
-
-                    throw new RedisErrorException("Task server error");
                 }
-
-//                processTask(taskData);
-            } else {
-                // Sleep for a while if no tasks are available
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                throw new RedisErrorException("Task server error");
             }
+
         }
     }
 
