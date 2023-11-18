@@ -52,7 +52,7 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         map.addValue("s3_peakList_src", batchSpectrumSearchDto.getPeakListS3FileSrc());
         map.addValue("s3_ms2file_src", batchSpectrumSearchDto.getMs2S3FileSrc());
         map.addValue("author_id", batchSpectrumSearchDto.getAuthorId());
-        map.addValue("task_status", TaskStatus.NOT_SUBMIT.getStatusCode());
+        map.addValue("task_status", batchSpectrumSearchDto.getTaskStatus().getStatusCode());
         map.addValue("mail", batchSpectrumSearchDto.getMail());
         map.addValue("ms2spectrumDataSource", batchSpectrumSearchDto.getMs2spectrumDataSource().name());
 
@@ -101,7 +101,7 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
                 "WHERE id=:taskId;";
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("taskStatus", TaskStatus.SUBMIT_IN_WAITING.getStatusCode());
+        map.put("taskStatus", batchSpectrumSearchDto.getTaskStatus().getStatusCode());
         map.put("MSTolerance", batchSpectrumSearchDto.getMsTolerance());
         map.put("msmsTolerance", batchSpectrumSearchDto.getMsmsTolerance());
         map.put("forwardWeight", batchSpectrumSearchDto.getForwardWeight());

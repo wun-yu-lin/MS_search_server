@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import service.ms_search_engine.constant.TaskStatus;
 import service.ms_search_engine.dao.BatchSearchRdbDao;
 import service.ms_search_engine.dao.BatchSearchS3FileDao;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
@@ -46,6 +47,7 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
             batchSearchS3FileDao.deleteFileByKey(dtoAfterUploadS3.getPeakListS3FileSrc());
             throw new S3DataUploadException("S3 data upload failed");
         }
+        dtoAfterUploadS3.setTaskStatus(TaskStatus.NOT_SUBMIT);
         BatchSpectrumSearchModel modelAfterSaveRdb = batchSearchRdbDao.postFileUploadInfo(dtoAfterUploadS3);
 
         return modelAfterSaveRdb;
@@ -56,6 +58,7 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
     public Boolean postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
 
         //save submit to database
+        batchSpectrumSearchDto.setTaskStatus(TaskStatus.SUBMIT_IN_WAITING);
         Boolean isRdbUpdateSuccess = batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
         if (!isRdbUpdateSuccess) {
             throw new DatabaseUpdateErrorException("update task info failed");
@@ -64,7 +67,7 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
         String jsonString = mapper.writeValueAsString(batchSpectrumSearchDto);
         redisTaskQueueService.newTask(jsonString);
 //        String taskString = redisTaskQueueService.getAndPopLastTask();
-//        BatchSpectrumSearchDto batchSpectrumSearchDto1 = mapper.readValue(taskString, BatchSpectrumSearchDto.class);
+//        BatchSpectrumSearchDto  batchSpectrumSearchDto1 = mapper.readValue(taskString, BatchSpectrumSearchDto.class);
 
 
 
