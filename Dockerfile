@@ -6,4 +6,4 @@ ADD src/main/resources/application-production-webServer.properties /app/config/p
 ADD src/main/resources/application-production-backgroundServer.properties /app/config/production/backgroundServer/application.properties
 EXPOSE 8080
 LABEL authors="linwunyu"
-ENTRYPOINT ["java","-jar","app.jar", "--spring.config.name=application", "--spring.config.location=/app/config/production/"]
+ENTRYPOINT ["java","-jar","app.jar", "--spring.config.name=application", "--spring.config.location=/app/config/production/webServer/"]
