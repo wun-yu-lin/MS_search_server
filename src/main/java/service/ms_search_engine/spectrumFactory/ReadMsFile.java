@@ -73,13 +73,15 @@ public class ReadMsFile {
                 //if line is END IONS, add Ms2spectrumModel obj to list, and normalize intensity of ms2 spectrum
                 if (Objects.equals(line, "END IONS")) {
                     assert ms2spectrumModel != null;
-                    //normalize intensity of ms2 spectrum
-                    double sumIntensity = 0;
+                    //normalize intensity of ms2 spectrum to %, max is 100%
+                    double intensityMax = 0;
                     for (int i = 0; i < ms2spectrumModel.getMs2spectrumArrauList().size(); i++) {
-                        sumIntensity += ms2spectrumModel.getMs2spectrumArrauList().get(i)[1];
+                        if (ms2spectrumModel.getMs2spectrumArrauList().get(i)[1] > intensityMax) {
+                            intensityMax = ms2spectrumModel.getMs2spectrumArrauList().get(i)[1];
+                        }
                     }
                     for (int i = 0; i < ms2spectrumModel.getMs2spectrumArrauList().size(); i++) {
-                        ms2spectrumModel.getMs2spectrumArrauList().get(i)[1] = ms2spectrumModel.getMs2spectrumArrauList().get(i)[1] / sumIntensity;
+                        ms2spectrumModel.getMs2spectrumArrauList().get(i)[1] = (ms2spectrumModel.getMs2spectrumArrauList().get(i)[1] / intensityMax)*100;
                     }
 
                     ms2spectrumModelList.add(ms2spectrumModel);
