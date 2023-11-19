@@ -1,4 +1,4 @@
-package service.ms_search_engine.service;
+package service.ms_search_engine.batchSearchSpectrum;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,9 +7,9 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import service.ms_search_engine.batchSearchSpectrum.BatchSpectrumSearchCalculatorService;
 import service.ms_search_engine.constant.TaskStatus;
 import service.ms_search_engine.dao.BatchSearchRdbDao;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
@@ -17,7 +17,6 @@ import service.ms_search_engine.exception.DatabaseUpdateErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.exception.RedisErrorException;
 import service.ms_search_engine.redisService.RedisTaskQueueService;
-import service.ms_search_engine.utility.BatchSpectrumSearchCalculator;
 
 @Service
 @Component
@@ -51,7 +50,7 @@ public class TaskProcessorService {
 
 
                         Thread.sleep(1000);
-                        BatchSpectrumSearchCalculator batchSpectrumSearchCalculator = new BatchSpectrumSearchCalculator(batchSpectrumSearchDto);
+                        BatchSpectrumSearchCalculatorService batchSpectrumSearchCalculator = new BatchSpectrumSearchCalculatorService(batchSpectrumSearchDto);
                         batchSpectrumSearchCalculator.processTask();
 
 
