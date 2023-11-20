@@ -72,6 +72,8 @@ async function submitForm() {
     _taskObj.responseObj.msmsTolerance = parseFloat(document.getElementById("msmsTolerance").value);
     _taskObj.responseObj.similarityAlgorithm = document.getElementById("algorithm_para").value;
     _taskObj.responseObj.similarityTolerance = parseFloat(document.getElementById("ms2_similarity_para").value);
+    _taskObj.responseObj.ms1Ms2matchMzTolerance = parseFloat(document.getElementById("ms1ms2PairMzParameter").value);
+    _taskObj.responseObj.ms1Ms2matchRtTolerance = parseFloat(document.getElementById("ms1ms2PairRtParameter").value);
 
     console.log(_taskObj.responseObj)
     let Keys = Object.keys(_taskObj.responseObj);
@@ -107,13 +109,13 @@ async function submitForm() {
         alert("MS tolerance and MS/MS tolerance must be filled");
         isFormPass = false;
     }
-    if (_taskObj.responseObj.msmsTolerance < 0 || _taskObj.responseObj.msTolerance < 0) {
-        alert("MS tolerance and MS/MS tolerance must be positive");
+    if (_taskObj.responseObj.msmsTolerance < 0 || _taskObj.responseObj.msTolerance < 0 || _taskObj.responseObj.ms1Ms2matchMzTolerance < 0 || _taskObj.responseObj.ms1Ms2matchRtTolerance < 0){
+        alert("MS tolerance and MS/MS tolerance, and RT must be positive");
         isFormPass = false;
     }
 
-    if (_taskObj.responseObj.msmsTolerance > 100 || _taskObj.responseObj.msTolerance >100) {
-        alert("MS tolerance and MS/MS tolerance must be less than 100");
+    if (_taskObj.responseObj.msmsTolerance > 100 || _taskObj.responseObj.msTolerance >100 || _taskObj.responseObj.ms1Ms2matchMzTolerance > 100 || _taskObj.responseObj.ms1Ms2matchRtTolerance > 100 || _taskObj.responseObj.ms1Ms2matchMzTolerance > 100 || _taskObj.responseObj.ms1Ms2matchRtTolerance > 100){
+        alert("MS tolerance and MS/MS tolerance, and RT must be less than 100");
         isFormPass = false;
     }
     if (_taskObj.responseObj.similarityTolerance < 0 || _taskObj.responseObj.similarityTolerance > 1) {

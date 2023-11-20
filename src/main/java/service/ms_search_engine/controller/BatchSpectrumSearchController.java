@@ -101,6 +101,8 @@ public class BatchSpectrumSearchController {
         batchSpectrumSearchDto.setReverseWeight(batchSpectrumSearchModel.getReverseWeight());
         batchSpectrumSearchDto.setSimilarityAlgorithm(batchSpectrumSearchModel.getSimilarityAlgorithm());
         batchSpectrumSearchDto.setIonMode(batchSpectrumSearchModel.getIonMode());
+        batchSpectrumSearchDto.setMs1Ms2matchMzTolerance(batchSpectrumSearchModel.getMs1Ms2matchMzTolerance());
+        batchSpectrumSearchDto.setMs1Ms2matchRtTolerance(batchSpectrumSearchModel.getMs1Ms2matchRtTolerance());
 
         Boolean isSuccessSubmit = batchSpectrumSearchService.postTaskSubmit(batchSpectrumSearchDto);
         if (!isSuccessSubmit) {

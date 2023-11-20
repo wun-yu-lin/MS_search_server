@@ -33,6 +33,14 @@
 				<div class="uploadStatus">Upload status:   <img id="uploadStatusLoading" class="hidden" th:src="@{/icon/upload-loading.gif}" alt="" style="width: 20px"><span id="uploadStatusResult"></span></div>
 			</div>
 			<hr>
+			<h3>MS1 & MS2 pair parameter</h3>
+			<div class="ms1ms2PairParameter_div">
+				<label for="ms1ms2PairMzParameter">Mz tolerance:</label>
+				<input type="text" id="ms1ms2PairMzParameter" name="ms1ms2PairMzParameter" placeholder="Require, 0-100 sec">
+				<label for="ms1ms2PairRtParameter">Rt tolerance:</label>
+				<input type="text" id="ms1ms2PairRtParameter" name="ms1ms2PairRtParameter" placeholder="Require, 0-100 ppm">
+			</div>
+
 			<h3>MS/MS search parameter</h3>
 
 			<div class="msToleranceParameter_div">

@@ -45,11 +45,15 @@ public class PeakPairGenerator {
         for (int i = 0; i < this.ms1PeakList.size(); i++) {
 
             //cuurent ms1 peak key to search in ms2 spectrumHashMap
-            String tempStr = (String)(Integer.parseInt(String.valueOf(this.ms1PeakList.get(i).getPeakMz())) + "_" + Integer.parseInt(String.valueOf(this.ms1PeakList.get(i).getPeakRt()/60)));
+            int tempPreMzInt = (int) Math.round(this.ms1PeakList.get(i).getPeakMz());
+            int tempRtInt = (int) Math.round(this.ms1PeakList.get(i).getPeakRt()/60);
+            String tempStr = (String) (tempPreMzInt + "_" + tempRtInt);
+            PeakPairModel tempPeakPairModel = new PeakPairModel();
+            Ms1peakModel tempMs1Model =  this.ms1PeakList.get(i);
 
             if (ms2spectrumModelHashMap.containsKey(tempStr)){
                 ArrayList<Ms2spectrumModel> tempArrayList = ms2spectrumModelHashMap.get(tempStr);
-                Ms1peakModel tempMs1Model =  this.ms1PeakList.get(i);
+
                 int bestMatchIndex = -1;
                 double bestMatchMzDev = 1000000000.0;
                 double bestMatchRtDev = 1000000000.0;
@@ -66,7 +70,7 @@ public class PeakPairGenerator {
 
                     }
                 }
-                PeakPairModel tempPeakPairModel = new PeakPairModel();
+
                 if (bestMatchIndex !=-1 && bestMatchMzDev < toleranceMz && bestMatchRtDev < toleranceRt){
                     //match peak, add peak pair to generatedList
 
@@ -93,6 +97,12 @@ public class PeakPairGenerator {
                 }
                 this.peakPairModelArrayList.add(tempPeakPairModel);
 
+            }else {
+                //ms1
+                tempPeakPairModel.setMs1FeatureId(tempMs1Model.getMs1FeatureId());
+                tempPeakPairModel.setPeakMz(tempMs1Model.getPeakMz());
+                tempPeakPairModel.setPeakRt(tempMs1Model.getPeakRt());
+                this.peakPairModelArrayList.add(tempPeakPairModel);
             }
 
 
