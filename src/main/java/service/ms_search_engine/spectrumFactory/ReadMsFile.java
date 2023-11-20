@@ -96,6 +96,60 @@ public class ReadMsFile {
         return ms2spectrumModelList;
     }
 
+    public ArrayList<Ms1peakModel> readMs1PeakListCsvFile() throws FileNotFoundException {
+        ArrayList<Ms1peakModel> ms1PeakList = new ArrayList<>();
+
+
+        //TODO
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line = null;
+            int scanIndex = 0;
+
+
+            while ((line = reader.readLine()) != null) {
+                if (scanIndex== 0) {
+                    String[] headerList = line.split(",");
+                    if(!(Objects.equals(headerList[0], "M_feature")) ||
+                        !(Objects.equals(headerList[1], "mz")) ||
+                        !(Objects.equals(headerList[2], "rt"))
+
+                    ){
+                        throw new FileNotFoundException("Peak list.csv file error");
+                    }
+                    scanIndex++;
+                    continue;
+
+                }
+
+
+
+                Ms1peakModel ms1peakModel = new Ms1peakModel();
+                String[] temp = line.split(",");
+                //if no data in row , break loop
+                if((Objects.equals(temp[0], "")) || (Objects.equals(temp[1], "mz")) || (Objects.equals(temp[2], "rt"))
+
+                ){
+                    break;
+                }
+
+
+                ms1peakModel.setMs1FeatureId(temp[0]);
+                ms1peakModel.setPeakMz(Double.parseDouble(temp[1]));
+                ms1peakModel.setPeakRt(Double.parseDouble(temp[2]));
+
+                ms1PeakList.add(ms1peakModel);
+                scanIndex++;
+
+
+            }
+        } catch (IOException ignored) {
+
+        }
+
+
+        return ms1PeakList;
+    }
+
     public static void main(String[] args) {
         ReadMsFile readMsFile = new ReadMsFile("");
         try {

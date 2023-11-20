@@ -25,6 +25,8 @@ public class BatchSpectrumSearchDto {
     private String similarityAlgorithm;
     private String ionMode;
     private TaskStatus taskStatus;
+    private Double ms1Ms2matchMzTolerance;
+    private Double ms1Ms2matchRtTolerance;
 
 
     public void getMs2spectrumDataSource(Ms2SpectrumDataSource ms2spectrumDataSource) {

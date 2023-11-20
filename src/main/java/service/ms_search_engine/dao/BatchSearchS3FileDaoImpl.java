@@ -1,22 +1,24 @@
 package service.ms_search_engine.dao;
 
 import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.policy.Resource;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
+import service.ms_search_engine.exception.S3DataDownloadException;
 import service.ms_search_engine.exception.S3DataUploadException;
-import service.ms_search_engine.model.BatchSpectrumSearchModel;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -26,8 +28,12 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao{
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
+    @Value("${aws.s3.bucket.download.fileDir}")
+    private String downloadFileDir;
 
     private final AmazonS3 s3Client;
+
+
 
     @Autowired
     public BatchSearchS3FileDaoImpl(AmazonS3 s3Client) {
@@ -114,6 +120,43 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao{
 
         return  uuid.toString();
     }
+
+    @Override
+    public UrlResource downloadFileByFileName(String fileName) throws S3DataDownloadException, IOException {
+        if (bucketIsEmpty()) {
+            throw new S3DataDownloadException("Requested bucket does not exist or is empty");
+        }
+//        String storedFileNameDir = downloadFileDir + fileName;
+        S3Object object = s3Client.getObject(bucketName, fileName);
+        try (S3ObjectInputStream s3is = object.getObjectContent()) {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+                byte[] read_buf = new byte[1024];
+                int read_len = 0;
+                while ((read_len = s3is.read(read_buf)) > 0) {
+                    fileOutputStream.write(read_buf, 0, read_len);
+                }
+            }
+            Path pathObject = Paths.get(fileName);
+            UrlResource urlResource = new UrlResource(pathObject.toUri());
+
+            if (urlResource.exists() || urlResource.isReadable()) {
+                return urlResource;
+            } else {
+                throw new S3DataDownloadException("Could not find the file!");
+            }
+        }
+
+    }
+    private boolean bucketIsEmpty() {
+
+        ListObjectsV2Result result = s3Client.listObjectsV2(this.bucketName);
+        if (result == null){
+            return false;
+        }
+        List<S3ObjectSummary> objects = result.getObjectSummaries();
+        return objects.isEmpty();
+    }
+
 
 
 }
