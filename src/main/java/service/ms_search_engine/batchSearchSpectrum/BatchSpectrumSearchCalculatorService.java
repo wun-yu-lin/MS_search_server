@@ -2,17 +2,12 @@ package service.ms_search_engine.batchSearchSpectrum;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import service.ms_search_engine.dto.BatchSpectrumSearchDto;
-import service.ms_search_engine.spectrumFactory.Ms1peakModel;
-import service.ms_search_engine.spectrumFactory.Ms2spectrumModel;
-import service.ms_search_engine.spectrumFactory.ReadMsFile;
+import org.springframework.stereotype.Component;
+import service.ms_search_engine.spectrumFactory.*;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-
+@Component
 public class BatchSpectrumSearchCalculatorService {
     private BatchSearchProcessorDto batchSearchProcessorDto;
 
@@ -43,23 +38,15 @@ public class BatchSpectrumSearchCalculatorService {
             ReadMsFile readMs2File = new ReadMsFile(batchSearchProcessorDto.getMs2spectrumResourceUrl().getURL().getPath());
             ArrayList<Ms2spectrumModel> ms2spectrumModelList = readMs2File.readXcms3MgfFile();
 
-                //ms2 data to hashmap
-            HashMap<String, ArrayList<Ms2spectrumModel>> ms2spectrumModelHashMap = new HashMap<>();
-            for (int i = 0; i < ms2spectrumModelList.size(); i++) {
-                int tempPreMzInt = (int) Math.round(ms2spectrumModelList.get(i).getPrecursorMz());
-                int tempRtInt = (int) Math.round(ms2spectrumModelList.get(i).getRetentionTime()/60);
-                String tempKey = (String) (tempPreMzInt + "_" + tempRtInt);
-                if(ms2spectrumModelHashMap.containsKey(tempKey)) {
-                    ms2spectrumModelHashMap.get(tempKey).add(ms2spectrumModelList.get(i));
-                }else {
-                    ArrayList<Ms2spectrumModel> tempArrayList = new ArrayList<>();
-                    tempArrayList.add(ms2spectrumModelList.get(i));
-                    ms2spectrumModelHashMap.put(tempKey, tempArrayList);
-                }
 
-            }
 
             //generate ms1, ms2 peak-pair list, invoke ms1-ms2 pair generator
+            PeakPairParameterModel peakPairParameterModel = new PeakPairParameterModel();
+            peakPairParameterModel.setMs1Ms2matchMzTolerance(batchSearchProcessorDto.getMs1Ms2matchMzTolerance());
+            peakPairParameterModel.setMs1Ms2matchRtTolerance(batchSearchProcessorDto.getMs1Ms2matchRtTolerance());
+            peakPairParameterModel.setIonMode(batchSearchProcessorDto.getIonMode());
+            PeakPairGenerator peakPairGenerator = new PeakPairGenerator(ms1PeakList, ms2spectrumModelList, peakPairParameterModel);
+            ArrayList<PeakPairModel> ms1ms2PeakPairList =  peakPairGenerator.generatePeakPairList();
 
 
             //search ms1, ms2 peak-pair list in library, add results to ms1, ms2 peak-pair list
