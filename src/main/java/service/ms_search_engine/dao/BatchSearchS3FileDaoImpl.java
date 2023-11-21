@@ -28,9 +28,6 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
-    @Value("${aws.s3.bucket.download.fileDir}")
-    private String downloadFileDir;
-
     private final AmazonS3 s3Client;
 
 
