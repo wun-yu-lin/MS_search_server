@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -17,7 +18,8 @@ public class ReadMsFile {
 
     public ArrayList<Ms2spectrumModel> readXcms3MgfFile() throws FileNotFoundException {
         ArrayList<Ms2spectrumModel> ms2spectrumModelList = new ArrayList<>();
-
+        DecimalFormat decimalFormatMz = new DecimalFormat("0.0000000");
+        DecimalFormat decimalFormatRt = new DecimalFormat("0.00");
 
         //TODO
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -66,7 +68,7 @@ public class ReadMsFile {
 
                 } else if (!Objects.equals(line.split("=")[0], "END IONS") && startRead) {
                     //save m/z and intensity to list, intensity is not normalized,  current is absolute value
-                    ms2spectrumModel.getMs2spectrumArrauList().add(new Double[]{Double.parseDouble(line.split(" ")[0]), Double.parseDouble(line.split(" ")[1])});
+                    ms2spectrumModel.getMs2spectrumArrauList().add(new Double[]{Double.parseDouble(decimalFormatMz.format(Double.parseDouble(line.split(" ")[0]))), Double.parseDouble(decimalFormatRt.format(Double.parseDouble(line.split(" ")[1])))});
 
                 }
 
@@ -99,6 +101,8 @@ public class ReadMsFile {
     public ArrayList<Ms1peakModel> readMs1PeakListCsvFile() throws FileNotFoundException {
         ArrayList<Ms1peakModel> ms1PeakList = new ArrayList<>();
 
+        DecimalFormat decimalFormatMz = new DecimalFormat("0.0000000");
+        DecimalFormat decimalFormatRt = new DecimalFormat("0.00");
 
         //TODO
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -134,8 +138,8 @@ public class ReadMsFile {
 
 
                 ms1peakModel.setMs1FeatureId(temp[0]);
-                ms1peakModel.setPeakMz(Double.parseDouble(temp[1]));
-                ms1peakModel.setPeakRt(Double.parseDouble(temp[2]));
+                ms1peakModel.setPeakMz(Double.parseDouble(decimalFormatMz.format(Double.parseDouble(temp[1]))));
+                ms1peakModel.setPeakRt(Double.parseDouble(decimalFormatRt.format(Double.parseDouble(temp[2]))));
 
                 ms1PeakList.add(ms1peakModel);
                 scanIndex++;

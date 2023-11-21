@@ -1,5 +1,6 @@
 package service.ms_search_engine.utility;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +34,17 @@ public class MS2spectrumDataTransFormation {
 
     public String ms2SpectrumNestedArrayToString(List<Double[]> ms2SpectrumArrayList){
         StringBuilder ms2spectrumStr = new StringBuilder();
+        DecimalFormat decimalFormatMz = new DecimalFormat("0.0000000");
+        DecimalFormat decimalFormatRt = new DecimalFormat("0.00");
 
         int arrListLength = ms2SpectrumArrayList.size();
 
         for (int i = 0; i < arrListLength ; i++) {
             if (ms2SpectrumArrayList.get(i).length > 1 ) {
-                ms2spectrumStr.append(ms2SpectrumArrayList.get(i)[0]).append(":").append(ms2SpectrumArrayList.get(i)[1]);
+                ms2spectrumStr.append(decimalFormatMz.format(ms2SpectrumArrayList.get(i)[0])).append(":").append(decimalFormatRt.format(ms2SpectrumArrayList.get(i)[1]));
             }
             if(ms2SpectrumArrayList.get(i).length == 1){
-                ms2spectrumStr.append(ms2SpectrumArrayList.get(i)[0]);
+                ms2spectrumStr.append(decimalFormatMz.format(ms2SpectrumArrayList.get(i)[0]));
             }
             if(ms2SpectrumArrayList.get(i).length != 0){
                 ms2spectrumStr.append(" ");

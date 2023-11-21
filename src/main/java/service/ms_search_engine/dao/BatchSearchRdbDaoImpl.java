@@ -94,10 +94,10 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         }
 
 
-        String sqlStr = "UPDATE ms_search_library.batch_task_info SET task_status=:taskStatus, MS_tolerance=:MSTolerance, " +
-                "MSMS_tolerance=:msmsTolerance, forward_weight=:forwardWeight, reverse_weight=:reverseWeight, " +
-                "similarity_algorithm=:similarityAlgorithm, ion_mode=:ionMode, similarity_tolerance=:similarityTolerance, mail=:mail " +
-                "WHERE id=:taskId;";
+        String sqlStr = "UPDATE ms_search_library.batch_task_info SET task_status=:taskStatus, MS_tolerance=:MSTolerance, s3_results_src=:s3ResultsSrc, " +
+                " MSMS_tolerance=:msmsTolerance, forward_weight=:forwardWeight, reverse_weight=:reverseWeight, finish_time=:finishTime,  " +
+                " similarity_algorithm=:similarityAlgorithm, ion_mode=:ionMode, similarity_tolerance=:similarityTolerance, mail=:mail " +
+                " WHERE id=:taskId;";
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("taskStatus", batchSpectrumSearchDto.getTaskStatus().getStatusCode());
@@ -110,6 +110,12 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         map.put("similarityTolerance", batchSpectrumSearchDto.getSimilarityTolerance());
         map.put("mail", batchSpectrumSearchDto.getMail());
         map.put("taskId", batchSpectrumSearchDto.getTaskId());
+        map.put("finishTime", batchSpectrumSearchDto.getFinishTime());
+        if (batchSpectrumSearchDto.getResultPeakListS3FileSrc() == null){
+            map.put("s3ResultsSrc", null);
+        }else {
+            map.put("s3ResultsSrc", batchSpectrumSearchDto.getResultPeakListS3FileSrc());
+        }
 
         int upDataResult =  namedParameterJdbcTemplate.update(sqlStr, map);
 
