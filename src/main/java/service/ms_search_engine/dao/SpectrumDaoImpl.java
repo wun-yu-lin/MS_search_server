@@ -215,5 +215,4 @@ public class SpectrumDaoImpl implements SpectrumDao {
         return insertResult==1;
     }
 
-
 }
