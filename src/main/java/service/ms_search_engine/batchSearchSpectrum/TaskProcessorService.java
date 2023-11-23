@@ -122,7 +122,16 @@ public class TaskProcessorService {
                             batchSpectrumSearchResultsVO.setExpPeakMz(peakPairModelArrayList.get(i).getPeakMz());
                             batchSpectrumSearchResultsVO.setExpPeakRt(peakPairModelArrayList.get(i).getPeakRt());
                             batchSpectrumSearchResultsVO.setExpScans(peakPairModelArrayList.get(i).getScans());
-                            batchSpectrumSearchResultsVO.setExpCharge(peakPairModelArrayList.get(i).getCharge());
+                            if (batchSpectrumSearchDto.getIonMode() == null) {
+                                batchSpectrumSearchResultsVO.setExpCharge("All");
+                            } else if (batchSpectrumSearchDto.getIonMode().equals("negative")) {
+                                batchSpectrumSearchResultsVO.setExpCharge("Neg");
+                            } else if (batchSpectrumSearchDto.getIonMode().equals("positive")){
+                                batchSpectrumSearchResultsVO.setExpCharge("Pos");
+                            }else {
+                                throw new QueryParameterException("Ion mode error");
+                            }
+                            //batchSpectrumSearchResultsVO.setExpCharge(batchSpectrumSearchDto.getIonMode());
                             batchSpectrumSearchResultsVO.setExpRetentionTime(peakPairModelArrayList.get(i).getRetentionTime());
                             batchSpectrumSearchResultsVO.setExpMs2PeakId(peakPairModelArrayList.get(i).getMs2PeakId());
                             batchSpectrumSearchResultsVO.setExpMs2FeatureId(peakPairModelArrayList.get(i).getMs2FeatureId());
@@ -173,8 +182,8 @@ public class TaskProcessorService {
                         header[1] = "mz";
                         header[2] = "rt";
                         header[3] = "scans";
-                        header[4] = "charge";
-                        header[5] = "retention_time";
+                        header[4] = "para_ion_mode";
+                        header[5] = "exp_spectrum_retention_time";
                         header[6] = "exp_ms2_peak_id";
                         header[7] = "exp_ms2_feature_id";
                         header[8] = "exp_ms2_spectrum";

@@ -8,19 +8,19 @@ public class BatchSpectrumSearchResultsVO {
     private String expMs1FeatureId;
     private Double expPeakMz;
     private Double expPeakRt;
-    private int expScans;
+    private Integer expScans;
     private String expCharge;
-    private double expRetentionTime; //in seconds
+    private Double expRetentionTime; //in seconds
     private String expMs2PeakId;
     private String expMs2FeatureId;
     private String expMs2Spectrum;
 
     //spectrumData model
-    private int compoundDataId;
-    private int compoundClassificationId;
-    private int msLevel;
-    private double precursorMz;
-    private double exactMass;
+    private Integer compoundDataId;
+    private Integer compoundClassificationId;
+    private Integer msLevel;
+    private Double precursorMz;
+    private Double exactMass;
     private String collisionEnergy;
     private String toolType;
     private String instrument;

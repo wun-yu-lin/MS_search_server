@@ -33,6 +33,7 @@ public class BatchSpectrumSearchDto {
     private Double ms1Ms2matchMzTolerance;
     private Double ms1Ms2matchRtTolerance;
     private Date finishTime;
+    private String taskDescription;
 
 
     public void getMs2spectrumDataSource(Ms2SpectrumDataSource ms2spectrumDataSource) {

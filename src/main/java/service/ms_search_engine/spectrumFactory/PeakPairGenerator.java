@@ -89,7 +89,7 @@ public class PeakPairGenerator {
                     tempPeakPairModel.setMs2spectrumArrauList(tempMs2Spectrum.getMs2spectrumArrauList());
 
                 }else{
-                    //ms1
+                    //ms1 only, no ms2 match
                     tempPeakPairModel.setMs1FeatureId(tempMs1Model.getMs1FeatureId());
                     tempPeakPairModel.setPeakMz(tempMs1Model.getPeakMz());
                     tempPeakPairModel.setPeakRt(tempMs1Model.getPeakRt());

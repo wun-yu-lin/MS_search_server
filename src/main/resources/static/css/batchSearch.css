@@ -26,7 +26,8 @@ body .batchSearch_div form label {
   color: #555;
 }
 body .batchSearch_div form input,
-body .batchSearch_div form select {
+body .batchSearch_div form select,
+body .batchSearch_div form textarea {
   border: #cbcbcb 1px solid;
   border-radius: 5px;
   width: 100%;

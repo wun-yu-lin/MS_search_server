@@ -31,6 +31,7 @@ public class BatchSpectrumSearchModel {
    private Date finishTime;
    private Double ms1Ms2matchMzTolerance;
    private Double ms1Ms2matchRtTolerance;
+   private String taskDescription;
 
 
 

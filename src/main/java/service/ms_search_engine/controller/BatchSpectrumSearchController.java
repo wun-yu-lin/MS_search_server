@@ -43,7 +43,8 @@ public class BatchSpectrumSearchController {
             @RequestParam @NotNull MultipartFile ms2File,
             @RequestParam @NotNull String mail,
             @RequestParam @NotNull Ms2SpectrumDataSource ms2spectrumDataSource,
-            @RequestParam(defaultValue = "0") int authorId
+            @RequestParam(defaultValue = "0") int authorId,
+            @RequestParam String taskDescription
             ) throws S3DataUploadException, QueryParameterException, DatabaseInsertErrorException {
 
         //setting max file size
@@ -79,6 +80,7 @@ public class BatchSpectrumSearchController {
         batchSpectrumSearchDto.setMs2spectrumDataSource(ms2spectrumDataSource);
         batchSpectrumSearchDto.setMail(mail);
         batchSpectrumSearchDto.setAuthorId(authorId);
+        batchSpectrumSearchDto.setTaskDescription(taskDescription);
         BatchSpectrumSearchModel batchSpectrumSearchModel = batchSpectrumSearchService.postFileUpload(batchSpectrumSearchDto);
         return ResponseEntity.status(HttpStatus.OK).body(batchSpectrumSearchModel);
     }
@@ -103,6 +105,7 @@ public class BatchSpectrumSearchController {
         batchSpectrumSearchDto.setIonMode(batchSpectrumSearchModel.getIonMode());
         batchSpectrumSearchDto.setMs1Ms2matchMzTolerance(batchSpectrumSearchModel.getMs1Ms2matchMzTolerance());
         batchSpectrumSearchDto.setMs1Ms2matchRtTolerance(batchSpectrumSearchModel.getMs1Ms2matchRtTolerance());
+        batchSpectrumSearchDto.setTaskDescription(batchSpectrumSearchModel.getTaskDescription());
 
         Boolean isSuccessSubmit = batchSpectrumSearchService.postTaskSubmit(batchSpectrumSearchDto);
         if (!isSuccessSubmit) {
@@ -112,8 +115,11 @@ public class BatchSpectrumSearchController {
     }
 
     @GetMapping("task/{id}")
-    public ResponseEntity<BatchSpectrumSearchModel> getTaskInfoById(@PathVariable @NotNull String id) {
-        return null;
+    public ResponseEntity<BatchSpectrumSearchModel> getTaskInfoById(@PathVariable @NotNull int id) throws QueryParameterException, SQLException {
+        BatchSpectrumSearchDto batchSpectrumSearchDto = new BatchSpectrumSearchDto();
+        BatchSpectrumSearchModel batchSpectrumSearchModel = batchSpectrumSearchService.getTaskInfoById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(batchSpectrumSearchModel);
     }
 
 

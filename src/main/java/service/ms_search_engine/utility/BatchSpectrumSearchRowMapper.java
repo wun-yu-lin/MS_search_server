@@ -31,6 +31,9 @@ public class BatchSpectrumSearchRowMapper implements RowMapper<BatchSpectrumSear
         batchSpectrumSearchModel.setMail(rs.getString("mail"));
         batchSpectrumSearchModel.setSimilarityTolerance(rs.getDouble("similarity_tolerance"));
         batchSpectrumSearchModel.setMs2spectrumDataSource(rs.getString("ms2spectrumDataSource"));
+        batchSpectrumSearchModel.setMs1Ms2matchMzTolerance(rs.getDouble("ms1ms2_match_mz_tolerance"));
+        batchSpectrumSearchModel.setMs1Ms2matchRtTolerance(rs.getDouble("ms1ms2_match_rt_tolerance"));
+        batchSpectrumSearchModel.setTaskDescription(rs.getString("task_description"));
 
         return batchSpectrumSearchModel;
     }

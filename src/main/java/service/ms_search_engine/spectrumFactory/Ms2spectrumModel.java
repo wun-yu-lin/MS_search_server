@@ -6,11 +6,11 @@ import java.util.List;
 
 @Data
 public class Ms2spectrumModel {
-    private int scans;
-    private int msLevel;
+    private Integer scans;
+    private Integer msLevel;
     private String charge;
-    private double retentionTime;
-    private double precursorMz;
+    private Double retentionTime;
+    private Double precursorMz;
     private String peakId;
     private String featureId;
     private List<Double[]> ms2spectrumArrauList; //ex: [m/z, intensity]

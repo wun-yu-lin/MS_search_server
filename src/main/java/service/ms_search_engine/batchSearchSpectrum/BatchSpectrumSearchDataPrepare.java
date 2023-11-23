@@ -49,8 +49,7 @@ public class BatchSpectrumSearchDataPrepare {
             return ms1ms2PeakPairList;
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return null ;
+            throw new RuntimeException(e);
         }
     }
 

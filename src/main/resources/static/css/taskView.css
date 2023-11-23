@@ -15,7 +15,14 @@ table {
 table, th, td {
   border: 1px solid #ddd;
 }
-table a, th a, td a {
+table span, th span, td span {
+  font-weight: bold;
+  color: black;
+}
+table p, th p, td p {
+  margin: 5px;
+}
+table p a, th p a, td p a {
   color: #212124;
 }
 
@@ -32,6 +39,7 @@ button {
   background-color: #3498db;
   color: #ffffff;
   padding: 10px 15px;
+  margin: 5px;
   border: none;
   border-radius: 5px;
   cursor: pointer;

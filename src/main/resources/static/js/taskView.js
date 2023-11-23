@@ -145,26 +145,37 @@ function createTableByTaskListData(taskObj) {
            break
 
     }
+    let tdFileSource = document.createElement("td")
+    let pPeakList = document.createElement("p")
+    pPeakList.innerHTML = `<span>MS1 file:</span>  <a href=${taskObj.s3PeakListSrc}>${taskObj.s3PeakListSrc.split(".net/")[1]}</a>`
 
-    let tdPeakList = document.createElement("td")
-    tdPeakList.innerHTML = `<a href=${taskObj.s3PeakListSrc}>${taskObj.s3PeakListSrc.split(".net/")[1]}</a>`
+    let pMs2File = document.createElement("p")
+    pMs2File.innerHTML = `<span>MS2 file:</span>  <a href=${taskObj.s3Ms2FileSrc}>${taskObj.s3Ms2FileSrc.split(".net/")[1]}</a>`
 
-    let tdMs2File = document.createElement("td")
-    tdMs2File.innerHTML = `<a href=${taskObj.s3Ms2FileSrc}>${taskObj.s3Ms2FileSrc.split(".net/")[1]}</a>`
-
-    let tdResult = document.createElement("td")
+    let pResult = document.createElement("p")
     if (taskObj.s3ResultsSrc === "N/A") {
-        tdResult.innerText = taskObj.s3ResultsSrc
+        pResult.innerHTML = `<span>Result:</span> ${taskObj.s3ResultsSrc}`
     }else{
-        tdResult.innerHTML = ` <a href=${taskObj.s3ResultsSrc}>${taskObj.s3ResultsSrc.split(".net/")[1]}</a>`
+        pResult.innerHTML = `<span>Result:</span> <a href=${taskObj.s3ResultsSrc}>${taskObj.s3ResultsSrc.split(".net/")[1]}</a>`
     }
+    tdFileSource.appendChild(pPeakList);
+    tdFileSource.appendChild(pMs2File);
+    tdFileSource.appendChild(pResult);
 
 
     let tdIonMode = document.createElement("td")
+    if(taskObj.ionMode == null || taskObj.ionMode === "" || taskObj.ionMode==="N/A"){
+        taskObj.ionMode = "all"
+    }
     tdIonMode.innerText = taskObj.ionMode;
 
     let tdEmail = document.createElement("td")
     tdEmail.innerText = taskObj.mail;
+    let tdDes = document.createElement("td")
+    if (taskObj.taskDescription === ""){
+        taskObj.taskDescription = "N/A"
+    }
+    tdDes.innerText = taskObj.taskDescription;
 
     let tdDataSource = document.createElement("td")
     tdDataSource.innerText = taskObj.ms2spectrumDataSource;
@@ -175,24 +186,34 @@ function createTableByTaskListData(taskObj) {
     let tdFinishTime = document.createElement("td")
     tdFinishTime.innerText = taskObj.finishTime;
 
-    let tdDelete = document.createElement("td")
+    let tdTaskOp = document.createElement("td")
     let deleteButton = document.createElement("button")
-    tdDelete.appendChild(deleteButton);
+    tdTaskOp.appendChild(deleteButton);
     deleteButton.id = taskObj.id;
     deleteButton.innerText = "Delete"
     deleteButton.onclick = onclickDeleteTaskById;
+    if (taskObj.taskStatus[0] === 0) {
+        let getSubmitButton = document.createElement("button")
+        getSubmitButton.id = taskObj.id;
+        getSubmitButton.innerText = "Go to submit"
+        getSubmitButton.onclick = function (event) {
+            window.location.href = "/batchSearch?taskId=" + event.target.id;
+        }
+        tdTaskOp.appendChild(getSubmitButton);
+
+
+    }
 
     tr.appendChild(tdId);
     tr.appendChild(tdTaskStatus);
-    tr.appendChild(tdPeakList);
-    tr.appendChild(tdMs2File);
-    tr.appendChild(tdResult);
+    tr.appendChild(tdFileSource);
     tr.appendChild(tdIonMode);
     tr.appendChild(tdEmail);
+    tr.appendChild(tdDes);
     tr.appendChild(tdDataSource);
     tr.appendChild(tdCreateTime);
     tr.appendChild(tdFinishTime);
-    tr.appendChild(tdDelete);
+    tr.appendChild(tdTaskOp);
 
     tableBody.appendChild(tr);
 

@@ -33,7 +33,9 @@ function main() {
 }
 
 async function asyncMain() {
-
+    //if taskID exist, fetch task data and fill in form
+    let isTaskIdExit =  checkTaskIdExit();
+    if(isTaskIdExit) await updateFormByTaskId();
 }
 
 
@@ -75,7 +77,7 @@ async function submitForm() {
     _taskObj.responseObj.ms1Ms2matchMzTolerance = parseFloat(document.getElementById("ms1ms2PairMzParameter").value);
     _taskObj.responseObj.ms1Ms2matchRtTolerance = parseFloat(document.getElementById("ms1ms2PairRtParameter").value);
 
-    console.log(_taskObj.responseObj)
+    document.getElementById("submitStatusResult").innerText = "";
     let Keys = Object.keys(_taskObj.responseObj);
     for (let i = 0; i < Keys.length; i++) {
 
@@ -147,17 +149,6 @@ async function submitForm() {
 }
 
 
-// function submitForm() {
-//     var formData = new FormData(document.getElementById("myForm"));
-//
-//     // 在這裡可以使用 AJAX 或其他方式將表單數據送到伺服器
-//
-//
-//
-//     // 這裡只是一個簡單的示例，將結果顯示在網頁上
-//     displayResult(formData);
-// }
-
 function displayResult(formData) {
     var resultDiv = document.getElementById("result");
     resultDiv.innerHTML = "<h2>表單送出的結果:</h2>";
@@ -165,4 +156,45 @@ function displayResult(formData) {
     formData.forEach(function (value, key) {
         resultDiv.innerHTML += "<p><strong>" + key + ":</strong> " + value + "</p>";
     });
+}
+
+
+function checkTaskIdExit(){
+    let url = new URL(window.location.href);
+    let taskId = url.searchParams.get("taskId");
+    return taskId != null;
+
+}
+
+async function updateFormByTaskId(){
+    document.getElementById("loadingScreen").classList.remove("hidden")
+    let url = new URL(window.location.href);
+    let taskId = url.searchParams.get("taskId");
+    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod("/api/batchSearch/task/"+taskId, {});
+    if (fetchData === null || fetchData === undefined){
+        alert("Task ID not found");
+        document.getElementById("loadingScreen").classList.add("hidden")
+        return
+    }
+    if (fetchData.taskStatus !== 0){
+        alert("Task already submit or failed, please upload new file");
+        document.getElementById("loadingScreen").classList.add("hidden")
+        window.location.href = "/batchSearch";
+        return
+    }
+    _taskObj.initialize();
+    _taskObj.responseObj = fetchData;
+    _taskObj.isFileUploaded = true;
+    _taskObj.isFormSubmitted = false;
+    _taskObj.isFormPass = false;
+
+    //update form
+    document.getElementById("mail").value = fetchData.mail;
+    document.getElementById("taskIdResult").innerText = fetchData.id;
+    document.getElementById("uploadStatusResult").innerText = "Success";
+    document.getElementById("submitStatusResult").innerText = "Waiting for submit";
+    document.getElementById("loadingScreen").classList.add("hidden")
+    if(fetchData.taskDescription === null || fetchData.taskDescription === undefined || fetchData.taskDescription==="") fetchData.taskDescription = "N/A";
+    document.getElementById("taskDescription").innerText = fetchData.taskDescription;
+
 }

@@ -16,7 +16,7 @@ public class ReadMsFile {
 //        this.filePath = "/Users/linwunyu/Documents/ms rawdata uplaod test/xcms/s/ms2spectra_all_DDA_binsize0.02_obp.mgf";
     }
 
-    public ArrayList<Ms2spectrumModel> readXcms3MgfFile() throws FileNotFoundException {
+    public ArrayList<Ms2spectrumModel> readXcms3MgfFile() throws IOException {
         ArrayList<Ms2spectrumModel> ms2spectrumModelList = new ArrayList<>();
         DecimalFormat decimalFormatMz = new DecimalFormat("0.0000000");
         DecimalFormat decimalFormatRt = new DecimalFormat("0.00");
@@ -91,14 +91,18 @@ public class ReadMsFile {
                 }
 
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            throw new IOException("Ms2 file error");
 
+        }
+        if(ms2spectrumModelList.size() == 0){
+            throw new FileNotFoundException("Ms2 file error, no spectrum found");
         }
 
         return ms2spectrumModelList;
     }
 
-    public ArrayList<Ms1peakModel> readMs1PeakListCsvFile() throws FileNotFoundException {
+    public ArrayList<Ms1peakModel> readMs1PeakListCsvFile() throws IOException {
         ArrayList<Ms1peakModel> ms1PeakList = new ArrayList<>();
 
         DecimalFormat decimalFormatMz = new DecimalFormat("0.0000000");
@@ -113,12 +117,14 @@ public class ReadMsFile {
             while ((line = reader.readLine()) != null) {
                 if (scanIndex== 0) {
                     String[] headerList = line.split(",");
-                    if(!(Objects.equals(headerList[0], "M_feature")) ||
-                        !(Objects.equals(headerList[1], "mz")) ||
-                        !(Objects.equals(headerList[2], "rt"))
-
-                    ){
-                        throw new FileNotFoundException("Peak list.csv file error");
+                    if(!Objects.equals(headerList[0], "M_feature")){
+                        throw new FileNotFoundException("Peak list.csv file error, M_feature column not found");
+                    }
+                    if(!Objects.equals(headerList[1], "mz")){
+                        throw new FileNotFoundException("Peak list.csv file error, mz column not found");
+                    }
+                    if(!Objects.equals(headerList[2], "rt")) {
+                        throw new FileNotFoundException("Peak list.csv file error, rt column not found");
                     }
                     scanIndex++;
                     continue;
@@ -146,7 +152,9 @@ public class ReadMsFile {
 
 
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            throw new IOException("Peak list.csv file error");
+
 
         }
 
@@ -154,7 +162,7 @@ public class ReadMsFile {
         return ms1PeakList;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ReadMsFile readMsFile = new ReadMsFile("");
         try {
             ArrayList<Ms2spectrumModel> ms2spectrumModelArrayList = readMsFile.readXcms3MgfFile();
