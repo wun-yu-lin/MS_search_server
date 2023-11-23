@@ -76,6 +76,7 @@ async function submitForm() {
     _taskObj.responseObj.similarityTolerance = parseFloat(document.getElementById("ms2_similarity_para").value);
     _taskObj.responseObj.ms1Ms2matchMzTolerance = parseFloat(document.getElementById("ms1ms2PairMzParameter").value);
     _taskObj.responseObj.ms1Ms2matchRtTolerance = parseFloat(document.getElementById("ms1ms2PairRtParameter").value);
+    _taskObj.responseObj.taskDescription = document.getElementById("taskDescription").value;
 
     document.getElementById("submitStatusResult").innerText = "";
     let Keys = Object.keys(_taskObj.responseObj);

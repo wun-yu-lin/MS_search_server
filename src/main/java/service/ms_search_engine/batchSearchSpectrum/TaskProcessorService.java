@@ -88,6 +88,38 @@ public class TaskProcessorService {
                         batchSearchProcessorDto.setMs1Ms2matchMzTolerance(batchSpectrumSearchDto.getMs1Ms2matchMzTolerance());
                         batchSearchProcessorDto.setMs1Ms2matchRtTolerance(batchSpectrumSearchDto.getMs1Ms2matchRtTolerance());
 
+                        //check download exist or not, if not exist,download again and wait for 10s, with 3 times retry
+
+                        //ms2spectrum *3
+                        if (batchSearchProcessorDto.getMs2spectrumResourceUrl() == null) {
+                            Thread.sleep(10000);
+                            batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
+                        }
+                        if (batchSearchProcessorDto.getMs2spectrumResourceUrl() == null) {
+                            Thread.sleep(10000);
+                            batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
+                        }
+                        if (batchSearchProcessorDto.getMs2spectrumResourceUrl() == null) {
+                            Thread.sleep(10000);
+                            batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
+                        }
+
+                        //Peak List * 3
+                        if (batchSearchProcessorDto.getPeakListResourceUrl() == null) {
+                            Thread.sleep(10000);
+                            batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
+                        }
+                        if (batchSearchProcessorDto.getPeakListResourceUrl() == null) {
+                            Thread.sleep(10000);
+                            batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
+                        }
+                        if (batchSearchProcessorDto.getPeakListResourceUrl() == null) {
+                            Thread.sleep(10000);
+                            batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
+                        }
+
+
+
 
                         //start process
                         BatchSpectrumSearchDataPrepare batchSpectrumSearchCalculator = new BatchSpectrumSearchDataPrepare(batchSearchProcessorDto);
