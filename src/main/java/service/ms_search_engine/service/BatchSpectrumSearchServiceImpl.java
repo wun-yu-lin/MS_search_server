@@ -87,7 +87,19 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
 
     @Override
     public BatchSpectrumSearchModel getTaskInfoById(int id) throws QueryParameterException, SQLException {
-        return batchSearchRdbDao.getTaskInfoById(id);
+
+        BatchSpectrumSearchModel batchSpectrumSearchModel =  batchSearchRdbDao.getTaskInfoById(id);
+        if (batchSpectrumSearchModel.getS3Ms2FileSrc() != null) {
+            batchSpectrumSearchModel.setS3Ms2FileSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3Ms2FileSrc());
+        }
+        if (batchSpectrumSearchModel.getS3PeakListSrc() != null) {
+            batchSpectrumSearchModel.setS3PeakListSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3PeakListSrc());
+        }
+        if (batchSpectrumSearchModel.getS3ResultsSrc() != null) {
+            batchSpectrumSearchModel.setS3ResultsSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3ResultsSrc());
+        }
+
+        return batchSpectrumSearchModel;
     }
 
     @Override
