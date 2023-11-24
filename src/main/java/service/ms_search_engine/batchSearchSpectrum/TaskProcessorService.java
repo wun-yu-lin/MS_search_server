@@ -1,15 +1,14 @@
 package service.ms_search_engine.batchSearchSpectrum;
 
 
-import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
-import com.opencsv.CSVWriterBuilder;
 import com.opencsv.ICSVWriter;
 import jakarta.annotation.PostConstruct;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
@@ -26,6 +25,8 @@ import service.ms_search_engine.exception.DatabaseUpdateErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.exception.RedisErrorException;
 import service.ms_search_engine.model.SpectrumDataModel;
+import service.ms_search_engine.redisService.RedisMailQueueService;
+import service.ms_search_engine.redisService.RedisSentTaskMailVO;
 import service.ms_search_engine.redisService.RedisTaskQueueService;
 import service.ms_search_engine.spectrumFactory.PeakPairModel;
 import service.ms_search_engine.utility.MS2spectrumDataTransFormation;
@@ -44,14 +45,18 @@ import java.util.List;
 public class TaskProcessorService {
 
     private final RedisTaskQueueService redisTaskQueueService;
+    private final RedisMailQueueService redisMailQueueService;
     private final BatchSearchRdbDao batchSearchRdbDao;
     private final BatchSearchS3FileDao batchSearchS3FileDao;
-
     private final SpectrumDao spectrumDao;
 
+    @Value("${aws.cloudFront.endpoint}")
+    private String awsCloudFrontEndpoint;
+
     @Autowired
-    public TaskProcessorService(RedisTaskQueueService redisTaskQueueService, BatchSearchRdbDao batchSearchRdbDao, BatchSearchS3FileDao batchSearchS3FileDao, SpectrumDao spectrumDao) {
+    public TaskProcessorService(RedisTaskQueueService redisTaskQueueService, RedisMailQueueService redisMailQueueService, BatchSearchRdbDao batchSearchRdbDao, BatchSearchS3FileDao batchSearchS3FileDao, SpectrumDao spectrumDao) {
         this.redisTaskQueueService = redisTaskQueueService;
+        this.redisMailQueueService = redisMailQueueService;
         this.batchSearchRdbDao = batchSearchRdbDao;
         this.batchSearchS3FileDao = batchSearchS3FileDao;
         this.spectrumDao = spectrumDao;
@@ -68,6 +73,7 @@ public class TaskProcessorService {
                     ObjectMapper mapper = new ObjectMapper();
                     BatchSpectrumSearchDto batchSpectrumSearchDto = mapper.readValue(taskDataStr, BatchSpectrumSearchDto.class);
                     BatchSearchProcessorDto batchSearchProcessorDto = new BatchSearchProcessorDto();
+                    RedisSentTaskMailVO redisSentTaskMailVO = new RedisSentTaskMailVO();
                     //start process task
                     try {
                         //change the task status to processing in database
@@ -77,6 +83,7 @@ public class TaskProcessorService {
                         Thread.sleep(1000);
 
                         //load & prepare parameters
+                        ////load parameter for processing
                         String ms2FileName = batchSpectrumSearchDto.getMs2S3FileSrc().split(".net/")[1];
                         String peakListFileName = batchSpectrumSearchDto.getPeakListS3FileSrc().split(".net/")[1];
                         batchSearchProcessorDto.setMs2spectrumResourceUrl(batchSearchS3FileDao.downloadFileByFileName(ms2FileName));
@@ -87,6 +94,29 @@ public class TaskProcessorService {
                         batchSearchProcessorDto.setIonMode(batchSpectrumSearchDto.getIonMode());
                         batchSearchProcessorDto.setMs1Ms2matchMzTolerance(batchSpectrumSearchDto.getMs1Ms2matchMzTolerance());
                         batchSearchProcessorDto.setMs1Ms2matchRtTolerance(batchSpectrumSearchDto.getMs1Ms2matchRtTolerance());
+
+                        //load parameter for sending email
+                        redisSentTaskMailVO.setMailAddress(batchSpectrumSearchDto.getMail());
+                        redisSentTaskMailVO.setSubject("Task " + batchSpectrumSearchDto.getTaskId() + " in processing");
+                        redisSentTaskMailVO.setMainText("Task " + batchSpectrumSearchDto.getTaskId() + " is in processing, please wait for the result");
+                        redisSentTaskMailVO.setPeakListS3FileSrc(batchSpectrumSearchDto.getPeakListS3FileSrc());
+                        redisSentTaskMailVO.setMs2S3FileSrc(batchSpectrumSearchDto.getMs2S3FileSrc());
+                        redisSentTaskMailVO.setMs2spectrumDataSource(batchSpectrumSearchDto.getMs2spectrumDataSource());
+                        redisSentTaskMailVO.setTaskId(batchSpectrumSearchDto.getTaskId());
+                        redisSentTaskMailVO.setMsTolerance(batchSpectrumSearchDto.getMsTolerance());
+                        redisSentTaskMailVO.setMsmsTolerance(batchSpectrumSearchDto.getMsmsTolerance());
+                        redisSentTaskMailVO.setSimilarityTolerance(batchSpectrumSearchDto.getSimilarityTolerance());
+                        redisSentTaskMailVO.setForwardWeight(batchSpectrumSearchDto.getForwardWeight());
+                        redisSentTaskMailVO.setReverseWeight(batchSpectrumSearchDto.getReverseWeight());
+                        redisSentTaskMailVO.setSimilarityAlgorithm(batchSpectrumSearchDto.getSimilarityAlgorithm());
+                        redisSentTaskMailVO.setIonMode(batchSpectrumSearchDto.getIonMode());
+                        redisSentTaskMailVO.setTaskStatus(TaskStatus.PROCESSING);
+                        redisSentTaskMailVO.setMs1Ms2matchMzTolerance(batchSpectrumSearchDto.getMs1Ms2matchMzTolerance());
+                        redisSentTaskMailVO.setMs1Ms2matchRtTolerance(batchSpectrumSearchDto.getMs1Ms2matchRtTolerance());
+                        redisSentTaskMailVO.setTaskDescription(batchSpectrumSearchDto.getTaskDescription());
+                        String mailString = mapper.writeValueAsString(redisSentTaskMailVO);
+
+
 
                         //check download exist or not, if not exist,download again and wait for 10s, with 3 times retry
 
@@ -119,7 +149,9 @@ public class TaskProcessorService {
                         }
 
 
-
+                        //send email
+                        mailString = mapper.writeValueAsString(redisSentTaskMailVO);
+                        redisMailQueueService.newMail (mailString);
 
                         //start process
                         BatchSpectrumSearchDataPrepare batchSpectrumSearchCalculator = new BatchSpectrumSearchDataPrepare(batchSearchProcessorDto);
@@ -324,17 +356,32 @@ public class TaskProcessorService {
 
 
                         Thread.sleep(1000);
+                        //update task status to finish in database and send email
                         batchSpectrumSearchDto.setTaskStatus(TaskStatus.FINISH);
                         batchSpectrumSearchDto.setFinishTime(DateTime.now().toDate());
                         batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+                        redisSentTaskMailVO.setSubject("Task " + batchSpectrumSearchDto.getTaskId() + " is finished");
+                        redisSentTaskMailVO.setMainText("Task " + batchSpectrumSearchDto.getTaskId() + " is finished, please check the result");
+                        redisSentTaskMailVO.setTaskStatus(TaskStatus.FINISH);
+                        redisSentTaskMailVO.setResultPeakListS3FileSrc(awsCloudFrontEndpoint + batchSpectrumSearchDto.getResultPeakListS3FileSrc());
+                        redisSentTaskMailVO.setFinishTime(batchSpectrumSearchDto.getFinishTime());
+                        mailString = mapper.writeValueAsString(redisSentTaskMailVO);
+                        redisMailQueueService.newMail (mailString);
+
 
                         System.out.println("Processing task: " + taskDataStr);
                     } catch (Exception e) {
                         System.out.println("Error processing task: " + e.getMessage());
                         Thread.sleep(1000);
+                        //update task status to error in database and send email
                         batchSpectrumSearchDto.setTaskStatus(TaskStatus.ERROR);
                         batchSpectrumSearchDto.setFinishTime(DateTime.now().toDate());
                         batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
+                        redisSentTaskMailVO.setSubject("Task " + batchSpectrumSearchDto.getTaskId() + " is Failed");
+                        redisSentTaskMailVO.setMainText("Task " + batchSpectrumSearchDto.getTaskId() + " is Failed, please check the file & parameters, resubmit the task");
+                        redisSentTaskMailVO.setTaskStatus(TaskStatus.ERROR);
+                        String mailString = mapper.writeValueAsString(redisSentTaskMailVO);
+                        redisMailQueueService.newMail (mailString);
 
                     } finally {
 //                        //process end, delete the file in disk

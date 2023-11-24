@@ -116,7 +116,6 @@ public class BatchSpectrumSearchController {
 
     @GetMapping("task/{id}")
     public ResponseEntity<BatchSpectrumSearchModel> getTaskInfoById(@PathVariable @NotNull int id) throws QueryParameterException, SQLException {
-        BatchSpectrumSearchDto batchSpectrumSearchDto = new BatchSpectrumSearchDto();
         BatchSpectrumSearchModel batchSpectrumSearchModel = batchSpectrumSearchService.getTaskInfoById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(batchSpectrumSearchModel);
