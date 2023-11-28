@@ -29,13 +29,14 @@ function main() {
     document.getElementById("uploadStatusLoading").classList.add("hidden")
     document.getElementById("uploadFileButton").onclick = uploadFile;
     document.getElementById("submitButton").onclick = submitForm;
+    document.getElementById("demoDataPosButton").onclick = setupDemoDataPos;
     _taskObj.initialize();
 }
 
 async function asyncMain() {
     //if taskID exist, fetch task data and fill in form
-    let isTaskIdExit =  checkTaskIdExit();
-    if(isTaskIdExit) await updateFormByTaskId();
+    let isTaskIdExit = checkTaskIdExit();
+    if (isTaskIdExit) await updateFormByTaskId();
 }
 
 
@@ -50,10 +51,10 @@ async function uploadFile(event) {
     _taskObj.responseObj = fetchData;
     _taskObj.isFileUploaded = true;
     console.log(fetchData)
-    if (typeof(responseObj) == 'object' && responseObj.status == 200){
+    if (typeof (responseObj) == 'object' && responseObj.status == 200) {
         document.getElementById("uploadStatusResult").innerText = "Success";
         document.getElementById("taskIdResult").innerText = fetchData.id;
-    }else{
+    } else {
         alert("Upload failed, please check your file")
         document.getElementById("uploadStatusResult").innerText = "Fail";
     }
@@ -64,7 +65,10 @@ async function uploadFile(event) {
 
 
 async function submitForm() {
-    if (!_taskObj.isFileUploaded) {alert("請先上傳檔案"); return;}
+    if (!_taskObj.isFileUploaded) {
+        alert("請先上傳檔案");
+        return;
+    }
     document.getElementById("submitStatusLoading").classList.remove("hidden")
     _taskObj.responseObj.forwardWeight = parseFloat(document.getElementById("forward_para").value);
     _taskObj.responseObj.reverseWeight = parseFloat(document.getElementById("reverse_para").value);
@@ -85,7 +89,7 @@ async function submitForm() {
         if (_taskObj.responseObj[Keys[i]] === "") {
             _taskObj.responseObj[Keys[i]] = null;
         }
-        if (isNaN(_taskObj.responseObj[Keys[i]]) && typeof(_taskObj.responseObj[Keys[i]]) != "string") {
+        if (isNaN(_taskObj.responseObj[Keys[i]]) && typeof (_taskObj.responseObj[Keys[i]]) != "string") {
             _taskObj.responseObj[Keys[i]] = null;
         }
     }
@@ -93,7 +97,7 @@ async function submitForm() {
         _taskObj.responseObj.forwardWeight = 0.5;
         _taskObj.responseObj.reverseWeight = 0.5;
     }
-    if(_taskObj.responseObj.similarityTolerance == null){
+    if (_taskObj.responseObj.similarityTolerance == null) {
         _taskObj.responseObj.similarityTolerance = 0.5;
     }
 
@@ -112,12 +116,12 @@ async function submitForm() {
         alert("MS tolerance and MS/MS tolerance must be filled");
         isFormPass = false;
     }
-    if (_taskObj.responseObj.msmsTolerance < 0 || _taskObj.responseObj.msTolerance < 0 || _taskObj.responseObj.ms1Ms2matchMzTolerance < 0 || _taskObj.responseObj.ms1Ms2matchRtTolerance < 0){
+    if (_taskObj.responseObj.msmsTolerance < 0 || _taskObj.responseObj.msTolerance < 0 || _taskObj.responseObj.ms1Ms2matchMzTolerance < 0 || _taskObj.responseObj.ms1Ms2matchRtTolerance < 0) {
         alert("MS tolerance and MS/MS tolerance, and RT must be positive");
         isFormPass = false;
     }
 
-    if (_taskObj.responseObj.msmsTolerance > 100 || _taskObj.responseObj.msTolerance >100 || _taskObj.responseObj.ms1Ms2matchMzTolerance > 100 || _taskObj.responseObj.ms1Ms2matchRtTolerance > 100 || _taskObj.responseObj.ms1Ms2matchMzTolerance > 100 || _taskObj.responseObj.ms1Ms2matchRtTolerance > 100){
+    if (_taskObj.responseObj.msmsTolerance > 100 || _taskObj.responseObj.msTolerance > 100 || _taskObj.responseObj.ms1Ms2matchMzTolerance > 100 || _taskObj.responseObj.ms1Ms2matchRtTolerance > 100 || _taskObj.responseObj.ms1Ms2matchMzTolerance > 100 || _taskObj.responseObj.ms1Ms2matchRtTolerance > 100) {
         alert("MS tolerance and MS/MS tolerance, and RT must be less than 100");
         isFormPass = false;
     }
@@ -126,7 +130,7 @@ async function submitForm() {
         isFormPass = false;
     }
 
-    if (!isFormPass){
+    if (!isFormPass) {
         document.getElementById("submitStatusLoading").classList.add("hidden")
         document.getElementById("submitStatusResult").innerText = "Fail, please check your input, and try again!";
         return;
@@ -135,14 +139,12 @@ async function submitForm() {
 
     //fetch api
     let responseObj = await fetchAPI.fetchDataByPOSTMethod("/api/batchSearch/task/submit", {"body": _taskObj.responseObj});
-    if (responseObj.status !== 200){
+    if (responseObj.status !== 200) {
         document.getElementById("submitStatusResult").innerText = "Fail, please check your input, and try again!";
         document.getElementById("submitStatusLoading").classList.add("hidden");
         return
     }
     document.getElementById("submitStatusResult").innerText = "Success";
-
-
 
 
     document.getElementById("submitStatusLoading").classList.add("hidden");
@@ -160,24 +162,24 @@ function displayResult(formData) {
 }
 
 
-function checkTaskIdExit(){
+function checkTaskIdExit() {
     let url = new URL(window.location.href);
     let taskId = url.searchParams.get("taskId");
     return taskId != null;
 
 }
 
-async function updateFormByTaskId(){
+async function updateFormByTaskId() {
     document.getElementById("loadingScreen").classList.remove("hidden")
     let url = new URL(window.location.href);
     let taskId = url.searchParams.get("taskId");
-    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod("/api/batchSearch/task/"+taskId, {});
-    if (fetchData === null || fetchData === undefined){
+    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod("/api/batchSearch/task/" + taskId, {});
+    if (fetchData === null || fetchData === undefined) {
         alert("Task ID not found");
         document.getElementById("loadingScreen").classList.add("hidden")
         return
     }
-    if (fetchData.taskStatus !== 0){
+    if (fetchData.taskStatus !== 0) {
         alert("Task already submit or failed, please upload new file");
         document.getElementById("loadingScreen").classList.add("hidden")
         window.location.href = "/batchSearch";
@@ -195,7 +197,49 @@ async function updateFormByTaskId(){
     document.getElementById("uploadStatusResult").innerText = "Success";
     document.getElementById("submitStatusResult").innerText = "Waiting for submit";
     document.getElementById("loadingScreen").classList.add("hidden")
-    if(fetchData.taskDescription === null || fetchData.taskDescription === undefined || fetchData.taskDescription==="") fetchData.taskDescription = "N/A";
+    if (fetchData.taskDescription === null || fetchData.taskDescription === undefined || fetchData.taskDescription === "") fetchData.taskDescription = "N/A";
     document.getElementById("taskDescription").innerText = fetchData.taskDescription;
+
+}
+
+async function setupDemoDataPos() {
+    document.getElementById("loadingScreen").classList.remove("hidden");
+    let peakListInput = document.getElementById("peakListFile");
+    let ms2SpectrumInput = document.getElementById("ms2File");
+
+    let ms2FileRes = await fetch("demoData/POS/MS2Spectrum_LCMS_POS.mgf");
+    let ms2FileResBob = await ms2FileRes.blob();
+    let ms2FileList = new DataTransfer();
+    let ms2File = new File([ms2FileResBob], "ms2Spectrum.mgf", {type: "text/mgf"});
+    ms2FileList.items.add(ms2File);
+
+
+    let peakListFileRes = await fetch("demoData/POS/peakList_LCMS_POS.csv");
+    let peakListFileBob = await peakListFileRes.blob();
+    let peakListFileList = new DataTransfer();
+    let peakListFile = new File([peakListFileBob], "peakListFile.csv", {type: "text/csv"});
+    peakListFileList.items.add(peakListFile);
+
+
+    peakListInput.files = peakListFileList.files;
+    ms2SpectrumInput.files = ms2FileList.files;
+
+
+    _taskObj.initialize();
+
+    //update form
+    document.getElementById("taskDescription").innerText = "Demo data is ready, please enter your email, click upload file and submit button";
+    document.getElementById("ms1ms2PairMzParameter").value = 20;
+    document.getElementById("ms1ms2PairRtParameter").value = 30;
+    document.getElementById("msTolerance").value = 15;
+    document.getElementById("msmsTolerance").value = 30;
+    document.getElementById("charge").value = "positive";
+    document.getElementById("forward_para").value = 0.5;
+    document.getElementById("reverse_para").value = 0.5;
+    document.getElementById("ms2_similarity_para").value = 0.8;
+
+
+    document.getElementById("loadingScreen").classList.add("hidden")
+
 
 }

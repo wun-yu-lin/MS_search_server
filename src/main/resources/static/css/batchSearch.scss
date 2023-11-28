@@ -29,6 +29,23 @@ body {
       text-align: center;
     }
 
+    .demoDate_div {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      .demoDate_button {
+        width: 100px !important;
+        margin: 5px 5px !important;
+        font-size: 12px;
+        padding: 5px 5px !important;
+        background-color: grey;
+      }
+      .demoDate_button:hover {
+        background-color: #007BFF;
+      }
+    }
+
+
     form {
       margin-top: 20px;
 
@@ -40,12 +57,16 @@ body {
 
       input,
       select,
-      textarea{
+      textarea {
         border: #cbcbcb 1px solid;
         border-radius: 5px;
         width: 100%;
         padding: 5px;
         margin-bottom: 12px;
+      }
+
+      a {
+        color: #007BFF;
       }
 
       hr {

@@ -17,6 +17,21 @@ body .batchSearch_div h1 {
   color: #333;
   text-align: center;
 }
+body .batchSearch_div .demoDate_div {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+body .batchSearch_div .demoDate_div .demoDate_button {
+  width: 100px !important;
+  margin: 5px 5px !important;
+  font-size: 12px;
+  padding: 5px 5px !important;
+  background-color: grey;
+}
+body .batchSearch_div .demoDate_div .demoDate_button:hover {
+  background-color: #007BFF;
+}
 body .batchSearch_div form {
   margin-top: 20px;
 }
@@ -33,6 +48,9 @@ body .batchSearch_div form textarea {
   width: 100%;
   padding: 5px;
   margin-bottom: 12px;
+}
+body .batchSearch_div form a {
+  color: #007BFF;
 }
 body .batchSearch_div form hr {
   border: 1px solid #ddd;
