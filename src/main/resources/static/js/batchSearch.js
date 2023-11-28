@@ -146,6 +146,9 @@ async function submitForm() {
     }
     document.getElementById("submitStatusResult").innerText = "Success";
 
+    setTimeout(function () {
+        window.location.href = "./taskView";
+    }, 300);
 
     document.getElementById("submitStatusLoading").classList.add("hidden");
 
@@ -214,7 +217,7 @@ async function setupDemoDataPos() {
     ms2FileList.items.add(ms2File);
 
 
-    let peakListFileRes = await fetch("demoData/POS/peakList_LCMS_POS.csv");
+    let peakListFileRes = await fetch("demoData/POS/PeakList_LCMS_POS.csv");
     let peakListFileBob = await peakListFileRes.blob();
     let peakListFileList = new DataTransfer();
     let peakListFile = new File([peakListFileBob], "peakListFile.csv", {type: "text/csv"});
@@ -226,6 +229,11 @@ async function setupDemoDataPos() {
 
 
     _taskObj.initialize();
+
+    document.getElementById("submitStatusResult").innerText = "Waiting for submit";
+    document.getElementById("uploadStatusResult").innerText = "Waiting for upload";
+    document.getElementById("taskIdResult").innerText = "";
+
 
     //update form
     document.getElementById("taskDescription").innerText = "Demo data is ready, please enter your email, click upload file and submit button";
