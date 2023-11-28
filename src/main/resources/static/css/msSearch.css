@@ -12,6 +12,7 @@
   width: 250px;
   display: flex;
   position: relative;
+  overflow-y: auto;
 }
 .search_div .search_param_div {
   border-radius: 10px;
@@ -20,6 +21,8 @@
   display: flex;
   flex-direction: column;
   position: fixed;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .search_div .search_button_div,
 .search_div .compound_name_para_div,
