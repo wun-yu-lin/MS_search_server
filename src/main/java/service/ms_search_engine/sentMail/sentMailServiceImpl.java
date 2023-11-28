@@ -170,7 +170,6 @@ public class sentMailServiceImpl implements sentMailService{
                 "<p>Task ID: " + redisSentTaskMailVO.getTaskId() + "</p>" +
                 "<p>Task description: " + redisSentTaskMailVO.getTaskDescription() + "</p>" +
                 "<p>Result peak list file url: " + redisSentTaskMailVO.getResultPeakListS3FileSrc() + "</p>" +
-                "<p>Task finish time: " + redisSentTaskMailVO.getFinishTime() + "</p>" +
                 "<hr>" +
                 "<p>Task parameters are as follows.</p>" +
                 "<p>MS tolerance: " + redisSentTaskMailVO.getMsTolerance() + "</p>" +
