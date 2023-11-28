@@ -59,12 +59,33 @@
   .source_ref_div {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    align-items: flex-start;
+    padding: 30px;
     width: 100%;
     background-color: #2D333B;
     border-radius: 10px;
     color: white;
+    gap:10px;
+    ol {
+      li {
+        margin: 10px;
+        list-style: inherit;
+      }
+      a {
+        color: #0485b9;
+      }
+      a:hover {
+        color: cornflowerblue;
+      }
+    }
+    p {
+     a {
+         color: #0485b9;
+     }
+      a:hover {
+        color: cornflowerblue;
+      }
+    }
 
 
   }

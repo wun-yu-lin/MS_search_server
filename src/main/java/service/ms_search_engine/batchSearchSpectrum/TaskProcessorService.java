@@ -149,9 +149,9 @@ public class TaskProcessorService {
                         }
 
 
-                        //send email
-                        mailString = mapper.writeValueAsString(redisSentTaskMailVO);
-                        redisMailQueueService.newMail (mailString);
+                        //job start and send email
+//                        mailString = mapper.writeValueAsString(redisSentTaskMailVO);
+//                        redisMailQueueService.newMail (mailString);
 
                         //start process
                         BatchSpectrumSearchDataPrepare batchSpectrumSearchCalculator = new BatchSpectrumSearchDataPrepare(batchSearchProcessorDto);

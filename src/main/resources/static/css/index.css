@@ -38,12 +38,29 @@
 .middle_div .source_ref_div {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  align-items: flex-start;
+  padding: 30px;
   width: 100%;
   background-color: #2D333B;
   border-radius: 10px;
   color: white;
+  gap: 10px;
+}
+.middle_div .source_ref_div ol li {
+  margin: 10px;
+  list-style: inherit;
+}
+.middle_div .source_ref_div ol a {
+  color: #0485b9;
+}
+.middle_div .source_ref_div ol a:hover {
+  color: cornflowerblue;
+}
+.middle_div .source_ref_div p a {
+  color: #0485b9;
+}
+.middle_div .source_ref_div p a:hover {
+  color: cornflowerblue;
 }
 
 .right_div {

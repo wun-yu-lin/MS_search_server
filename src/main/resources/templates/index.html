@@ -10,77 +10,93 @@
 </head>
 <body>
 <div layout:fragment="content">
-<!--		<div class="left_div">-->
-<!--			<div class="userInfo_div">-->
-<!--				<h1>User Info</h1>-->
-<!--			</div>-->
-<!--		</div>-->
-		<div class="middle_div">
-			<div class="source_ref_div">
-				<h1 style="font-size: 22px; font-style: inherit ">MS search - A web server, provide match function with LC-MS/MS spectrum database</h1>
-				<p></p>
-			</div>
-			<div class="introduction_project_div">
-				<h1 style="font-size: 18px; font-style: inherit">Introduction project architecture</h1>
-				<img class="project_architecture_img" th:src="@{/picture/projectArchitecture.png}" alt="img failed"></img>
-				<h1 style="font-size: 18px; font-style: inherit">MS/MS search workflow</h1>
-				<img class="project_architecture_img" th:src="@{/picture/msms_search_workflow.png}" alt="img failed"></img>
-				<h1 style="font-size: 18px; font-style: inherit">Multiple MS/MS workflow</h1>
-				<img class="project_architecture_img" th:src="@{/picture/batch_search_workflow.png}" alt="img failed"></img>
-			</div>
-
+	<!--		<div class="left_div">-->
+	<!--			<div class="userInfo_div">-->
+	<!--				<h1>User Info</h1>-->
+	<!--			</div>-->
+	<!--		</div>-->
+	<div class="middle_div">
+		<div class="source_ref_div">
+			<h1 style="font-size: 22px; font-style: inherit ">Welcome to MS search !</h1>
+<!--			<p>We provide ms/ms search function with LC-MS/MS spectrum database</p>-->
+			<p>Features of the MS Search Website:</p>
+			<ol>
+				<li>Integration of 2,055,042 MS & MS/MS spectra, sourced from the <a href="https://mona.fiehnlab.ucdavis.edu/">MoNA online public database</a> .
+				</li>
+				<li>
+					<a href="./msSearch">MS/MS Search</a> - provides an online spectrum similarity search system, optimizing backend architecture and
+					databases for sub-second search performance.
+				</li>
+				<li>
+					<a href="./batchSearch">Multiple MS/MS Search</a> - Offers batch comparison functionality for uploaded files, task status
+					management, email notification capability, and utilizes a queue for task sequencing and email event
+					processing.
+				</li>
+			</ol>
+			<p>For any parameter-related queries, refer to the <a href="https://hackmd.io/SUkqKCOWRQSoOAN6lTEMmA">tutorial page</a> for detailed explanations of parameters.</p>
 		</div>
-		<div class="right_div">
-			<div class="release_note_div">
-				<h1 style="font-size: 22px; font-style: inherit "> Release note</h1>
-				<!--				建立清單-->
-				<ul>
-					<li>
-						<span class="version">v1.0.1</span>
-						<span class="date">- November 11, 2023</span>
-						<p class="description">MS search web create.</p>
-					</li>
-					<li>
-						<span class="version">v1.0.2</span>
-						<span class="date">- November 13, 2023</span>
-						<p class="description">Add MS/MS search function.</p>
-						<p class="description">Create 200w spectrum data in database!</p>
-					</li>
-					<li>
-						<span class="version">v1.0.3</span>
-						<span class="date">- November 15, 2023</span>
-						<p class="description">Opt front-end function.</p>
-					</li>
-					<li>
-						<span class="version">v1.0.4</span>
-						<span class="date">- November 19, 2023</span>
-						<p class="description">MS/MS batch search functionality has been added, and testing is still in progress. The feature is not yet fully functional.</p>
-					</li>
-					<li>
-						<span class="version">v1.0.5</span>
-						<span class="date">- November 22, 2023</span>
-						<p class="description">MS/MS batch search functionality has been added, provide batch search function. Provide Search result download! </p>
-					</li>
-					<li>
-						<span class="version">v1.0.6</span>
-						<span class="date">- November 23, 2023</span>
-						<p class="description">Opt task control workflow, result.csv. </p>
-					</li>
-					<li>
-						<span class="version">v1.0.7</span>
-						<span class="date">- November 25, 2023</span>
-						<p class="description">Add email notification functionality. </p>
-					</li>
-
-
-
-					<!-- Add more release notes as needed -->
-				</ul>
-			</div>
-<!--			<div class="ads_div">-->
-<!--				<h1>廣告斂財區</h1>-->
-<!--			</div>-->
+		<div class="introduction_project_div">
+			<h1 style="font-size: 18px; font-style: inherit">Introduction project architecture</h1>
+			<img class="project_architecture_img" th:src="@{/picture/projectArchitecture.png}" alt="img failed"></img>
+			<h1 style="font-size: 18px; font-style: inherit">MS/MS search workflow</h1>
+			<img class="project_architecture_img" th:src="@{/picture/msms_search_workflow.png}" alt="img failed"></img>
+			<h1 style="font-size: 18px; font-style: inherit">Multiple MS/MS workflow</h1>
+			<img class="project_architecture_img" th:src="@{/picture/batch_search_workflow.png}" alt="img failed"></img>
 		</div>
+
+	</div>
+	<div class="right_div">
+		<div class="release_note_div">
+			<h1 style="font-size: 22px; font-style: inherit "> Release note</h1>
+			<!--				建立清單-->
+			<ul>
+				<li>
+					<span class="version">v1.0.1</span>
+					<span class="date">- November 11, 2023</span>
+					<p class="description">MS search web create.</p>
+				</li>
+				<li>
+					<span class="version">v1.0.2</span>
+					<span class="date">- November 13, 2023</span>
+					<p class="description">Add MS/MS search function.</p>
+					<p class="description">Create 200w spectrum data in database!</p>
+				</li>
+				<li>
+					<span class="version">v1.0.3</span>
+					<span class="date">- November 15, 2023</span>
+					<p class="description">Opt front-end function.</p>
+				</li>
+				<li>
+					<span class="version">v1.0.4</span>
+					<span class="date">- November 19, 2023</span>
+					<p class="description">MS/MS batch search functionality has been added, and testing is still in
+						progress. The feature is not yet fully functional.</p>
+				</li>
+				<li>
+					<span class="version">v1.0.5</span>
+					<span class="date">- November 22, 2023</span>
+					<p class="description">MS/MS batch search functionality has been added, provide batch search
+						function. Provide Search result download! </p>
+				</li>
+				<li>
+					<span class="version">v1.0.6</span>
+					<span class="date">- November 23, 2023</span>
+					<p class="description">Opt task control workflow, result.csv. </p>
+				</li>
+				<li>
+					<span class="version">v1.0.7</span>
+					<span class="date">- November 25, 2023</span>
+					<p class="description">Add email notification functionality. </p>
+				</li>
+
+
+				<!-- Add more release notes as needed -->
+			</ul>
+		</div>
+		<!--			<div class="ads_div">-->
+		<!--				<h1>廣告斂財區</h1>-->
+		<!--			</div>-->
+	</div>
 
 </div>
 </body>
