@@ -38,7 +38,7 @@ th {
   background-color: #f2f2f2;
 }
 
-button {
+.table-body > tr > td > button {
   background-color: #3498db;
   color: #ffffff;
   padding: 10px 15px;
@@ -48,7 +48,7 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-button:hover {
+.table-body > tr > td > button:hover {
   background-color: #2980b9;
 }
 
