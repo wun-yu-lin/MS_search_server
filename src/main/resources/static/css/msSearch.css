@@ -160,8 +160,10 @@
 }
 .search_div .search_button_div {
   display: flex;
-  align-items: flex-start;
+  justify-content: space-between;
   width: 100%;
+  gap: 20px;
+  flex-direction: row;
 }
 .search_div .search_button_div .search_button {
   width: 50px;
@@ -170,7 +172,14 @@
   color: white;
   border-radius: 5px;
 }
-.search_div .search_button_div .search_button:hover {
+.search_div .search_button_div .reset_button, .search_div .search_button_div .demo_button {
+  height: 25px;
+  background-color: #a2a2a2;
+  color: white;
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+}
+.search_div .search_button_div .search_button:hover, .search_div .search_button_div .reset_button:hover, .search_div .search_button_div .demo_button:hover {
   cursor: pointer;
 }
 .search_div .tolerance_para_div_div {
