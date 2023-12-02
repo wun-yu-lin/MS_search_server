@@ -102,12 +102,14 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px;
+  gap: 20px;
 }
 .div_header .header_div {
   flex-direction: row;
   display: flex;
   align-items: center;
   gap: 5px;
+  min-width: 150px;
 }
 .div_header .header_div .header_div_li_a {
   font-size: 24px;
@@ -117,33 +119,55 @@ body {
   line-height: 34px;
 }
 .div_header .header_search_div {
-  width: calc(100% - 600px);
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
   position: relative;
   display: flex;
   flex-direction: row;
+  opacity: 0.85;
 }
 .div_header .header_search_div .header_search_button {
   position: absolute;
-  inset: 2.5px auto auto 5px;
+  inset: 4.5px auto auto 5px;
   background-image: url("../icon/searchIcon.png");
   background-repeat: no-repeat;
   background-color: rgba(255, 255, 255, 0);
   background-size: contain;
   width: 23px;
-  height: 23px;
+  height: 100%;
+}
+.div_header .header_search_div .header_search_button:hover {
+  cursor: pointer;
 }
 .div_header .header_search_div .header_search_input {
   background-color: white;
   padding: 5px 40px;
   border-radius: 20px;
   width: 100%;
-  height: 28px;
-  font-size: 20px;
+  height: 100%;
+  font-size: 14px;
 }
 .div_header .header_search_div .header_search_input:focus {
   outline: none;
   border-color: #007BFF;
   box-shadow: 0 0 5px #007BFF;
+}
+.div_header .header_ms2Search_div, .div_header .header_msSearch_div, .div_header .header_taskView_div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.div_header .header_ms2Search_div a, .div_header .header_msSearch_div a, .div_header .header_taskView_div a {
+  font-size: 18px;
+}
+.div_header .header_ms2Search_div:hover, .div_header .header_msSearch_div:hover, .div_header .header_taskView_div:hover {
+  cursor: pointer;
+}
+.div_header .header_ms2Search_div:hover a, .div_header .header_msSearch_div:hover a, .div_header .header_taskView_div:hover a {
+  color: #007BFF;
 }
 .div_header .header_div_other {
   display: flex;
@@ -208,6 +232,9 @@ body {
 @media (max-width: 1200px) {
   .header_search_div {
     width: calc(100% - 400px) !important;
+  }
+  .header_ms2Search_div, .header_msSearch_div, .header_taskView_div {
+    display: none !important;
   }
 }
 @media (max-width: 700px) {

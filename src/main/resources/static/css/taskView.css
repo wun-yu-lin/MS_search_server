@@ -25,6 +25,9 @@ table p, th p, td p {
 table p a, th p a, td p a {
   color: #212124;
 }
+table p a:hover, th p a:hover, td p a:hover {
+  color: #3498db;
+}
 
 th, td {
   padding: 12px;

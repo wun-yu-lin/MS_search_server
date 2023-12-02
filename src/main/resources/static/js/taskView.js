@@ -181,10 +181,18 @@ function createTableByTaskListData(taskObj) {
     tdDataSource.innerText = taskObj.ms2spectrumDataSource;
 
     let tdCreateTime = document.createElement("td")
-    tdCreateTime.innerText = taskObj.createTime;
+    if (taskObj.createTime === null || taskObj.createTime === "" ||  taskObj.createTime === "N/A") {
+        tdCreateTime.innerText = taskObj.createTime;
+    }else {
+        tdCreateTime.innerText = new Date(taskObj.createTime).toLocaleString('zh-Hans');
+    }
 
     let tdFinishTime = document.createElement("td")
-    tdFinishTime.innerText = taskObj.finishTime;
+    if (taskObj.finishTime === null || taskObj.finishTime === "" ||  taskObj.finishTime === "N/A") {
+        tdFinishTime.innerText = taskObj.finishTime;
+    }else {
+        tdFinishTime.innerText = new Date(taskObj.finishTime).toLocaleString('zh-Hans');
+    }
 
     let tdTaskOp = document.createElement("td")
     let deleteButton = document.createElement("button")

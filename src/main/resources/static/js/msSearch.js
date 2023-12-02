@@ -8,12 +8,14 @@ let _pageStatusObj = {
     "nextPageSpectrumInit": 0,
     "fetchUrl": null,
     "isFetching": false,
+    "isMS2SpectrumSearch": false,
     initialPara(){
         this.isFirstLoad = false
         this.isNextPage = false
         this.nextPageSpectrumInit = 0
         this.fetchUrl = null
         this.isFetching = false
+        this.isMS2SpectrumSearch = false
 
     }
 };
@@ -129,11 +131,18 @@ async function onClickFunctionForSearchSpectrum() {
 
 
 
+
     document.getElementById("spectrum_container_div").innerHTML = ""
     if (fetchData.length === 0 || fetchData === undefined || fetchData === null || getParameterObj === null) {
         createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
         document.getElementById("loadingScreen").classList.add("hidden")
         return
+    }
+
+    //check ms2 spectrum or not
+    if (getParameterObj.ms2Spectrum != null && getParameterObj.ms2Spectrum !== ""){
+        _pageStatusObj.isMS2SpectrumSearch = true
+        _pageStatusObj.isNextPage = false
     }
 
     if (getParameterObj.ms2Spectrum != null && getParameterObj.ms2Spectrum !== "") {
@@ -313,7 +322,6 @@ function getSpectrumQueryParaFromForm() {
     if (getParameterObj.isPassCheck === false) {
         alert("Please check your input data")
     }
-    console.log(getParameterObj)
     return getParameterObj
 }
 

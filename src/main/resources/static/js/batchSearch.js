@@ -9,7 +9,9 @@ const fetchAPI = new FetchAPI();
 let _taskObj = {
     "responseObj": {},
     "isFileUploaded": false,
+    "isFileUploading":false,
     "isFormSubmitted": false,
+    "isFormSubmitting":false,
     "isFormPass": false,
     initialize() {
         this.responseObj = {};
@@ -41,25 +43,31 @@ async function asyncMain() {
 
 
 async function uploadFile(event) {
+    if (_taskObj.isFileUploading) {
+        alert("File is uploading, please wait");
+        return;
+    }
     event.preventDefault();
     _taskObj.initialize();
+    _taskObj.isFileUploading = true;
+
     document.getElementById("uploadStatusResult").innerText = "";
     document.getElementById("uploadStatusLoading").classList.remove("hidden")
-
     let responseObj = await fetchAPI.sentFormDataByPostMethod("/api/batchSearch/file/upload", new FormData(document.getElementById("myForm")));
     let fetchData = await responseObj.json();
     _taskObj.responseObj = fetchData;
-    _taskObj.isFileUploaded = true;
-    console.log(fetchData)
+
     if (typeof (responseObj) == 'object' && responseObj.status == 200) {
         document.getElementById("uploadStatusResult").innerText = "Success";
         document.getElementById("taskIdResult").innerText = fetchData.id;
+        _taskObj.isFileUploaded = true;
     } else {
         alert("Upload failed, please check your file")
         document.getElementById("uploadStatusResult").innerText = "Fail";
     }
 
     document.getElementById("uploadStatusLoading").classList.add("hidden")
+    _taskObj.isFileUploading = false;
 
 }
 
@@ -69,6 +77,11 @@ async function submitForm() {
         alert("請先上傳檔案");
         return;
     }
+    if (_taskObj.isFormSubmitting) {
+        alert("Form is submitting, please wait");
+        return;
+    }
+    _taskObj.isFormSubmitting = true;
     document.getElementById("submitStatusLoading").classList.remove("hidden")
     _taskObj.responseObj.forwardWeight = parseFloat(document.getElementById("forward_para").value);
     _taskObj.responseObj.reverseWeight = parseFloat(document.getElementById("reverse_para").value);
@@ -147,6 +160,7 @@ async function submitForm() {
     document.getElementById("submitStatusResult").innerText = "Success";
 
     setTimeout(function () {
+        _taskObj.isFormSubmitting = false;
         window.location.href = "./taskView";
     }, 300);
 
@@ -192,6 +206,8 @@ async function updateFormByTaskId() {
     _taskObj.responseObj = fetchData;
     _taskObj.isFileUploaded = true;
     _taskObj.isFormSubmitted = false;
+    _taskObj.isFormSubmitting = false;
+    _taskObj.isFileUploading = false;
     _taskObj.isFormPass = false;
 
     //update form

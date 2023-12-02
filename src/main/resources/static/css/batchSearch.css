@@ -49,6 +49,20 @@ body .batchSearch_div form textarea {
   padding: 5px;
   margin-bottom: 12px;
 }
+body .batchSearch_div form input[type=file], body .batchSearch_div form input::file-selector-button {
+  cursor: pointer;
+}
+body .batchSearch_div form input::file-selector-button {
+  background-color: #2D333B;
+  color: white;
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+  opacity: 0.5;
+}
+body .batchSearch_div form select:hover {
+  cursor: pointer;
+}
 body .batchSearch_div form a {
   color: #007BFF;
 }
