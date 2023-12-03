@@ -4,14 +4,23 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import service.ms_search_engine.dao.BatchSearchS3FileDao;
+import service.ms_search_engine.exception.S3DataDownloadException;
 import service.ms_search_engine.redisService.RedisSentTaskMailVO;
+
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import java.io.File;
+import java.io.IOException;
 
 @Component
 public class sentMailServiceImpl implements sentMailService{
     private final JavaMailSender javaMailSender;
+    private final BatchSearchS3FileDao batchSearchS3FileDao;
 
     @Value("${spring.mail.username}")
     private String username;
@@ -21,8 +30,9 @@ public class sentMailServiceImpl implements sentMailService{
     private final String footer ="__________________ <br>"+ "Best regards, <br>" + "MS search team , <br>" + "<a href='https://ms-search.us'>ms-search</a> <br>" ;
 
     @Autowired
-    public sentMailServiceImpl(JavaMailSender javaMailSender) {
+    public sentMailServiceImpl(JavaMailSender javaMailSender, BatchSearchS3FileDao batchSearchS3FileDao) {
         this.javaMailSender = javaMailSender;
+        this.batchSearchS3FileDao = batchSearchS3FileDao;
     }
 
 
@@ -152,9 +162,10 @@ public class sentMailServiceImpl implements sentMailService{
     }
 
     @Override
-    public boolean sendTaskFinishMail(String address, RedisSentTaskMailVO redisSentTaskMailVO) throws MessagingException {
+    public boolean sendTaskFinishMail(String address, RedisSentTaskMailVO redisSentTaskMailVO) throws MessagingException, S3DataDownloadException, IOException {
+
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");;
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
         if (redisSentTaskMailVO.getMailAddress() == null){throw new MessagingException("mail address is null");}
         if (redisSentTaskMailVO.getTaskId() == null){throw new MessagingException("task id is null");}
         if (redisSentTaskMailVO.getTaskDescription() == null){redisSentTaskMailVO.setTaskDescription("no description");}
@@ -193,7 +204,20 @@ public class sentMailServiceImpl implements sentMailService{
         helper.setTo(address);
         helper.setSubject("MS search task finish notice." + " Task ID: " + redisSentTaskMailVO.getTaskId());
         helper.setFrom(username);
+
+        //Download result file from s3, and set as byteArray output stream
+        UrlResource attFileUrl = batchSearchS3FileDao.downloadFileByFileName(redisSentTaskMailVO.getResultPeakListS3FileSrc().split(".net/")[1]);
+        File attFile = new File(attFileUrl.getURI().getPath());
+        helper.addAttachment(attFile.getName(), attFile);
+
+
+
+
+
+
         javaMailSender.send(mimeMessage);
+        File file = new File(attFileUrl.getURI());
+        file.delete();
 
         return true;
     }

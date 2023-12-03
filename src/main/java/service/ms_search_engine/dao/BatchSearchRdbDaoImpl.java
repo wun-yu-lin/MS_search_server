@@ -159,12 +159,14 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
 
         String sqlStr = "SELECT id, s3_peakList_src, s3_ms2file_src, s3_results_src, author_id, task_status, create_time, finish_time, MS_tolerance, " +
                 "MSMS_tolerance, forward_weight, reverse_weight, similarity_algorithm, ion_mode, mail, similarity_tolerance, ms2spectrumDataSource, " +
-                "ms1ms2_match_mz_tolerance, ms1ms2_match_rt_tolerance, task_description FROM ms_search_library.batch_task_info bi WHERE bi.author_id=:authorId ORDER BY bi.id DESC limit :taskInit, :taskOffset;";
+                "ms1ms2_match_mz_tolerance, ms1ms2_match_rt_tolerance, task_description FROM ms_search_library.batch_task_info bi WHERE bi.author_id=:authorId and task_status !=:noEqualTaskStatus " +
+                " ORDER BY bi.id DESC limit :taskInit, :taskOffset;";
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("authorId", batchTaskSearchDto.getAuthorId());
         map.put("taskInit", batchTaskSearchDto.getTaskInit());
         map.put("taskOffset", batchTaskSearchDto.getTaskOffset());
+        map.put("noEqualTaskStatus", TaskStatus.DELETE.getStatusCode());
 
         List<BatchSpectrumSearchModel> batchSpectrumSearchModelList = namedParameterJdbcTemplate.query(sqlStr, map, new BatchSpectrumSearchRowMapper());
 
@@ -182,6 +184,22 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
             throw new DatabaseDeleteErrorException("delete failed");
         }
 
+
+        return true;
+    }
+
+    @Override
+    public Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException {
+        if (id==0){throw new QueryParameterException("Error para");};
+
+        String sqlStr = "UPDATE ms_search_library.batch_task_info SET task_status=:taskStatus WHERE id = :id;";
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("taskStatus", TaskStatus.DELETE.getStatusCode());
+        map.put("id", id);
+        int updateStatus = namedParameterJdbcTemplate.update(sqlStr, map);
+        if (updateStatus == 0) {
+            throw new SQLException("update failed");
+        }
 
         return true;
     }

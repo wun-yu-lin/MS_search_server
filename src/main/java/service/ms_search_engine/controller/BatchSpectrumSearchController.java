@@ -143,7 +143,8 @@ public class BatchSpectrumSearchController {
     @DeleteMapping("task/{id}")
     public ResponseEntity<String> deleteTaskById(@PathVariable @NotNull int id) throws QueryParameterException, S3DataUploadException, SQLException {
 
-        batchSpectrumSearchService.deleteTaskById(id);
+//        batchSpectrumSearchService.deleteTaskById(id);
+        batchSpectrumSearchService.changeTaskStatusToDelete(id);
         return ResponseEntity.status(HttpStatus.OK).body("delete success");
     }
 

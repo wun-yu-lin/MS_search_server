@@ -46,17 +46,19 @@ function taskStatusMap(statusCode) {
     statusCode = parseInt(statusCode);
     switch (statusCode) {
         case 0:
-            return [0,"No submit"];
+            return [0, "No submit"];
         case 1:
-            return [1,"Waiting"];
+            return [1, "Waiting"];
         case 2:
-            return [2,"Processing"];
+            return [2, "Processing"];
         case 3:
-            return [3,"Finished"];
+            return [3, "Finished"];
         case 4:
-            return [4,"Task error"];
+            return [4, "Task error"];
+        case 5:
+            return [5, "Deleted"]
         default:
-            return [4,"Task error"];
+            return [4, "Task error"];
     }
 }
 
@@ -115,7 +117,7 @@ function createTableByTaskListData(taskObj) {
 
     let tdTaskStatus = document.createElement("td")
     tdTaskStatus.innerText = taskObj.taskStatus[1];
-    switch (taskObj.taskStatus[0]){
+    switch (taskObj.taskStatus[0]) {
         // case 0:
         //     return [0,"No submit"];
         // case 1:
@@ -126,6 +128,8 @@ function createTableByTaskListData(taskObj) {
         //     return [3,"Task finished"];
         // case 4:
         //     return [4,"Task error"];
+        // case 5:
+        //     return [5, "Deleted"];
         // default:
         //     return [4,"Task error"];
         case 0:
@@ -135,14 +139,16 @@ function createTableByTaskListData(taskObj) {
             tdTaskStatus.style.color = "Green";
             break
         case 2:
-           tdTaskStatus.style.color = "Green";
-           break
+            tdTaskStatus.style.color = "Green";
+            break
         case 3:
-           tdTaskStatus.style.color = "Blue";
-           break
+            tdTaskStatus.style.color = "Blue";
+            break
         case 4:
-           tdTaskStatus.style.color = "Red";
-           break
+            tdTaskStatus.style.color = "Red";
+            break
+        case 5:
+            tdTaskStatus.style.color = "Black";
 
     }
     let tdFileSource = document.createElement("td")
@@ -155,7 +161,7 @@ function createTableByTaskListData(taskObj) {
     let pResult = document.createElement("p")
     if (taskObj.s3ResultsSrc === "N/A") {
         pResult.innerHTML = `<span>Result:</span> ${taskObj.s3ResultsSrc}`
-    }else{
+    } else {
         pResult.innerHTML = `<span>Result:</span> <a href=${taskObj.s3ResultsSrc}>${taskObj.s3ResultsSrc.split(".net/")[1]}</a>`
     }
     tdFileSource.appendChild(pPeakList);
@@ -164,7 +170,7 @@ function createTableByTaskListData(taskObj) {
 
 
     let tdIonMode = document.createElement("td")
-    if(taskObj.ionMode == null || taskObj.ionMode === "" || taskObj.ionMode==="N/A"){
+    if (taskObj.ionMode == null || taskObj.ionMode === "" || taskObj.ionMode === "N/A") {
         taskObj.ionMode = "all"
     }
     tdIonMode.innerText = taskObj.ionMode;
@@ -172,7 +178,7 @@ function createTableByTaskListData(taskObj) {
     let tdEmail = document.createElement("td")
     tdEmail.innerText = taskObj.mail;
     let tdDes = document.createElement("td")
-    if (taskObj.taskDescription === ""){
+    if (taskObj.taskDescription === "") {
         taskObj.taskDescription = "N/A"
     }
     tdDes.innerText = taskObj.taskDescription;
@@ -181,16 +187,16 @@ function createTableByTaskListData(taskObj) {
     tdDataSource.innerText = taskObj.ms2spectrumDataSource;
 
     let tdCreateTime = document.createElement("td")
-    if (taskObj.createTime === null || taskObj.createTime === "" ||  taskObj.createTime === "N/A") {
+    if (taskObj.createTime === null || taskObj.createTime === "" || taskObj.createTime === "N/A") {
         tdCreateTime.innerText = taskObj.createTime;
-    }else {
+    } else {
         tdCreateTime.innerText = new Date(taskObj.createTime).toLocaleString('zh-Hans');
     }
 
     let tdFinishTime = document.createElement("td")
-    if (taskObj.finishTime === null || taskObj.finishTime === "" ||  taskObj.finishTime === "N/A") {
+    if (taskObj.finishTime === null || taskObj.finishTime === "" || taskObj.finishTime === "N/A") {
         tdFinishTime.innerText = taskObj.finishTime;
-    }else {
+    } else {
         tdFinishTime.innerText = new Date(taskObj.finishTime).toLocaleString('zh-Hans');
     }
 
@@ -256,24 +262,27 @@ async function onclickDeleteTaskById(event) {
 }
 
 
-function createScrollDownObserverForNextPage(){
-    let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
-        if(entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1){
+function createScrollDownObserverForNextPage() {
+    let scrollDownObserver = new IntersectionObserver(async (entries, observe) => {
+        if (entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1) {
             let targetElement = entries[0].target;
             observe.unobserve(entries[0].target);
-            if(_pageStatusObj.isFetching === true) return observe.observe(targetElement);
-            if(_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
-            if(_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
+            if (_pageStatusObj.isFetching === true) return observe.observe(targetElement);
+            if (_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
+            if (_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
             //add action of loading
-            let url = fetchAPI.generateGetUrlByParameter({"authId":_pageStatusObj.authId, "taskInit":_pageStatusObj.nextPageSpectrumInit}, _pageStatusObj.fetchUrl);
+            let url = fetchAPI.generateGetUrlByParameter({
+                "authId": _pageStatusObj.authId,
+                "taskInit": _pageStatusObj.nextPageSpectrumInit
+            }, _pageStatusObj.fetchUrl);
             console.log(url)
             let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(url, {"method": "GET"});
-            if (typeof(fetchData) === "object") {
+            if (typeof (fetchData) === "object") {
                 _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
                 console.log(_pageStatusObj.nextPageSpectrumInit)
-                if (fetchData.length >=30) {
+                if (fetchData.length >= 30) {
                     _pageStatusObj.isNextPage = true
-                }else {
+                } else {
                     _pageStatusObj.isNextPage = false
                 }
             }
@@ -291,8 +300,6 @@ function createScrollDownObserverForNextPage(){
 
             observe.observe(targetElement);
         }
-
-
 
 
     })
