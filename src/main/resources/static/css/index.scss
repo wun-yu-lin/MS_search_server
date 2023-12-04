@@ -139,3 +139,13 @@
   color: #ffffff;
 }
 
+@media (max-width: 500px) {
+  .container {
+    gap:10px !important;
+    flex-direction: column;
+  }
+  .middle_div, .right_div {
+    width: 100% !important;
+  }
+}
+

@@ -4,12 +4,14 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  max-width: 100%;
 }
 
 table, th, td {
@@ -50,6 +52,40 @@ th {
 }
 .table-body > tr > td > button:hover {
   background-color: #2980b9;
+}
+
+@media (max-width: 1200px) {
+  .data-item thead > tr > th, .data-item tbody > tr > td, .data-item tbody > tr > td > p, .data-item tbody > tr > td > p > a, .data-item tbody > tr > td > p > span {
+    font-size: 12px;
+  }
+  .table-body > tr > td > button {
+    padding: 5px 7px;
+    margin: 3px;
+    font-size: 10px;
+  }
+  th, td {
+    padding: 3px;
+  }
+}
+@media (max-width: 1000px) {
+  #data-container {
+    max-width: calc(100% - 10px);
+  }
+  .data-item thead > tr > th, .data-item tbody > tr > td, .data-item tbody > tr > td > p, .data-item tbody > tr > td > p > a, .data-item tbody > tr > td > p > span {
+    font-size: 10px;
+  }
+  .data-item tbody > tr > td > p > a {
+    font-size: 8px;
+  }
+  .email_th, .email_td {
+    display: none;
+  }
+  .createTime_th, .createTime_td {
+    display: none;
+  }
+  .des_th, .des_td {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=taskView.css.map */

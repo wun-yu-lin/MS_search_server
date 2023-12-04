@@ -265,4 +265,80 @@ table th {
   font-weight: bold;
 }
 
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: column !important;
+  }
+  .search_div, .search_param_div {
+    position: relative !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow-y: scroll !important;
+  }
+  .search_param_div {
+    flex-direction: column !important;
+  }
+  .search_button_div {
+    justify-content: flex-start !important;
+  }
+  .search_button_div,
+  .compound_name_para_div,
+  .formula_para_div,
+  .exact_mass_para_div,
+  .precursor_mz_para_div,
+  .tolerance_para_div,
+  .charge_para_div,
+  .ms2Spectrum_para_div,
+  .ms2_tolerance_para_div,
+  .ms2_similarity_para_div,
+  .weight_para_div,
+  .algorithm_para_div {
+    width: calc(100% - 20px) !important;
+  }
+  .search_button_div input, .search_button_div select,
+  .compound_name_para_div input,
+  .compound_name_para_div select,
+  .formula_para_div input,
+  .formula_para_div select,
+  .exact_mass_para_div input,
+  .exact_mass_para_div select,
+  .precursor_mz_para_div input,
+  .precursor_mz_para_div select,
+  .tolerance_para_div input,
+  .tolerance_para_div select,
+  .charge_para_div input,
+  .charge_para_div select,
+  .ms2Spectrum_para_div input,
+  .ms2Spectrum_para_div select,
+  .ms2_tolerance_para_div input,
+  .ms2_tolerance_para_div select,
+  .ms2_similarity_para_div input,
+  .ms2_similarity_para_div select,
+  .weight_para_div input,
+  .weight_para_div select,
+  .algorithm_para_div input,
+  .algorithm_para_div select {
+    width: 50% !important;
+  }
+  .ms2Spectrum {
+    width: 50% !important;
+  }
+  .weight_para_div_div input {
+    width: 100% !important;
+  }
+  .spectrum_container_div {
+    width: 100% !important;
+  }
+  .spectrum_container_div .spectrum_item_div {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .spectrum_container_div .spectrum_item_div .spectrum_info_div {
+    width: 100% !important;
+  }
+  .spectrum_container_div .spectrum_item_div .spectrum_canvas_div {
+    width: 80% !important;
+  }
+}
+
 /*# sourceMappingURL=msSearch.css.map */

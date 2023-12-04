@@ -131,3 +131,9 @@ body {
     }
   }
 }
+
+@media (max-width: 500px) {
+  .weight_para_input {
+    width: 100% !important;
+  }
+}

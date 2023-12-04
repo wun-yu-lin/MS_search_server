@@ -113,9 +113,11 @@ function createTableByTaskListData(taskObj) {
     let tr = document.createElement("tr");
 
     let tdId = document.createElement("td")
+    tdId.classList.add("taskId_td");
     tdId.innerText = taskObj.id;
 
     let tdTaskStatus = document.createElement("td")
+    tdTaskStatus.classList.add("taskStatus_td");
     tdTaskStatus.innerText = taskObj.taskStatus[1];
     switch (taskObj.taskStatus[0]) {
         // case 0:
@@ -152,6 +154,7 @@ function createTableByTaskListData(taskObj) {
 
     }
     let tdFileSource = document.createElement("td")
+    tdFileSource.classList.add("fileSource_td");
     let pPeakList = document.createElement("p")
     pPeakList.innerHTML = `<span>MS1 file:</span>  <a href=${taskObj.s3PeakListSrc}>${taskObj.s3PeakListSrc.split(".net/")[1]}</a>`
 
@@ -170,23 +173,28 @@ function createTableByTaskListData(taskObj) {
 
 
     let tdIonMode = document.createElement("td")
+    tdIonMode.classList.add("ionMode_td");
     if (taskObj.ionMode == null || taskObj.ionMode === "" || taskObj.ionMode === "N/A") {
         taskObj.ionMode = "all"
     }
     tdIonMode.innerText = taskObj.ionMode;
 
     let tdEmail = document.createElement("td")
+    tdEmail.classList.add("email_td");
     tdEmail.innerText = taskObj.mail;
     let tdDes = document.createElement("td")
+    tdDes.classList.add("des_td");
     if (taskObj.taskDescription === "") {
         taskObj.taskDescription = "N/A"
     }
     tdDes.innerText = taskObj.taskDescription;
 
     let tdDataSource = document.createElement("td")
+    tdDataSource.classList.add("dataSource_td");
     tdDataSource.innerText = taskObj.ms2spectrumDataSource;
 
     let tdCreateTime = document.createElement("td")
+    tdCreateTime.classList.add("createTime_td");
     if (taskObj.createTime === null || taskObj.createTime === "" || taskObj.createTime === "N/A") {
         tdCreateTime.innerText = taskObj.createTime;
     } else {
@@ -194,6 +202,7 @@ function createTableByTaskListData(taskObj) {
     }
 
     let tdFinishTime = document.createElement("td")
+    tdFinishTime.classList.add("finishTime_td");
     if (taskObj.finishTime === null || taskObj.finishTime === "" || taskObj.finishTime === "N/A") {
         tdFinishTime.innerText = taskObj.finishTime;
     } else {
@@ -201,6 +210,7 @@ function createTableByTaskListData(taskObj) {
     }
 
     let tdTaskOp = document.createElement("td")
+    tdTaskOp.classList.add("taskOp_td");
     let deleteButton = document.createElement("button")
     tdTaskOp.appendChild(deleteButton);
     deleteButton.id = taskObj.id;

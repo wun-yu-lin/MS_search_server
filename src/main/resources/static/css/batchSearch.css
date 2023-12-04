@@ -102,4 +102,10 @@ body .batchSearch_div #result {
   margin-top: 20px;
 }
 
+@media (max-width: 500px) {
+  .weight_para_input {
+    width: 100% !important;
+  }
+}
+
 /*# sourceMappingURL=batchSearch.css.map */
