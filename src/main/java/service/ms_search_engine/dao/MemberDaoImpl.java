@@ -31,7 +31,7 @@ public class MemberDaoImpl implements MemberDao{
         if (principalName == null) {
             throw new QueryParameterException("principalName is null");
         }
-        String sqlStr = "SELECT id, principal_name, create_time, last_log_in_time, log_in_type, role, name FROM ms_search_library.member m WHERE m.principal_name = :principalName;";
+        String sqlStr = "SELECT id, principal_name, create_time, last_log_in_time, log_in_type, role, name, email FROM ms_search_library.member m WHERE m.principal_name = :principalName;";
         HashMap<String, Object> map = new HashMap<>();
         map.put("principalName", principalName);
 
@@ -46,7 +46,7 @@ public class MemberDaoImpl implements MemberDao{
         if(id == null) {
             throw new QueryParameterException("id is null");
         }
-        String sqlStr = "SELECT id, principal_name, create_time, last_log_in_time, log_in_type, role, name FROM ms_search_library.member m WHERE id = :id;";
+        String sqlStr = "SELECT id, principal_name, create_time, last_log_in_time, log_in_type, role, name, email FROM ms_search_library.member m WHERE id = :id;";
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
 
@@ -65,8 +65,8 @@ public class MemberDaoImpl implements MemberDao{
             throw new DatabaseInsertErrorException("member is exist");
         }
 
-        String sqlStr = "INSERT INTO ms_search_library.member (principal_name, create_time, last_log_in_time, log_in_type, role, name) " +
-                "VALUES (:principalName, :createTime, :lastLogInTime, :logInType, :role, :name);";
+        String sqlStr = "INSERT INTO ms_search_library.member (principal_name, create_time, last_log_in_time, log_in_type, role, name, email) " +
+                "VALUES (:principalName, :createTime, :lastLogInTime, :logInType, :role, :name, :email);";
 
         MapSqlParameterSource map = new MapSqlParameterSource();
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -76,6 +76,7 @@ public class MemberDaoImpl implements MemberDao{
         map.addValue("logInType", memberModel.getLogInType());
         map.addValue("role", memberModel.getRole());
         map.addValue("name", memberModel.getName());
+        map.addValue("email", memberModel.getEmail());
         int insertStatus = namedParameterJdbcTemplate.update(sqlStr, map, keyHolder);
         if (insertStatus == 0) {
             throw new DatabaseInsertErrorException("insert failed");
@@ -92,7 +93,7 @@ public class MemberDaoImpl implements MemberDao{
             throw new QueryParameterException("principalName is null");
         }
 
-        String sqlStr = "SELECT id, principal_name, create_time, last_log_in_time, log_in_type, role, name FROM ms_search_library.member m WHERE m.principal_name = :principalName;";
+        String sqlStr = "SELECT id, principal_name, create_time, last_log_in_time, log_in_type, role, name, email FROM ms_search_library.member m WHERE m.principal_name = :principalName;";
         HashMap<String, Object> map = new HashMap<>();
         map.put("principalName", principalName);
 

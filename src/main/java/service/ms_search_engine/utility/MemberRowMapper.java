@@ -17,6 +17,7 @@ public class MemberRowMapper implements RowMapper<MemberModel> {
         memberModel.setLogInType(rs.getString("log_in_type"));
         memberModel.setRole(rs.getString("role"));
         memberModel.setName(rs.getString("name"));
+        memberModel.setEmail(rs.getString("email"));
 
 
 
