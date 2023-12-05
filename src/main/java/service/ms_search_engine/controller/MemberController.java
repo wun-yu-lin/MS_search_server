@@ -137,4 +137,15 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberVO);
     }
 
+    @GetMapping("/auth")
+    public ResponseEntity<String> getMember(@AuthenticationPrincipal OAuth2User oAuth2User
+    ) throws QueryParameterException {
+        if (oAuth2User == null) {
+            return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+
 }
