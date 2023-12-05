@@ -27,14 +27,19 @@ public class SecurityConfiguration {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/logIn")
+                        .defaultSuccessUrl("/OAuthSuccess", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
                 .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
+            //    .formLogin(Customizer.withDefaults())
 
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         //static page
-                        .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
                         .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
                         .requestMatchers("/login").permitAll()
                         //static resources
@@ -49,7 +54,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/spectrum/**","/api/compound/**").hasRole("ADMIN")
                         .requestMatchers( "/api/batchSearch/**").authenticated()
-                        .requestMatchers("/api/user").authenticated()
+                        .requestMatchers("/api/member").authenticated()
                         .anyRequest().denyAll()
                 );
 

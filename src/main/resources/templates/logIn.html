@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="en"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	  layout:decorate="~{layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>MS search - log in</title>
+	<link rel="stylesheet" th:href="@{/css/logIn.css}">
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="webIcon_div">
+		<img th:src="@{/icon/webIcon.png}" alt="MS search">
+		<li class="webIcon_div_li"><a class="webIcon_div_li_a" href="./">MS search</a></li>
+	</div>
+	<p class="logInNotice_p">Please sign in to gain additional privileges.</p>
+	<div class="oauth2Login_div">
+		<a href="/oauth2/authorization/google" class="oauth2Login_a">
+			<img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="" class="oauth2Login_img">
+			<span class="oauth2Login_span">Sign in with google</span>
+		</a>
+		<a href="/oauth2/authorization/github" class="oauth2Login_a">
+			<img src="https://img.icons8.com/ios-filled/50/000000/github.png" alt="" class="oauth2Login_img">
+			<span class="oauth2Login_span">Sign in with github</span>
+		</a>
+
+	</div>
+
+
+</div>
+</body>
+<div layout:fragment="script">
+	<!--	<script type="module" th:src="@{/js/utility/spectrumChart.js}"></script>-->
+	<!--	<script type="module" th:src="@{/js/msSearch.js}"></script>-->
+</div>
+</html>

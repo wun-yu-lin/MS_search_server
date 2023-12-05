@@ -38,4 +38,16 @@ public class HtmlController {
 
         return "aboutUs";
     }
+
+    @GetMapping("/logIn")
+    public String logIn(){
+
+        return "logIn";
+    }
+
+    @GetMapping("/OAuthSuccess")
+    public String OAuthSuccess(){
+
+        return "OAuthSuccessPage";
+    }
 }
