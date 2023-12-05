@@ -32,4 +32,10 @@ public class HtmlController {
 
         return "taskView";
     }
+
+    @GetMapping("/aboutUs")
+    public String aboutUs(){
+
+        return "aboutUs";
+    }
 }
