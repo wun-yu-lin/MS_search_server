@@ -98,7 +98,7 @@ body {
 
 .div_header {
   height: 34px;
-  width: calc(100% - 100px);
+  width: calc(100% - 50px);
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px;
@@ -169,6 +169,23 @@ body {
 .div_header .header_ms2Search_div:hover a, .div_header .header_msSearch_div:hover a, .div_header .header_taskView_div:hover a {
   color: #007BFF;
 }
+.div_header .profile_div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  gap: 5px;
+}
+.div_header .profile_div img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.div_header .profile_div span {
+  font-size: 16px;
+  color: white;
+}
 .div_header .header_div_other {
   display: flex;
   gap: 20px;
@@ -177,7 +194,7 @@ body {
   height: 100%;
 }
 .div_header .header_div_other .header_other_item {
-  width: 100px;
+  width: 80px;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -235,7 +252,7 @@ body {
   pointer-events: none; /* 避免隱藏的元素仍然接收事件 */
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .header_search_div {
     width: calc(100% - 400px) !important;
   }

@@ -203,4 +203,13 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
 
         return true;
     }
+
+    @Override
+    public BatchSpectrumSearchModel getLastTask() {
+        String sqlStr = "select * from ms_search_library.batch_task_info order by id desc limit 0,1;";
+
+        BatchSpectrumSearchModel batchSpectrumSearchModel = namedParameterJdbcTemplate.queryForObject(sqlStr, new HashMap<>(), new BatchSpectrumSearchRowMapper());
+
+        return batchSpectrumSearchModel;
+    }
 }

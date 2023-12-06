@@ -51,7 +51,7 @@ async function getMember() {
         return data;
     } else {
         alert("Error, please login again");
-        window.location.href = "/";
+        window.location.href = "/logIn";
         return null;
     }
 }

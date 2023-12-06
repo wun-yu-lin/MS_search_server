@@ -107,7 +107,7 @@ body {
 
 .div_header {
   height: 34px;
-  width: calc(100% - 100px);
+  width: calc(100% - 50px);
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px;
@@ -187,6 +187,23 @@ body {
 
 
   }
+  .profile_div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    gap:5px;
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+    span {
+        font-size: 16px;
+        color: white;
+    }
+  }
 
   .header_div_other {
     display: flex;
@@ -196,7 +213,7 @@ body {
     height: 100%;
 
     .header_other_item {
-      width: 100px;
+      width: 80px;
       position: relative;
       display: flex;
       flex-direction: row;
@@ -287,7 +304,7 @@ body {
 //  transition: opacity 0.5s ease-in-out;
 //}
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .header_search_div {
     width: calc(100% - 400px) !important;
   }

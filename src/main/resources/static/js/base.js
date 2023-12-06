@@ -10,7 +10,7 @@ async function baseMain() {
     document.getElementById("header_search_button").onclick = sentSearchKeyToAPI;
     document.getElementById("loadingScreen").classList.add("hidden")
     if (await isAuth()) {
-        changeToLogInStatus();
+        await changeToLogInStatus();
     } else {
         changeToLogOutStatus();
     }
@@ -37,11 +37,21 @@ async function isAuth() {
     }
 }
 
-function changeToLogInStatus() {
+async function changeToLogInStatus() {
     document.getElementById("logOut_ul").style.display = "block";
+    let response = await fetch("/api/member", {method: "GET"})
+    let memberInfo = await response.json();
+    let spanName = document.createElement("span");
+    let img = document.createElement("img");
+    img.src = memberInfo.pictureSrc;
+    spanName.innerText = memberInfo.name;
+    document.getElementById("profile_div").appendChild(img);
+    document.getElementById("profile_div").appendChild(spanName);
+
 }
 
 function changeToLogOutStatus(){
     document.getElementById("logOut_ul").style.display = "none";
+    document.getElementById("profile_div").innerHTML = "";
 }
 

@@ -10,4 +10,5 @@ public interface MemberDao {
     Integer postMember(MemberModel memberModel) throws DatabaseInsertErrorException, QueryParameterException;
     Boolean isExistMemberByPrincipalName(String principalName) throws QueryParameterException;
     Boolean updateMemberLastLogInTimeByPrincipalName(String principalName) throws QueryParameterException, DatabaseInsertErrorException;
+    MemberModel getLastMember();
 }

@@ -122,4 +122,13 @@ public class MemberDaoImpl implements MemberDao{
 
         return true;
     }
+
+    @Override
+    public MemberModel getLastMember() {
+        String sqlStr = "select * from ms_search_library.member order by id desc limit 0,1;";
+
+        MemberModel memberModel = namedParameterJdbcTemplate.queryForObject(sqlStr, new HashMap<>(), new MemberRowMapper());
+
+        return memberModel;
+    }
 }

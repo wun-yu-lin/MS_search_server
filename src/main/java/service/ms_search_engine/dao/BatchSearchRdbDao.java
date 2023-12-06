@@ -20,4 +20,6 @@ public interface BatchSearchRdbDao{
     Boolean deleteTaskById(int id) throws QueryParameterException, DatabaseDeleteErrorException;
 
     Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException;
+
+    BatchSpectrumSearchModel getLastTask();
 }

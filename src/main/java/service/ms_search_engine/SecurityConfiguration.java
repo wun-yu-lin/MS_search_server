@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 )
                 .headers(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+                //.formLogin(Customizer.withDefaults())
 
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/webStatus/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/spectrum/**","/api/compound/**").hasRole("ADMIN")
                         .requestMatchers( "/api/batchSearch/**").authenticated()
                         .requestMatchers("/api/member/auth").permitAll()

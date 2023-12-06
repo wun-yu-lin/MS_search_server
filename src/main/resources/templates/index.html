@@ -47,6 +47,10 @@
 	</div>
 	<div class="right_div">
 		<div class="release_note_div">
+			<h1 style="font-size: 22px; font-style: inherit "> Web status</h1>
+			<p>Registered users: <span id="registeredCount_span">N.D.</span></p>
+			<p>Submitted tasks: <span id="submittedCount_span">N.D.</span></p>
+
 			<h1 style="font-size: 22px; font-style: inherit "> Release note</h1>
 			<!--				建立清單-->
 			<ul>
@@ -123,4 +127,7 @@
 
 </div>
 </body>
+<div layout:fragment="script">
+	<script type="module" th:src="@{/js/index.js}"></script>
+</div>
 </html>

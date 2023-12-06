@@ -7,9 +7,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import service.ms_search_engine.constant.Ms2SpectrumDataSource;
+import service.ms_search_engine.dao.MemberDao;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
 import service.ms_search_engine.dto.BatchTaskSearchDto;
 import service.ms_search_engine.exception.*;
@@ -31,14 +35,20 @@ public class BatchSpectrumSearchController {
     // get /api/batchSearch/task/{id} -> get task status by id
     // delete /api/batchSearch/task/{id} -> delete task by id, change task status to delete, s3 data delete
     private final BatchSpectrumSearchService batchSpectrumSearchService;
+    private final OAuth2AuthorizedClientService authorizedClientService;
+    private final MemberDao memberDao;
+
 
     @Autowired
-    public BatchSpectrumSearchController(BatchSpectrumSearchService batchSpectrumSearchService) {
+    public BatchSpectrumSearchController(BatchSpectrumSearchService batchSpectrumSearchService, OAuth2AuthorizedClientService authorizedClientService, MemberDao memberDao) {
         this.batchSpectrumSearchService = batchSpectrumSearchService;
+        this.authorizedClientService = authorizedClientService;
+        this.memberDao = memberDao;
     }
 
     @PostMapping("file/upload")
     public ResponseEntity<BatchSpectrumSearchModel> postFileUpload(
+            OAuth2AuthenticationToken authentication,
             @RequestParam @NotNull MultipartFile peakListFile,
             @RequestParam @NotNull MultipartFile ms2File,
             @RequestParam @NotNull String mail,
@@ -46,6 +56,12 @@ public class BatchSpectrumSearchController {
             @RequestParam(defaultValue = "0") int authorId,
             @RequestParam String taskDescription
             ) throws S3DataUploadException, QueryParameterException, DatabaseInsertErrorException {
+        //check user Author id
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+        if (authorId  != memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId()) {
+            throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
+        }
+
 
         //setting max file size
         int peakListFileMaxSize = 100 * 1024 * 1024; // max 100MB
@@ -87,8 +103,15 @@ public class BatchSpectrumSearchController {
 
     @PostMapping("task/submit")
     public ResponseEntity<String> postTaskSubmit(
-            @RequestBody BatchSpectrumSearchModel batchSpectrumSearchModel
+            @RequestBody BatchSpectrumSearchModel batchSpectrumSearchModel,
+            OAuth2AuthenticationToken authentication
     ) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
+        //check authorId
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+        if (batchSpectrumSearchModel.getAuthorId()  != memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId()) {
+            throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
+        }
+
         BatchSpectrumSearchDto batchSpectrumSearchDto = new BatchSpectrumSearchDto();
         batchSpectrumSearchDto.setPeakListS3FileSrc(batchSpectrumSearchModel.getS3PeakListSrc());
         batchSpectrumSearchDto.setMs2S3FileSrc(batchSpectrumSearchModel.getS3Ms2FileSrc());

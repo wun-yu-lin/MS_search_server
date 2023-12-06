@@ -40,7 +40,7 @@ function main() {
         let memberObj = await fetch("./api/member",{method: "GET"});
         if (memberObj.status !== 200) {
             alert("Please login first");
-            window.location.href = "/login";
+            window.location.href = "/logIn";
             return
         }
         memberObj = await memberObj.json();
