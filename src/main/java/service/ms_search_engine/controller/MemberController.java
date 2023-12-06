@@ -1,8 +1,6 @@
 package service.ms_search_engine.controller;
 
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,10 +43,6 @@ public class MemberController {
                                               OAuth2AuthenticationToken authentication
     ) throws QueryParameterException {
 
-
-
-        Collection<? extends GrantedAuthority> authorities = oAuth2User.getAuthorities();
-        System.out.println("authorities = " + authorities.toArray()[0]);
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
         MemberModel memberModel = memberService.getMemberByPrincipalName(authorizedClient.getPrincipalName());
         if (memberModel == null) {

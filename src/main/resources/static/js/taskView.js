@@ -32,6 +32,8 @@ function main() {
 }
 
 async function asyncMain() {
+    let member = await getMember();
+    _pageStatusObj.authId = member.id;
     let taskList = await getTaskListByApiAndUpdatePageStatus();
     taskList.forEach((task) => {
             createTableByTaskListData(task)
@@ -39,6 +41,19 @@ async function asyncMain() {
     )
     createScrollDownObserverForNextPage();
 
+}
+
+async function getMember() {
+    let url = "/api/member";
+    let response = await fetch(url, {method: "GET"})
+    if (response.status === 200) {
+        let data = await response.json();
+        return data;
+    } else {
+        alert("Error, please login again");
+        window.location.href = "/";
+        return null;
+    }
 }
 
 
@@ -67,12 +82,11 @@ async function getTaskListByApiAndUpdatePageStatus() {
 
     _pageStatusObj.fetchUrl = "/api/batchSearch/task";
     let paraObj = {
-        "authodId": "0",
+        "authorId": _pageStatusObj.authId,
         "taskInit": _pageStatusObj.nextPageSpectrumInit,
         "taskOffset": 30
     }
     _pageStatusObj.paraObj = paraObj;
-    _pageStatusObj.authId = paraObj.authodId;
     let url = fetchAPI.generateGetUrlByParameter(paraObj, _pageStatusObj.fetchUrl);
     _pageStatusObj.isFetching = true;
     _pageStatusObj.isFirstLoad = true;

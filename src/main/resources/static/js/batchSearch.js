@@ -8,6 +8,7 @@ import FetchAPI from "./utility/FetchAPI.js";
 const fetchAPI = new FetchAPI();
 let _taskObj = {
     "responseObj": {},
+    "memberObj": {},
     "isFileUploaded": false,
     "isFileUploading":false,
     "isFormSubmitted": false,
@@ -15,6 +16,7 @@ let _taskObj = {
     "isFormPass": false,
     initialize() {
         this.responseObj = {};
+        this.memberObj = {};
         this.isFileUploaded = false;
         this.isFormSubmitted = false;
         this.isFormPass = false;
@@ -33,6 +35,19 @@ function main() {
     document.getElementById("submitButton").onclick = submitForm;
     document.getElementById("demoDataPosButton").onclick = setupDemoDataPos;
     _taskObj.initialize();
+    //load member data
+    window.onload = async function () {
+        let memberObj = await fetch("./api/member",{method: "GET"});
+        if (memberObj.status !== 200) {
+            alert("Please login first");
+            window.location.href = "/login";
+            return
+        }
+        memberObj = await memberObj.json();
+        _taskObj.memberObj = memberObj;
+        document.getElementById("mail").value = memberObj.email;
+        document.getElementById("authorId").value = memberObj.id;
+    }
 }
 
 async function asyncMain() {
@@ -54,6 +69,11 @@ async function uploadFile(event) {
     document.getElementById("uploadStatusResult").innerText = "";
     document.getElementById("uploadStatusLoading").classList.remove("hidden")
     let responseObj = await fetchAPI.sentFormDataByPostMethod("/api/batchSearch/file/upload", new FormData(document.getElementById("myForm")));
+    if (responseObj.status !== 200) {
+        document.getElementById("uploadStatusResult").innerText = "Fail";
+        document.getElementById("uploadStatusLoading").classList.add("hidden")
+        _taskObj.isFileUploading = false;
+    }
     let fetchData = await responseObj.json();
     _taskObj.responseObj = fetchData;
 
@@ -94,6 +114,7 @@ async function submitForm() {
     _taskObj.responseObj.ms1Ms2matchMzTolerance = parseFloat(document.getElementById("ms1ms2PairMzParameter").value);
     _taskObj.responseObj.ms1Ms2matchRtTolerance = parseFloat(document.getElementById("ms1ms2PairRtParameter").value);
     _taskObj.responseObj.taskDescription = document.getElementById("taskDescription").value;
+    _taskObj.responseObj.authorId = parseInt(document.getElementById("authorId").value);
 
     document.getElementById("submitStatusResult").innerText = "";
     let Keys = Object.keys(_taskObj.responseObj);
