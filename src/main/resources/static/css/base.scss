@@ -200,21 +200,27 @@ body {
       position: relative;
       display: flex;
       flex-direction: row;
-      justify-content: flex-end;
+      justify-content: center;
 
       .header_other_button {
+        display: flex;
+        flex-direction: row;
         position: relative;
         text-align: end;
         color: white;
         font-size: 24px;
         background-color: rgb(255, 255, 255, 0);
         ///border: red 1px solid;
+        img {
+            width: 60px;
+            height: 60px;
+        }
       }
 
       .dropDown_bg_div {
         position: absolute;
         display: none;
-        top: 30px;
+        top: 50px;
         right: 0;
         padding-top: 10px;
         width: 300%;
