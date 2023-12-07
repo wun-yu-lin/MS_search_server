@@ -90,7 +90,9 @@ async function getTaskListByApiAndUpdatePageStatus() {
     let url = fetchAPI.generateGetUrlByParameter(paraObj, _pageStatusObj.fetchUrl);
     _pageStatusObj.isFetching = true;
     _pageStatusObj.isFirstLoad = true;
-    let data = await fetchAPI.fetchSpectrumDataByGetMethod(url, {});
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod(url, {});
+    let data = await response.json();
+
     _pageStatusObj.isFetching = false;
 
     if (data == null) {
@@ -300,7 +302,8 @@ function createScrollDownObserverForNextPage() {
                 "taskInit": _pageStatusObj.nextPageSpectrumInit
             }, _pageStatusObj.fetchUrl);
             console.log(url)
-            let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(url, {"method": "GET"});
+            let response = await fetchAPI.fetchSpectrumDataByGetMethod(url, {"method": "GET"});
+            let fetchData = await response.json();
             if (typeof (fetchData) === "object") {
                 _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
                 console.log(_pageStatusObj.nextPageSpectrumInit)

@@ -32,8 +32,8 @@ class FetchAPI {
     async fetchSpectrumDataByGetMethod(url, requestParaObj){
         requestParaObj["method"] = "GET"
         let data = await fetch(url, requestParaObj)
-        let dataParse = await data.json()
-        return dataParse
+        //let dataParse = await data.json()
+        return data
     }
 
     async fetchDataByPOSTMethod(url, requestParaObj){

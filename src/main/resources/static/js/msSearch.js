@@ -96,7 +96,13 @@ async function sentParameterToFuzzyAPI() {
     let fetchUrl = fetchAPI.generateGetUrlByParameter(paramObject, "/api/spectrum/fuzzy")
     _pageStatusObj.fetchUrl = fetchUrl
     _pageStatusObj.isFetching = true
-    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    if (response.status !== 200){
+        createMessageIntoSpectrumContainer("No spectrum data found!! Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum. ")
+        _pageStatusObj.isNextPage === false
+        document.getElementById("loadingScreen").classList.add("hidden")
+    }
+    let fetchData = await response.json()
     _pageStatusObj.isFetching = false
     _pageStatusObj.isFirstLoad = true
     if (typeof (fetchData) === "object") {
@@ -120,7 +126,13 @@ async function onClickFunctionForSearchSpectrum() {
     let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum")
     _pageStatusObj.fetchUrl = fetchUrl
     _pageStatusObj.isFetching = true
-    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    if(response.status !== 200){
+        createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
+        _pageStatusObj.isNextPage === false
+        document.getElementById("loadingScreen").classList.add("hidden")
+    }
+    let fetchData = await response.json()
     _pageStatusObj.isFetching = false
     _pageStatusObj.isFirstLoad = true
     if (typeof (fetchData) === "object") {
@@ -285,6 +297,11 @@ function getSpectrumQueryParaFromForm() {
                 getParameterObj.isPassCheck = false
                 return null
             }
+            if (getParameterObj.minPrecursorMz === null || getParameterObj.maxPrecursorMz === null) {
+                alert("Please key-in precursor m/z & MS tolerance, when you want to search by MS2 spectrum")
+                getParameterObj.isPassCheck = false
+                return null
+            }
 
 
             if (isNaN(getParameterObj.ms2SpectrumSimilarityTolerance)) getParameterObj.ms2SpectrumSimilarityTolerance = null
@@ -433,7 +450,7 @@ function searchDivDeFaultPara() {
     document.getElementById("exact_mass").value = "444.153"
     document.getElementById("precursor_mz").value = "443.146"
     document.getElementById("tolerance").value = "20"
-    document.getElementById("ms2Spectrum").innerHTML = `65.0397:1.632979
+    document.getElementById("ms2Spectrum").value = `65.0397:1.632979
 65.9986:5.718588 
 68.9982:4.494347 
 83.0503:1.145107 
@@ -503,7 +520,12 @@ function createScrollDownObserverForNextPage() {
             if (_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
             //add action of loading
 
-            let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(_pageStatusObj.fetchUrl + `&spectrumInit=${_pageStatusObj.nextPageSpectrumInit}`, {"method": "GET"})
+            let response = await fetchAPI.fetchSpectrumDataByGetMethod(_pageStatusObj.fetchUrl + `&spectrumInit=${_pageStatusObj.nextPageSpectrumInit}`, {"method": "GET"})
+            if (response.status !== 200){
+                createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
+                _pageStatusObj.isNextPage === false
+            }
+            let fetchData = await response.json()
             if (typeof (fetchData) === "object") {
                 _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
                 if (fetchData.length >= 10) {
@@ -551,6 +573,7 @@ function resetParaAndSpectrumItem() {
     document.getElementById("tolerance_unit").value = "ppm"
     document.getElementById("charge").value = ""
     document.getElementById("ms2Spectrum").innerHTML = ""
+    document.getElementById("ms2Spectrum").value = ""
     document.getElementById("ms2_tolerance_para").value = ""
     document.getElementById("ms2_similarity_para").value = ""
     document.getElementById("forward_para").value = ""

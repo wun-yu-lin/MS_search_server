@@ -211,7 +211,13 @@ async function updateFormByTaskId() {
     document.getElementById("loadingScreen").classList.remove("hidden")
     let url = new URL(window.location.href);
     let taskId = url.searchParams.get("taskId");
-    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod("/api/batchSearch/task/" + taskId, {});
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod("/api/batchSearch/task/" + taskId, {});
+    if (response.status !== 200) {
+        alert("Task ID not found");
+        document.getElementById("loadingScreen").classList.add("hidden")
+        return
+    }
+    let fetchData = await response.json();
     if (fetchData === null || fetchData === undefined) {
         alert("Task ID not found");
         document.getElementById("loadingScreen").classList.add("hidden")
