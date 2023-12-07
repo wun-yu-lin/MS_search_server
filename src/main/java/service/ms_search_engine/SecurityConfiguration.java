@@ -45,6 +45,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
                         .requestMatchers("/login").permitAll()
                         //static resources
+                        //loaderio
+                        .requestMatchers("/loaderio-4ec2846ed840a5bee0888f814d57dd62.txt").permitAll()
                         .requestMatchers(HttpMethod.GET, "/css/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/js/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/icon/**").permitAll()
