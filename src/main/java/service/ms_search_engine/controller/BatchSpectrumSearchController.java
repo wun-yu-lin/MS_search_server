@@ -25,6 +25,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/batchSearch/")
@@ -149,8 +150,14 @@ public class BatchSpectrumSearchController {
     public ResponseEntity<List<BatchSpectrumSearchModel>> getTaskByParameter(
             @RequestParam(defaultValue = "0") Integer authorId,
             @RequestParam(defaultValue = "0") Integer taskInit,
-            @RequestParam(defaultValue = "30") Integer taskOffset
+            @RequestParam(defaultValue = "30") Integer taskOffset,
+            OAuth2AuthenticationToken authentication
     ) throws QueryParameterException, SQLException {
+        //check authorId
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+        if (!Objects.equals(authorId, memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId())) {
+            throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
+        }
 
         //preparation dto
         BatchTaskSearchDto batchTaskSearchDto = new BatchTaskSearchDto();
@@ -164,8 +171,12 @@ public class BatchSpectrumSearchController {
     }
 
     @DeleteMapping("task/{id}")
-    public ResponseEntity<String> deleteTaskById(@PathVariable @NotNull int id) throws QueryParameterException, S3DataUploadException, SQLException {
-
+    public ResponseEntity<String> deleteTaskById(@PathVariable @NotNull int id, OAuth2AuthenticationToken authentication) throws QueryParameterException, S3DataUploadException, SQLException {
+        //check authorId
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
+        if (id != memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId()) {
+            throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
+        }
 //        batchSpectrumSearchService.deleteTaskById(id);
         batchSpectrumSearchService.changeTaskStatusToDelete(id);
         return ResponseEntity.status(HttpStatus.OK).body("delete success");
