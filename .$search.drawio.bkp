@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-12-07T19:12:11.163Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="ljeYVvzvtDVcBq1tb8gM" version="22.1.2" type="device">
+<mxfile host="Electron" modified="2023-12-09T15:28:33.391Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="Nlqeo5_kq5IyUnH0vrmm" version="22.1.2" type="device">
   <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
-    <mxGraphModel dx="1840" dy="1245" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1624" dy="1118" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -324,11 +324,11 @@
         <mxCell id="nUrSP0fMEXODZFnYIuiU-29" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="2139" y="728" width="201" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="nUrSP0fMEXODZFnYIuiU-30" value="Spectrum factory" style="swimlane;whiteSpace=wrap;html=1;" parent="nUrSP0fMEXODZFnYIuiU-29" vertex="1">
+        <mxCell id="nUrSP0fMEXODZFnYIuiU-30" value="Spectrum DAO" style="swimlane;whiteSpace=wrap;html=1;" parent="nUrSP0fMEXODZFnYIuiU-29" vertex="1">
           <mxGeometry width="201" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="nUrSP0fMEXODZFnYIuiU-31" value="generatePeakPairList()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="nUrSP0fMEXODZFnYIuiU-29" vertex="1">
-          <mxGeometry x="24" y="28" width="141" height="26" as="geometry" />
+        <mxCell id="nUrSP0fMEXODZFnYIuiU-31" value="getSpectrumByParameter()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="nUrSP0fMEXODZFnYIuiU-29" vertex="1">
+          <mxGeometry x="13" y="28" width="164" height="26" as="geometry" />
         </mxCell>
         <mxCell id="nUrSP0fMEXODZFnYIuiU-33" value="MySQL" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.mysql_db_instance;fillColor=#2E73B8;gradientColor=none;" parent="1" vertex="1">
           <mxGeometry x="1474" y="365" width="60" height="64.5" as="geometry" />
