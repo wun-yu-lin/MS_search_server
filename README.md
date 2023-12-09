@@ -49,7 +49,7 @@ Provide rapid MS/MS search within a 2-million-entry MS spectra database.
 
 
 
-- Then you access special url & API, backend service will require authorization.
+- Then you access special URL & API, backend service will require authorization.
 - Authorization and authentication using spring security OAuth 2.0.
     ![SprintSecurityOAuth2](https://github.com/wun-yu-lin/MS_search_server/blob/main/demo/SpringSecurityOAuth2.gif?raw=true)
 
