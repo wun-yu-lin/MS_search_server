@@ -24,6 +24,7 @@ import service.ms_search_engine.dto.SpectrumQueryParaDto;
 import service.ms_search_engine.exception.DatabaseUpdateErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.exception.RedisErrorException;
+import service.ms_search_engine.model.BatchSpectrumSearchModel;
 import service.ms_search_engine.model.SpectrumDataModel;
 import service.ms_search_engine.redisService.RedisMailQueueService;
 import service.ms_search_engine.redisService.RedisSentTaskMailVO;
@@ -77,6 +78,17 @@ public class TaskProcessorService {
                     RedisSentTaskMailVO redisSentTaskMailVO = new RedisSentTaskMailVO();
                     //start process task
                     try {
+                        //check task status in database, if not in pending, return error
+                        BatchSpectrumSearchModel batchSpectrumSearchModel = batchSearchRdbDao.getTaskInfoById(batchSpectrumSearchDto.getTaskId());
+                        if (batchSpectrumSearchModel == null) {
+                            continue;
+                        }
+                        if (batchSpectrumSearchModel.getTaskStatus() != TaskStatus.SUBMIT_IN_WAITING.getStatusCode()) {
+                            System.out.println("Task is not in waiting status, possible reason: task is processing, finished, deleted or error");
+                            continue;
+                        }
+
+
                         //change the task status to processing in database
                         batchSpectrumSearchDto.setTaskStatus(TaskStatus.PROCESSING);
                         batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
