@@ -10,7 +10,7 @@
     </parent>
     <groupId>service</groupId>
     <artifactId>MS_search_engine</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <name>MS_search_engine</name>
     <description>MS_search_engine</description>
 
