@@ -22,6 +22,11 @@ public class SecurityConfiguration {
     @Value("spring.security.admin.password")
     private String adminPassword;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api-doc/**",
+            "/swagger-ui/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -35,10 +40,15 @@ public class SecurityConfiguration {
                 )
                 .headers(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                //.formLogin(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
 
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        //swagger hub
+                        //.requestMatchers(AUTH_WHITELIST).authenticated()
+                        .requestMatchers(AUTH_WHITELIST).hasAnyRole("ADMIN")
+
+
                         //static page
                         .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
                         .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
