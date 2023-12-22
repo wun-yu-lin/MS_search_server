@@ -1,5 +1,6 @@
 package service.ms_search_engine.controller;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +24,7 @@ class SpectrumControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testGetById() throws Exception {
+    public void testGetSpectrumByID() throws Exception {
 
         //建立一個RequestBuilder, 可以發起的request與相關的設定
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -36,6 +37,52 @@ class SpectrumControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
+        String body = mvcResult.getResponse().getContentAsString();
+        System.out.println("Response:" + body);
+    }
+
+    @Test
+    @DisplayName("Get spectrum by parameter, normal case")
+    public void test1GetSpectrumByParameter() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/spectrum")
+                .param("spectrumInit", "0")
+                .param("spectrumOffSet", "10")
+                .param("compoundName", "Caffeine")
+                .contentType("application/json");
+        MvcResult mvcResult = mockMvc.perform((requestBuilder))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        String body = mvcResult.getResponse().getContentAsString();
+        System.out.println("Response:" + body);
+    }
+
+    @Test
+    @DisplayName("Get spectrum by fuzzy, normal case")
+    public void test1GetSpectrumByFuzzy() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/spectrum/fuzzy")
+                .param("keyWord", "tetracycline")
+                .contentType("application/json");
+        MvcResult mvcResult = mockMvc.perform((requestBuilder))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        String body = mvcResult.getResponse().getContentAsString();
+        System.out.println("Response:" + body);
+    }
+
+    @Test
+    @DisplayName("Get spectrum by fuzzy, error case")
+    public void test2GetSpectrumByFuzzy() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/spectrum/fuzzy")
+                .contentType("application/json");
+        MvcResult mvcResult = mockMvc.perform((requestBuilder))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andReturn();
         String body = mvcResult.getResponse().getContentAsString();
         System.out.println("Response:" + body);
     }
