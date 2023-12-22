@@ -24,6 +24,7 @@ class SpectrumControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    @DisplayName("Get spectrum by ID, normal case")
     public void testGetSpectrumByID() throws Exception {
 
         //建立一個RequestBuilder, 可以發起的request與相關的設定
@@ -42,7 +43,7 @@ class SpectrumControllerTest {
     }
 
     @Test
-    @DisplayName("Get spectrum by parameter, normal case")
+    @DisplayName("Get spectrum by parameter, normal case.")
     public void test1GetSpectrumByParameter() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/spectrum")
@@ -59,7 +60,7 @@ class SpectrumControllerTest {
     }
 
     @Test
-    @DisplayName("Get spectrum by fuzzy, normal case")
+    @DisplayName("Get spectrum by fuzzy, normal case.")
     public void test1GetSpectrumByFuzzy() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/spectrum/fuzzy")
@@ -74,7 +75,7 @@ class SpectrumControllerTest {
     }
 
     @Test
-    @DisplayName("Get spectrum by fuzzy, error case")
+    @DisplayName("Get spectrum by fuzzy, error case.")
     public void test2GetSpectrumByFuzzy() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/spectrum/fuzzy")
