@@ -86,4 +86,6 @@ public class CompoundController {
         }
         return ResponseEntity.status(HttpStatus.OK).body("post compound classification data success");
     }
+
+
 }
