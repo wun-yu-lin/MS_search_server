@@ -1,0 +1,15 @@
+steps:
+  build:
+    image: openjdk:17-jdk-slim
+    commands:
+      - echo "start run the build step"
+    when:
+      event:
+        - pull_request
+  compileTest:
+    image: openjdk:17-jdk-slim
+    commands:
+      - ./mvn test
+    when:
+      event:
+        - pull_request
