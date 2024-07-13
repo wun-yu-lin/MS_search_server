@@ -1,4 +1,3 @@
-
 @charset "UTF-8";
 * {
   padding: 0;
@@ -8,9 +7,9 @@
   font-family: "Noto Sans TC", sans-serif;
 }
 
-* html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,
-sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,
-th,td {
+* html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub,
+sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr,
+th, td {
   margin: 0;
   padding: 0;
   border: 0;
@@ -46,17 +45,18 @@ body {
 /*設定footer本身高度*/
 .footer {
   width: 100%;
-  height: 70px;
-  background-color:#4D4D4D;
+  height: 35px;
+  background-color: #4D4D4D;
   justify-content: center;
   align-items: center;
 
   .footer_div_p {
-    font-size: 20px;
+    font-size: 18px;
     color: white;
   }
 
 }
+
 .loadingScreen {
   top: 54px;
   position: fixed;
@@ -64,7 +64,7 @@ body {
   background-color: #1e1d20;
   z-index: 100;
 
-  .loadingioMask{
+  .loadingioMask {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -74,6 +74,7 @@ body {
 
 
   }
+
   .loadingImg {
     width: 20%;
   }
@@ -87,8 +88,9 @@ body {
   align-items: center;
   margin: 0;
   margin-top: 54px;
-  min-height: calc(100vh - 89px - 54px); /*100vh - footer高度 - header高度*/
+  min-height: calc(100vh - 56px - 54px); /*100vh - footer高度 - header高度*/
 }
+
 .header {
   width: 100%;
   height: 54px;
@@ -102,18 +104,22 @@ body {
   border-bottom: 2px solid rgba(132, 132, 132, 0.80);
 
 }
+
 .div_header {
   height: 34px;
-  width: calc(100% - 100px);
+  width: calc(100% - 50px);
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px;
+  gap: 20px;
 
   .header_div {
     flex-direction: row;
     display: flex;
     align-items: center;
     gap: 5px;
+    min-width: 150px;
+
     .header_div_li_a {
       font-size: 24px;
       color: white;
@@ -124,28 +130,38 @@ body {
   }
 
   .header_search_div {
-    width: calc(100% - 600px);
+    width: 100%;
+    height: 100%;
+    max-width: 500px ;
     position: relative;
     display: flex;
     flex-direction: row;
-    .header_search_button{
+    opacity: 0.85;
+
+
+    .header_search_button {
       position: absolute;
-      inset: 2.5px auto auto 5px;
+      inset: 4.5px auto auto 5px;
       background-image: url("../icon/searchIcon.png");
       background-repeat: no-repeat;
       background-color: rgba(255, 255, 255, 0);
       background-size: contain;
       width: 23px;
-      height: 23px;
+      height: 100%;
     }
-    .header_search_input{
-      background-color: white ;
+    .header_search_button:hover {
+      cursor: pointer;
+    }
+
+    .header_search_input {
+      background-color: white;
       padding: 5px 40px;
       border-radius: 20px;
       width: 100%;
-      height: 28px;
-      font-size: 20px;
+      height: 100%;
+      font-size: 14px;
     }
+
     .header_search_input:focus {
       outline: none;
       border-color: #007BFF;
@@ -153,79 +169,127 @@ body {
     }
   }
 
-.header_div_other {
-  display: flex;
-  gap:20px;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-
-  .header_other_item{
-    width: 100px;
-    position: relative;
+  .header_ms2Search_div, .header_msSearch_div, .header_taskView_div {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    .header_other_button{
-      position: relative;
-      text-align: end;
-      color: white;
-      font-size: 24px;
-      background-color: rgb(255,255,255,0);
-      ///border: red 1px solid;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    a {
+      font-size:18px;
     }
-    .dropDown_bg_div{
-      position: absolute;
-      display: none;
-      top: 30px;
-      right: 0;
-      padding-top: 10px;
-      width: 300%;
-      //border: red 1px solid;
+  }
+  .header_ms2Search_div:hover, .header_msSearch_div:hover, .header_taskView_div:hover {
+    cursor: pointer;
+    a {
+      color: #007BFF;
+    }
 
-    }
-    .dropDown_div{
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      gap: 10px;
-      padding: 10px;
-      //position: absolute;
-      //top: 54px;
-      //right: 0;
-      background-color: rgba(26, 26, 26, 0.95);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border: #4D4D4D 2px solid;
-      border-radius: 4px;
-      ul > li {
-        display: flex;
-        justify-content: flex-end;
-        a {
-          font-size: 20px;
-        }
-
-      }
-    }
-    .header_other_button:hover + .dropDown_bg_div{
-      display: flex;
-    }
-    .dropDown_bg_div:hover{
-      display: flex;
-    }
 
   }
+  .profile_div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    gap:5px;
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+    span {
+        font-size: 16px;
+        color: white;
+    }
+  }
+
+  .header_div_other {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .header_other_item {
+      width: 80px;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      .header_other_button {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        text-align: end;
+        color: white;
+        font-size: 24px;
+        background-color: rgb(255, 255, 255, 0);
+        ///border: red 1px solid;
+        img {
+            width: 60px;
+            height: 60px;
+        }
+      }
+
+      .dropDown_bg_div {
+        position: absolute;
+        display: none;
+        top: 50px;
+        right: 0;
+        padding-top: 10px;
+        width: 300%;
+        //border: red 1px solid;
+
+      }
+
+      .dropDown_div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        padding: 10px;
+        //position: absolute;
+        //top: 54px;
+        //right: 0;
+        background-color: rgba(26, 26, 26, 0.95);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: #4D4D4D 2px solid;
+        border-radius: 4px;
+
+        ul > li {
+          display: flex;
+          justify-content: flex-end;
+
+          a {
+            font-size: 20px;
+          }
+
+        }
+      }
+
+      .header_other_button:hover + .dropDown_bg_div {
+        display: flex;
+      }
+
+      .dropDown_bg_div:hover {
+        display: flex;
+      }
+
+    }
 
 
-
-  //.header_div_other_li_a, .header_div_other_li_button {
-  //  font-size: 20px;
-  //  color: white;
-  //  background-color: rgba(255, 255, 255, 0);
-  //  font-style: normal;
-  //  font-weight: 400;
-  //  line-height: 34px;
-  //}
-}
+    //.header_div_other_li_a, .header_div_other_li_button {
+    //  font-size: 20px;
+    //  color: white;
+    //  background-color: rgba(255, 255, 255, 0);
+    //  font-style: normal;
+    //  font-weight: 400;
+    //  line-height: 34px;
+    //}
+  }
 }
 
 
@@ -240,14 +304,45 @@ body {
 //  transition: opacity 0.5s ease-in-out;
 //}
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .header_search_div {
     width: calc(100% - 400px) !important;
   }
+  .header_ms2Search_div, .header_msSearch_div, .header_taskView_div{
+    display: none !important;
+  }
+
+  .loadingImg {
+    width: 35% !important;
+  }
+
 }
 
 @media (max-width: 700px) {
-  .div_header{
+  .div_header {
     width: 100% !important;
+    max-width: 100vw !important;
+
   }
+  .header_search_div {
+    display: none !important;
+
+  }
+  .loadingImg {
+    width: 50% !important;
+  }
+
+}
+
+@media (max-width: 400px) {
+  .ionMode_th, .ionMode_td {
+    display: none !important;
+  }
+  .dataSource_th, .dataSource_td {
+    display: none !important;
+  }
+  .loadingImg {
+    width: 70% !important;
+  }
+
 }

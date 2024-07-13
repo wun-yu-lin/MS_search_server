@@ -17,4 +17,6 @@ public interface BatchSpectrumSearchService {
     List<BatchSpectrumSearchModel> getTaskInfoByParameter(BatchTaskSearchDto batchTaskSearchDto) throws QueryParameterException, SQLException;
     Boolean deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException;
 
+    Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException, S3DataUploadException;
+
 }

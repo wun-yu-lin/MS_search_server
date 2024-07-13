@@ -44,13 +44,13 @@ body {
 /*設定footer本身高度*/
 .footer {
   width: 100%;
-  height: 70px;
+  height: 35px;
   background-color: #4D4D4D;
   justify-content: center;
   align-items: center;
 }
 .footer .footer_div_p {
-  font-size: 20px;
+  font-size: 18px;
   color: white;
 }
 
@@ -80,7 +80,7 @@ body {
   align-items: center;
   margin: 0;
   margin-top: 54px;
-  min-height: calc(100vh - 89px - 54px); /*100vh - footer高度 - header高度*/
+  min-height: calc(100vh - 56px - 54px); /*100vh - footer高度 - header高度*/
 }
 
 .header {
@@ -98,16 +98,18 @@ body {
 
 .div_header {
   height: 34px;
-  width: calc(100% - 100px);
+  width: calc(100% - 50px);
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px;
+  gap: 20px;
 }
 .div_header .header_div {
   flex-direction: row;
   display: flex;
   align-items: center;
   gap: 5px;
+  min-width: 150px;
 }
 .div_header .header_div .header_div_li_a {
   font-size: 24px;
@@ -117,33 +119,72 @@ body {
   line-height: 34px;
 }
 .div_header .header_search_div {
-  width: calc(100% - 600px);
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
   position: relative;
   display: flex;
   flex-direction: row;
+  opacity: 0.85;
 }
 .div_header .header_search_div .header_search_button {
   position: absolute;
-  inset: 2.5px auto auto 5px;
+  inset: 4.5px auto auto 5px;
   background-image: url("../icon/searchIcon.png");
   background-repeat: no-repeat;
   background-color: rgba(255, 255, 255, 0);
   background-size: contain;
   width: 23px;
-  height: 23px;
+  height: 100%;
+}
+.div_header .header_search_div .header_search_button:hover {
+  cursor: pointer;
 }
 .div_header .header_search_div .header_search_input {
   background-color: white;
   padding: 5px 40px;
   border-radius: 20px;
   width: 100%;
-  height: 28px;
-  font-size: 20px;
+  height: 100%;
+  font-size: 14px;
 }
 .div_header .header_search_div .header_search_input:focus {
   outline: none;
   border-color: #007BFF;
   box-shadow: 0 0 5px #007BFF;
+}
+.div_header .header_ms2Search_div, .div_header .header_msSearch_div, .div_header .header_taskView_div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.div_header .header_ms2Search_div a, .div_header .header_msSearch_div a, .div_header .header_taskView_div a {
+  font-size: 18px;
+}
+.div_header .header_ms2Search_div:hover, .div_header .header_msSearch_div:hover, .div_header .header_taskView_div:hover {
+  cursor: pointer;
+}
+.div_header .header_ms2Search_div:hover a, .div_header .header_msSearch_div:hover a, .div_header .header_taskView_div:hover a {
+  color: #007BFF;
+}
+.div_header .profile_div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  gap: 5px;
+}
+.div_header .profile_div img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.div_header .profile_div span {
+  font-size: 16px;
+  color: white;
 }
 .div_header .header_div_other {
   display: flex;
@@ -153,23 +194,29 @@ body {
   height: 100%;
 }
 .div_header .header_div_other .header_other_item {
-  width: 100px;
+  width: 80px;
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
 }
 .div_header .header_div_other .header_other_item .header_other_button {
+  display: flex;
+  flex-direction: row;
   position: relative;
   text-align: end;
   color: white;
   font-size: 24px;
   background-color: rgba(255, 255, 255, 0);
 }
+.div_header .header_div_other .header_other_item .header_other_button img {
+  width: 60px;
+  height: 60px;
+}
 .div_header .header_div_other .header_other_item .dropDown_bg_div {
   position: absolute;
   display: none;
-  top: 30px;
+  top: 50px;
   right: 0;
   padding-top: 10px;
   width: 300%;
@@ -205,14 +252,38 @@ body {
   pointer-events: none; /* 避免隱藏的元素仍然接收事件 */
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .header_search_div {
     width: calc(100% - 400px) !important;
+  }
+  .header_ms2Search_div, .header_msSearch_div, .header_taskView_div {
+    display: none !important;
+  }
+  .loadingImg {
+    width: 35% !important;
   }
 }
 @media (max-width: 700px) {
   .div_header {
     width: 100% !important;
+    max-width: 100vw !important;
+  }
+  .header_search_div {
+    display: none !important;
+  }
+  .loadingImg {
+    width: 50% !important;
+  }
+}
+@media (max-width: 400px) {
+  .ionMode_th, .ionMode_td {
+    display: none !important;
+  }
+  .dataSource_th, .dataSource_td {
+    display: none !important;
+  }
+  .loadingImg {
+    width: 70% !important;
   }
 }
 

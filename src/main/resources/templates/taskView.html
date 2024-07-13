@@ -19,24 +19,25 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Data Table</title>
-		<link rel="stylesheet" href="styles.css">
+<!--		<link rel="stylesheet" href="styles.css">-->
 	</head>
 	<body>
+
 	<div id="data-container">
+	<h1 style="font-size: 14px;color: #4D4D4D">All files will be <span style="color: brown">automatically deleted after seven days</span>. <br>Please make sure to download and save the results upon task completion.</h1>
 		<table class="data-item">
 			<thead>
 			<tr>
-				<th>ID</th>
-				<th>Task Status</th>
-				<th>Peak List Source</th>
-				<th>MS2 File Source</th>
-				<th>Results Source</th>
-				<th>Ion Mode</th>
-				<th>Email</th>
-				<th>MS2 Spectrum Data Source</th>
-				<th>Create Time</th>
-				<th>Finish Time</th>
-				<th>Task Delete</th>
+				<th class="taskId_th">Task ID</th>
+				<th class="taskStatus_th">Task status</th>
+				<th class="fileSource_th">File source</th>
+				<th class="ionMode_th">Ion Mode</th>
+				<th class="email_th">Email</th>
+				<th class="des_th">Task description</th>
+				<th class="dataSource_th">Data Source</th>
+				<th class="createTime_th">Create Time</th>
+				<th class="finishTime_th">Finish Time</th>
+				<th class="taskOp_th">Task operation</th>
 			</tr>
 			</thead>
 			<tbody class="table-body" id="table-body">

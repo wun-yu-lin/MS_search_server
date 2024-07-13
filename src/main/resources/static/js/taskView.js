@@ -32,6 +32,8 @@ function main() {
 }
 
 async function asyncMain() {
+    let member = await getMember();
+    _pageStatusObj.authId = member.id;
     let taskList = await getTaskListByApiAndUpdatePageStatus();
     taskList.forEach((task) => {
             createTableByTaskListData(task)
@@ -41,22 +43,37 @@ async function asyncMain() {
 
 }
 
+async function getMember() {
+    let url = "/api/member";
+    let response = await fetch(url, {method: "GET"})
+    if (response.status === 200) {
+        let data = await response.json();
+        return data;
+    } else {
+        alert("Error, please login again");
+        window.location.href = "/logIn";
+        return null;
+    }
+}
+
 
 function taskStatusMap(statusCode) {
     statusCode = parseInt(statusCode);
     switch (statusCode) {
         case 0:
-            return [0,"No submit"];
+            return [0, "No submit"];
         case 1:
-            return [1,"Waiting"];
+            return [1, "Waiting"];
         case 2:
-            return [2,"Processing"];
+            return [2, "Processing"];
         case 3:
-            return [3,"Finished"];
+            return [3, "Finished"];
         case 4:
-            return [4,"Task error"];
+            return [4, "Task error"];
+        case 5:
+            return [5, "Deleted"]
         default:
-            return [4,"Task error"];
+            return [4, "Task error"];
     }
 }
 
@@ -65,16 +82,17 @@ async function getTaskListByApiAndUpdatePageStatus() {
 
     _pageStatusObj.fetchUrl = "/api/batchSearch/task";
     let paraObj = {
-        "authodId": "0",
+        "authorId": _pageStatusObj.authId,
         "taskInit": _pageStatusObj.nextPageSpectrumInit,
         "taskOffset": 30
     }
     _pageStatusObj.paraObj = paraObj;
-    _pageStatusObj.authId = paraObj.authodId;
     let url = fetchAPI.generateGetUrlByParameter(paraObj, _pageStatusObj.fetchUrl);
     _pageStatusObj.isFetching = true;
     _pageStatusObj.isFirstLoad = true;
-    let data = await fetchAPI.fetchSpectrumDataByGetMethod(url, {});
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod(url, {});
+    let data = await response.json();
+
     _pageStatusObj.isFetching = false;
 
     if (data == null) {
@@ -111,11 +129,13 @@ function createTableByTaskListData(taskObj) {
     let tr = document.createElement("tr");
 
     let tdId = document.createElement("td")
+    tdId.classList.add("taskId_td");
     tdId.innerText = taskObj.id;
 
     let tdTaskStatus = document.createElement("td")
+    tdTaskStatus.classList.add("taskStatus_td");
     tdTaskStatus.innerText = taskObj.taskStatus[1];
-    switch (taskObj.taskStatus[0]){
+    switch (taskObj.taskStatus[0]) {
         // case 0:
         //     return [0,"No submit"];
         // case 1:
@@ -126,6 +146,8 @@ function createTableByTaskListData(taskObj) {
         //     return [3,"Task finished"];
         // case 4:
         //     return [4,"Task error"];
+        // case 5:
+        //     return [5, "Deleted"];
         // default:
         //     return [4,"Task error"];
         case 0:
@@ -135,64 +157,103 @@ function createTableByTaskListData(taskObj) {
             tdTaskStatus.style.color = "Green";
             break
         case 2:
-           tdTaskStatus.style.color = "Green";
-           break
+            tdTaskStatus.style.color = "Green";
+            break
         case 3:
-           tdTaskStatus.style.color = "Blue";
-           break
+            tdTaskStatus.style.color = "Blue";
+            break
         case 4:
-           tdTaskStatus.style.color = "Red";
-           break
+            tdTaskStatus.style.color = "Red";
+            break
+        case 5:
+            tdTaskStatus.style.color = "Black";
 
     }
+    let tdFileSource = document.createElement("td")
+    tdFileSource.classList.add("fileSource_td");
+    let pPeakList = document.createElement("p")
+    pPeakList.innerHTML = `<span>MS1 file:</span>  <a href=${taskObj.s3PeakListSrc}>${taskObj.s3PeakListSrc.split(".net/")[1]}</a>`
 
-    let tdPeakList = document.createElement("td")
-    tdPeakList.innerHTML = `<a href=${taskObj.s3PeakListSrc}>${taskObj.s3PeakListSrc.split(".net/")[1]}</a>`
+    let pMs2File = document.createElement("p")
+    pMs2File.innerHTML = `<span>MS2 file:</span>  <a href=${taskObj.s3Ms2FileSrc}>${taskObj.s3Ms2FileSrc.split(".net/")[1]}</a>`
 
-    let tdMs2File = document.createElement("td")
-    tdMs2File.innerHTML = `<a href=${taskObj.s3Ms2FileSrc}>${taskObj.s3Ms2FileSrc.split(".net/")[1]}</a>`
-
-    let tdResult = document.createElement("td")
+    let pResult = document.createElement("p")
     if (taskObj.s3ResultsSrc === "N/A") {
-        tdResult.innerText = taskObj.s3ResultsSrc
-    }else{
-        tdResult.innerHTML = ` <a href=${taskObj.s3ResultsSrc}>${taskObj.s3ResultsSrc.split(".net/")[1]}</a>`
+        pResult.innerHTML = `<span>Result:</span> ${taskObj.s3ResultsSrc}`
+    } else {
+        pResult.innerHTML = `<span>Result:</span> <a href=${taskObj.s3ResultsSrc}>${taskObj.s3ResultsSrc.split(".net/")[1]}</a>`
     }
+    tdFileSource.appendChild(pPeakList);
+    tdFileSource.appendChild(pMs2File);
+    tdFileSource.appendChild(pResult);
 
 
     let tdIonMode = document.createElement("td")
+    tdIonMode.classList.add("ionMode_td");
+    if (taskObj.ionMode == null || taskObj.ionMode === "" || taskObj.ionMode === "N/A") {
+        taskObj.ionMode = "all"
+    }
     tdIonMode.innerText = taskObj.ionMode;
 
     let tdEmail = document.createElement("td")
+    tdEmail.classList.add("email_td");
     tdEmail.innerText = taskObj.mail;
+    let tdDes = document.createElement("td")
+    tdDes.classList.add("des_td");
+    if (taskObj.taskDescription === "") {
+        taskObj.taskDescription = "N/A"
+    }
+    tdDes.innerText = taskObj.taskDescription;
 
     let tdDataSource = document.createElement("td")
+    tdDataSource.classList.add("dataSource_td");
     tdDataSource.innerText = taskObj.ms2spectrumDataSource;
 
     let tdCreateTime = document.createElement("td")
-    tdCreateTime.innerText = taskObj.createTime;
+    tdCreateTime.classList.add("createTime_td");
+    if (taskObj.createTime === null || taskObj.createTime === "" || taskObj.createTime === "N/A") {
+        tdCreateTime.innerText = taskObj.createTime;
+    } else {
+        tdCreateTime.innerText = new Date(taskObj.createTime).toLocaleString('zh-Hans');
+    }
 
     let tdFinishTime = document.createElement("td")
-    tdFinishTime.innerText = taskObj.finishTime;
+    tdFinishTime.classList.add("finishTime_td");
+    if (taskObj.finishTime === null || taskObj.finishTime === "" || taskObj.finishTime === "N/A") {
+        tdFinishTime.innerText = taskObj.finishTime;
+    } else {
+        tdFinishTime.innerText = new Date(taskObj.finishTime).toLocaleString('zh-Hans');
+    }
 
-    let tdDelete = document.createElement("td")
+    let tdTaskOp = document.createElement("td")
+    tdTaskOp.classList.add("taskOp_td");
     let deleteButton = document.createElement("button")
-    tdDelete.appendChild(deleteButton);
+    tdTaskOp.appendChild(deleteButton);
     deleteButton.id = taskObj.id;
     deleteButton.innerText = "Delete"
     deleteButton.onclick = onclickDeleteTaskById;
+    if (taskObj.taskStatus[0] === 0) {
+        let getSubmitButton = document.createElement("button")
+        getSubmitButton.id = taskObj.id;
+        getSubmitButton.innerText = "Go to submit"
+        getSubmitButton.onclick = function (event) {
+            window.location.href = "/batchSearch?taskId=" + event.target.id;
+        }
+        tdTaskOp.appendChild(getSubmitButton);
+
+
+    }
 
     tr.appendChild(tdId);
     tr.appendChild(tdTaskStatus);
-    tr.appendChild(tdPeakList);
-    tr.appendChild(tdMs2File);
-    tr.appendChild(tdResult);
+    tr.appendChild(tdFileSource);
     tr.appendChild(tdIonMode);
     tr.appendChild(tdEmail);
+    tr.appendChild(tdDes);
     tr.appendChild(tdDataSource);
     tr.appendChild(tdCreateTime);
     tr.appendChild(tdFinishTime);
-    tr.appendChild(tdDelete);
+    tr.appendChild(tdTaskOp);
 
     tableBody.appendChild(tr);
 
@@ -227,24 +288,28 @@ async function onclickDeleteTaskById(event) {
 }
 
 
-function createScrollDownObserverForNextPage(){
-    let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
-        if(entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1){
+function createScrollDownObserverForNextPage() {
+    let scrollDownObserver = new IntersectionObserver(async (entries, observe) => {
+        if (entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1) {
             let targetElement = entries[0].target;
             observe.unobserve(entries[0].target);
-            if(_pageStatusObj.isFetching === true) return observe.observe(targetElement);
-            if(_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
-            if(_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
+            if (_pageStatusObj.isFetching === true) return observe.observe(targetElement);
+            if (_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
+            if (_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
             //add action of loading
-            let url = fetchAPI.generateGetUrlByParameter({"authId":_pageStatusObj.authId, "taskInit":_pageStatusObj.nextPageSpectrumInit}, _pageStatusObj.fetchUrl);
+            let url = fetchAPI.generateGetUrlByParameter({
+                "authId": _pageStatusObj.authId,
+                "taskInit": _pageStatusObj.nextPageSpectrumInit
+            }, _pageStatusObj.fetchUrl);
             console.log(url)
-            let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(url, {"method": "GET"});
-            if (typeof(fetchData) === "object") {
+            let response = await fetchAPI.fetchSpectrumDataByGetMethod(url, {"method": "GET"});
+            let fetchData = await response.json();
+            if (typeof (fetchData) === "object") {
                 _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
                 console.log(_pageStatusObj.nextPageSpectrumInit)
-                if (fetchData.length >=30) {
+                if (fetchData.length >= 30) {
                     _pageStatusObj.isNextPage = true
-                }else {
+                } else {
                     _pageStatusObj.isNextPage = false
                 }
             }
@@ -262,8 +327,6 @@ function createScrollDownObserverForNextPage(){
 
             observe.observe(targetElement);
         }
-
-
 
 
     })

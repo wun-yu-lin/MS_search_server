@@ -10,7 +10,7 @@
     </parent>
     <groupId>service</groupId>
     <artifactId>MS_search_engine</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <name>MS_search_engine</name>
     <description>MS_search_engine</description>
 
@@ -93,17 +93,17 @@
             <version>2.1.0</version>
         </dependency>
 
-<!--        slf4j-->
+        <!--        slf4j-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.8</version>
+            <version>1.4.12</version>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.4.8 </version>
+            <version>1.4.12</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -144,20 +144,62 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-<!--        redis pool-->
+        <!--        redis pool-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>2.6.0</version>
         </dependency>
 
-<!--        Java Object to json converter-->
+        <!--        Java Object to json converter-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.15.1</version>
         </dependency>
 
+        <!--        csv operator-->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <!--       java spring mail sender-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!--        spring security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.5.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
 
 
     </dependencies>
@@ -165,11 +207,11 @@
     <build>
         <plugins>
 
-<!--            plugin for swagger web ui-->
+            <!--            plugin for swagger web ui-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<!--                <version>3.1.2</version>-->
+                <!--                <version>3.1.2</version>-->
                 <executions>
                     <execution>
                         <id>pre-integration-test</id>

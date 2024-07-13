@@ -4,19 +4,31 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  max-width: 100%;
 }
 
 table, th, td {
   border: 1px solid #ddd;
 }
-table a, th a, td a {
+table span, th span, td span {
+  font-weight: bold;
+  color: black;
+}
+table p, th p, td p {
+  margin: 5px;
+}
+table p a, th p a, td p a {
   color: #212124;
+}
+table p a:hover, th p a:hover, td p a:hover {
+  color: #3498db;
 }
 
 th, td {
@@ -28,17 +40,52 @@ th {
   background-color: #f2f2f2;
 }
 
-button {
+.table-body > tr > td > button {
   background-color: #3498db;
   color: #ffffff;
   padding: 10px 15px;
+  margin: 5px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-button:hover {
+.table-body > tr > td > button:hover {
   background-color: #2980b9;
+}
+
+@media (max-width: 1200px) {
+  .data-item thead > tr > th, .data-item tbody > tr > td, .data-item tbody > tr > td > p, .data-item tbody > tr > td > p > a, .data-item tbody > tr > td > p > span {
+    font-size: 12px;
+  }
+  .table-body > tr > td > button {
+    padding: 5px 7px;
+    margin: 3px;
+    font-size: 10px;
+  }
+  th, td {
+    padding: 3px;
+  }
+}
+@media (max-width: 1000px) {
+  #data-container {
+    max-width: calc(100% - 10px);
+  }
+  .data-item thead > tr > th, .data-item tbody > tr > td, .data-item tbody > tr > td > p, .data-item tbody > tr > td > p > a, .data-item tbody > tr > td > p > span {
+    font-size: 10px;
+  }
+  .data-item tbody > tr > td > p > a {
+    font-size: 8px;
+  }
+  .email_th, .email_td {
+    display: none;
+  }
+  .createTime_th, .createTime_td {
+    display: none;
+  }
+  .des_th, .des_td {
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=taskView.css.map */

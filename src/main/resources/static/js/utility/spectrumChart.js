@@ -87,6 +87,7 @@ class SpectrumChart {
             },
             options: {
                 responsive: true,
+                aspectRatio: 1.8,
                 plugins: {
                     legend: {
                         position: 'top',
@@ -192,6 +193,7 @@ class SpectrumChart {
             },
             options: {
                 responsive: true,
+                aspectRatio: 1.8,
                 plugins: {
                     legend: {
                         position: 'top',

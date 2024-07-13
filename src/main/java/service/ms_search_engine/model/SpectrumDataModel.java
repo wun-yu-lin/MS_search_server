@@ -18,15 +18,15 @@ import java.util.List;
 @Data
 public class SpectrumDataModel {
     //spectrum info
-    private int id;
-    private int compoundDataId;
-    private int compoundClassificationId;
-    private int authorId;
-    private int msLevel;
-    private double precursorMz;
-    private double exactMass;
+    private Integer id;
+    private Integer compoundDataId;
+    private Integer compoundClassificationId;
+    private Integer authorId;
+    private Integer msLevel;
+    private Double precursorMz;
+    private Double exactMass;
     private String collisionEnergy;
-    private double mzError;
+    private Double mzError;
     private Timestamp lastModify;
     private Timestamp dateCreated;
     private ArrayList<String> dataSourceArrayList;

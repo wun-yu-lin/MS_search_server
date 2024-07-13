@@ -29,6 +29,9 @@ public class BatchSpectrumSearchModel {
    private String ms2spectrumDataSource;
    private Date createTime;
    private Date finishTime;
+   private Double ms1Ms2matchMzTolerance;
+   private Double ms1Ms2matchRtTolerance;
+   private String taskDescription;
 
 
 

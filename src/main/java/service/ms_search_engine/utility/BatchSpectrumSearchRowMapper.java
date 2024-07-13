@@ -20,8 +20,8 @@ public class BatchSpectrumSearchRowMapper implements RowMapper<BatchSpectrumSear
         batchSpectrumSearchModel.setS3ResultsSrc(rs.getString("s3_results_src"));
         batchSpectrumSearchModel.setAuthorId(rs.getInt("author_id"));
         batchSpectrumSearchModel.setTaskStatus(rs.getInt("task_status"));
-        batchSpectrumSearchModel.setCreateTime(rs.getDate("create_time"));
-        batchSpectrumSearchModel.setFinishTime(rs.getDate("finish_time"));
+        batchSpectrumSearchModel.setCreateTime(rs.getTimestamp("create_time"));
+        batchSpectrumSearchModel.setFinishTime(rs.getTimestamp("finish_time"));
         batchSpectrumSearchModel.setMsTolerance(rs.getDouble("ms_tolerance"));
         batchSpectrumSearchModel.setMsmsTolerance(rs.getDouble("msms_tolerance"));
         batchSpectrumSearchModel.setForwardWeight(rs.getDouble("forward_weight"));
@@ -31,6 +31,9 @@ public class BatchSpectrumSearchRowMapper implements RowMapper<BatchSpectrumSear
         batchSpectrumSearchModel.setMail(rs.getString("mail"));
         batchSpectrumSearchModel.setSimilarityTolerance(rs.getDouble("similarity_tolerance"));
         batchSpectrumSearchModel.setMs2spectrumDataSource(rs.getString("ms2spectrumDataSource"));
+        batchSpectrumSearchModel.setMs1Ms2matchMzTolerance(rs.getDouble("ms1ms2_match_mz_tolerance"));
+        batchSpectrumSearchModel.setMs1Ms2matchRtTolerance(rs.getDouble("ms1ms2_match_rt_tolerance"));
+        batchSpectrumSearchModel.setTaskDescription(rs.getString("task_description"));
 
         return batchSpectrumSearchModel;
     }

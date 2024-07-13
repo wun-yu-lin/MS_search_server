@@ -12,6 +12,7 @@
     width: 250px;
     display: flex;
     position: relative;
+    overflow-y: auto;
 
     .search_param_div {
       border-radius: 10px;
@@ -20,6 +21,9 @@
       display: flex;
       flex-direction: column;
       position: fixed;
+      max-height: 90vh;
+      overflow-y: auto;
+
     }
   .search_button_div,
   .compound_name_para_div,
@@ -49,6 +53,9 @@
       border-radius: 10px;
       padding: 0 10px;
     }
+    select:hover{
+      cursor: pointer;
+    }
   }
 
   .weight_para_div_div{
@@ -58,14 +65,27 @@
   }
   .search_button_div {
     display: flex;
-    align-items: flex-start;
+    justify-content: space-between;
     width: 100%;
+    gap: 20px;
+    flex-direction: row;
     .search_button {
       width: 50px;
       height: 25px;
       background-color: #75bcff;
       color: white;
       border-radius: 5px;
+    }
+    .reset_button, .demo_button {
+      height: 25px;
+      background-color: #a2a2a2;
+      color: white;
+      border-radius: 5px;
+      padding: 0 5px 0 5px;
+
+    }
+    .search_button:hover, .reset_button:hover, .demo_button:hover {
+      cursor: pointer;
     }
 
   }
@@ -158,3 +178,64 @@ table {
     font-weight: bold;
   }
 }
+
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: column !important;
+  }
+  .search_div, .search_param_div {
+    position: relative !important;
+    width: 100% !important;
+    //max-height: 40vh !important;
+    max-height: none !important;
+    overflow-y: scroll !important;
+  }
+  .search_param_div {
+    flex-direction: column !important;
+  }
+  .search_button_div {
+    justify-content: flex-start !important;
+  }
+  .search_button_div,
+  .compound_name_para_div,
+  .formula_para_div,
+  .exact_mass_para_div,
+  .precursor_mz_para_div,
+  .tolerance_para_div,
+  .charge_para_div,
+  .ms2Spectrum_para_div,
+  .ms2_tolerance_para_div,
+  .ms2_similarity_para_div,
+  .weight_para_div,
+  .algorithm_para_div
+  {
+    width: calc(100% - 20px) !important;
+    input, select {
+      width: 50% !important;
+    }
+  }
+  .ms2Spectrum {
+    width: 50% !important;
+  }
+  .weight_para_div_div {
+    input {
+      width: 100% !important;
+    }
+  }
+  .spectrum_container_div {
+    width: 100% !important;
+
+    .spectrum_item_div {
+      flex-direction: column !important;
+      align-items: center !important;
+      .spectrum_info_div {
+        width: 100% !important;
+      }
+        .spectrum_canvas_div {
+            width: 80% !important;
+        }
+    }
+  }
+
+}
+

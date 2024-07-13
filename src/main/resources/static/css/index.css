@@ -1,32 +1,21 @@
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
+  max-width: 1600px;
   padding: 10px;
-  gap: 10px;
-}
-
-.left_div {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.left_div .userInfo_div {
-  padding: 10px;
-  width: 100%;
-  height: 300px;
-  background-color: #2D333B;
-  border-radius: 10px;
-  color: white;
+  gap: 50px;
 }
 
 .middle_div {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 60%;
+  width: 70%;
+}
+.middle_div div {
+  box-shadow: 0 0 2px 0 grey;
 }
 .middle_div .introduction_project_div {
   display: flex;
@@ -43,30 +32,57 @@
   width: 100%;
   border-radius: 5px;
 }
+.middle_div .introduction_project_div h1 {
+  padding-top: 20px;
+}
 .middle_div .source_ref_div {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  align-items: flex-start;
+  padding: 30px;
   width: 100%;
   background-color: #2D333B;
   border-radius: 10px;
   color: white;
+  gap: 10px;
+}
+.middle_div .source_ref_div ol li {
+  margin: 10px;
+  list-style: inherit;
+}
+.middle_div .source_ref_div ol a {
+  color: #0485b9;
+}
+.middle_div .source_ref_div ol a:hover {
+  color: cornflowerblue;
+}
+.middle_div .source_ref_div p a {
+  color: #0485b9;
+}
+.middle_div .source_ref_div p a:hover {
+  color: cornflowerblue;
 }
 
 .right_div {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 20%;
+  width: 30%;
 }
 .right_div .release_note_div {
-  padding: 10px;
+  padding: 20px;
   width: 100%;
-  height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   background-color: #2D333B;
   border-radius: 10px;
   color: white;
+}
+.right_div .release_note_div ul {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 .right_div .ads_div {
   padding: 10px;
@@ -88,6 +104,16 @@
 
 .description {
   color: #ffffff;
+}
+
+@media (max-width: 500px) {
+  .container {
+    gap: 10px !important;
+    flex-direction: column;
+  }
+  .middle_div, .right_div {
+    width: 100% !important;
+  }
 }
 
 /*# sourceMappingURL=index.css.map */

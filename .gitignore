@@ -42,3 +42,6 @@ build/
 *.tar.gz
 *.out
 *.sql
+
+*.mgf
+*.csv

@@ -20,14 +20,27 @@
 			<img th:src="@{/icon/webIcon.png}" alt="" style="width: 30px; height: 30px">
 			<li class="header_div_li"><a class="header_div_li_a" href="./">MS search</a></li>
 		</div>
+		<div class="header_msSearch_div">
+			<a href="./msSearch">MS/MS search</a>
+		</div >
+		<div class="header_ms2Search_div">
+			<a href="./batchSearch">Multiple MS/MS search</a>
+		</div>
+		<div class="header_taskView_div">
+			<a href="./taskView">Task view</a>
+		</div>
 		<div class="header_search_div">
 			<button class="header_search_button" id="header_search_button"></button>
 			<label for="msSearch"></label>
 			<input class="header_search_input" type="text" name="msSearch" id="msSearch" placeholder="MS search by precursor m/z, compound name, formula, inchi key" minlength="3">
 		</div>
+		<div class="profile_div" id="profile_div">
+<!--			<span>文昱</span>-->
+<!--			<img src="https://lh3.googleusercontent.com/a/ACg8ocKEH0Iq0WVEijddRYtxi_N5zo7lQCCj-9fNW1wT2Yd_=s96-c" alt="">-->
+		</div>
 		<div class="header_div_other">
 			<div class="header_other_item">
-				<button class="header_other_button"><img src="" alt="">Feature</button>
+				<button class="header_other_button"><img th:src="@{/picture/navbar_icon.png}" alt="Other"></button>
 				<div class="dropDown_bg_div">
 					<div class="dropDown_div">
 						<ul>
@@ -40,8 +53,15 @@
 							<li><a href="./taskView">Search task view</a></li>
 						</ul>
 						<ul>
-							<li><a href="./swagger-ui/index.html#/">Swagger API Docs</a></li>
+							<li><a href="https://hackmd.io/@Y8FW9GMORQ-PswU64m3aaQ/rJEBXaoVp">Tutorial</a></li>
 						</ul>
+						<ul id="logOut_ul">
+							<li><a href="./logout">Log out</a></li>
+						</ul>
+
+<!--						<ul>-->
+<!--							<li><a href="./swagger-ui/index.html#/">Swagger API Docs</a></li>-->
+<!--						</ul>-->
 					</div>
 				</div>
 

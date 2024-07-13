@@ -29,6 +29,23 @@ body {
       text-align: center;
     }
 
+    .demoDate_div {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      .demoDate_button {
+        width: 100px !important;
+        margin: 5px 5px !important;
+        font-size: 12px;
+        padding: 5px 5px !important;
+        background-color: grey;
+      }
+      .demoDate_button:hover {
+        background-color: #007BFF;
+      }
+    }
+
+
     form {
       margin-top: 20px;
 
@@ -39,12 +56,34 @@ body {
       }
 
       input,
-      select {
+      select,
+      textarea {
         border: #cbcbcb 1px solid;
         border-radius: 5px;
         width: 100%;
         padding: 5px;
         margin-bottom: 12px;
+      }
+      input[type="file"], input::file-selector-button {
+        cursor: pointer;
+      }
+      input::file-selector-button {
+        background-color: #2D333B;
+        color: white ;
+        padding: 0.5em;
+        border: none;
+        border-radius: 5px;
+        opacity: 0.5;
+      }
+      select:hover{
+        cursor: pointer ;
+      }
+      //input#peakListFile:hover, input#ms2File:hover, input#file-upload-button{
+      //  cursor: pointer ;
+      //}
+
+      a {
+        color: #007BFF;
       }
 
       hr {
@@ -90,5 +129,11 @@ body {
       text-align: center;
       margin-top: 20px;
     }
+  }
+}
+
+@media (max-width: 500px) {
+  .weight_para_input {
+    width: 100% !important;
   }
 }

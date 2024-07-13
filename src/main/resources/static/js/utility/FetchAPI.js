@@ -32,9 +32,21 @@ class FetchAPI {
     async fetchSpectrumDataByGetMethod(url, requestParaObj){
         requestParaObj["method"] = "GET"
         let data = await fetch(url, requestParaObj)
-        let dataParse = await data.json()
-        return dataParse
+        //let dataParse = await data.json()
+        return data
     }
+
+    async fetchDataByPOSTMethod(url, requestParaObj){
+        requestParaObj["method"] = "POST"
+        requestParaObj["headers"] = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        requestParaObj["body"] = JSON.stringify(requestParaObj["body"])
+        return await fetch(url, requestParaObj)
+    }
+
+
 
     async sentFormDataByPostMethod(url, formData){
         try {

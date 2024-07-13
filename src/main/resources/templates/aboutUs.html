@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>MS search</title>
+  <link rel="stylesheet" th:href="@{/css/aboutUs.css}">
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="info_div">
+    <div class="about_lab_div">
+      <h1>CCL lab</h1>
+      <p>Thank you for visiting our website! Our lab is named as Laboratory for Mass Spectrometry, Major study on
+        metabolomics and proteomics.</p>
+      <img class="lab_img" th:src="@{/picture/lab_picture.jpg}" alt="">
+    </div>
+    <div class="about_author_div">
+      <h1>About author</h1>
+      <p>Hi, My name is WunYu Lin. <br>
+        I graduated from National Chung Hsing University with a master's degree. I am very interested in the field of programming languages and have established an MS search platform for untargeted metabolomics.</p>
+      <div class="contact">
+        <h2>Contact</h2>
+        <div class="contact_item">
+          <p>email : wylinze@gmail.com</p>
+          <a class="contact_a" href="https://github.com/wun-yu-lin">GitHub</a>
+        </div>
+
+
+      </div>
+      <img class="author_img" th:src="@{/picture/authorPicture.jpg}" alt="">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

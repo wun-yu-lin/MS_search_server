@@ -57,4 +57,10 @@ public class ControllerException {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("RedisQueueErrorException: " + exception.getMessage());
     }
+
+    @ExceptionHandler(S3DataDownloadException.class)
+    public ResponseEntity<String> prepareResponseForS3DataDownloadException(S3DataDownloadException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("S3DataDownloadException: " + exception.getMessage());
+    }
 }

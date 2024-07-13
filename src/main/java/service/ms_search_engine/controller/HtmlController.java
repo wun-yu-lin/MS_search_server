@@ -32,4 +32,22 @@ public class HtmlController {
 
         return "taskView";
     }
+
+    @GetMapping("/aboutUs")
+    public String aboutUs(){
+
+        return "aboutUs";
+    }
+
+    @GetMapping("/logIn")
+    public String logIn(){
+
+        return "logIn";
+    }
+
+    @GetMapping("/OAuthSuccess")
+    public String OAuthSuccess(){
+
+        return "OAuthSuccessPage";
+    }
 }

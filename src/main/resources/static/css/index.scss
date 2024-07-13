@@ -1,34 +1,39 @@
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
+  max-width: 1600px;
   padding: 10px;
-  gap: 10px;
+  gap: 50px;
 }
 
-.left_div {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
-  .userInfo_div {
-    padding: 10px;
-    width: 100%;
-    height: 300px;
-    background-color: #2D333B;
-    border-radius: 10px;
-    color: white;
-
-  }
-}
+//.left_div {
+//  width: 20%;
+//  display: flex;
+//  flex-direction: column;
+//  gap: 20px;
+//
+//  .userInfo_div {
+//    padding: 10px;
+//    width: 100%;
+//    height: 300px;
+//    background-color: #2D333B;
+//    border-radius: 10px;
+//    color: white;
+//
+//  }
+//}
 
 .middle_div {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 60%;
+  width: 70%;
+
+  div {
+    box-shadow: 0 0 2px 0 grey;
+  }
 
   .introduction_project_div {
     display: flex;
@@ -40,21 +45,47 @@
     background-color: #2D333B;
     border-radius: 10px;
     color: white;
+
     .project_architecture_img {
       width: 100%;
       border-radius: 5px;
+    }
+
+    h1 {
+      padding-top: 20px;
     }
   }
 
   .source_ref_div {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    align-items: flex-start;
+    padding: 30px;
     width: 100%;
     background-color: #2D333B;
     border-radius: 10px;
     color: white;
+    gap:10px;
+    ol {
+      li {
+        margin: 10px;
+        list-style: inherit;
+      }
+      a {
+        color: #0485b9;
+      }
+      a:hover {
+        color: cornflowerblue;
+      }
+    }
+    p {
+     a {
+         color: #0485b9;
+     }
+      a:hover {
+        color: cornflowerblue;
+      }
+    }
 
 
   }
@@ -65,15 +96,23 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 20%;
+  width: 30%;
 
   .release_note_div {
-    padding: 10px;
+    padding: 20px;
     width: 100%;
-    height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     background-color: #2D333B;
     border-radius: 10px;
     color: white;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
   }
 
   .ads_div {
@@ -86,6 +125,7 @@
   }
 
 }
+
 .version {
   font-weight: bold;
   color: #0485b9;
@@ -97,5 +137,15 @@
 
 .description {
   color: #ffffff;
+}
+
+@media (max-width: 500px) {
+  .container {
+    gap:10px !important;
+    flex-direction: column;
+  }
+  .middle_div, .right_div {
+    width: 100% !important;
+  }
 }
 

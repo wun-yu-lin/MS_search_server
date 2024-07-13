@@ -1,5 +1,6 @@
 import SpectrumChart from "./utility/SpectrumChart.js"
 import FetchAPI from "./utility/FetchAPI.js"
+
 let scrollDownObserver;
 //global variable for record page status
 let _pageStatusObj = {
@@ -8,12 +9,14 @@ let _pageStatusObj = {
     "nextPageSpectrumInit": 0,
     "fetchUrl": null,
     "isFetching": false,
-    initialPara(){
+    "isMS2SpectrumSearch": false,
+    initialPara() {
         this.isFirstLoad = false
         this.isNextPage = false
         this.nextPageSpectrumInit = 0
         this.fetchUrl = null
         this.isFetching = false
+        this.isMS2SpectrumSearch = false
 
     }
 };
@@ -34,6 +37,8 @@ async function mainAsync() {
 
     createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
     document.getElementById("search_button").onclick = onClickFunctionForSearchSpectrum
+    document.getElementById("reset_button").onclick = resetParaAndSpectrumItem
+    document.getElementById("demo_button").onclick = searchDivDeFaultPara
     let firstFetchData = await sentParameterToFuzzyAPI()
 
     //處理Fuzzy API的回傳結果
@@ -50,7 +55,7 @@ async function mainAsync() {
 
         });
         document.getElementById("loadingScreen").classList.add("hidden")
-        if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("No more data.")
+        if (_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("No more data.")
         createScrollDownObserverForNextPage();
         return
 
@@ -63,6 +68,7 @@ async function mainAsync() {
 
 async function sentParameterToFuzzyAPI() {
     _pageStatusObj.initialPara();
+
     function isUrlParameterValid(urlParameter) {
         if (urlParameter === undefined || urlParameter === null || urlParameter === "") {
             return false
@@ -90,14 +96,20 @@ async function sentParameterToFuzzyAPI() {
     let fetchUrl = fetchAPI.generateGetUrlByParameter(paramObject, "/api/spectrum/fuzzy")
     _pageStatusObj.fetchUrl = fetchUrl
     _pageStatusObj.isFetching = true
-    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    if (response.status !== 200){
+        createMessageIntoSpectrumContainer("No spectrum data found!! Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum. ")
+        _pageStatusObj.isNextPage === false
+        document.getElementById("loadingScreen").classList.add("hidden")
+    }
+    let fetchData = await response.json()
     _pageStatusObj.isFetching = false
     _pageStatusObj.isFirstLoad = true
-    if (typeof(fetchData) === "object") {
+    if (typeof (fetchData) === "object") {
         _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
-        if (fetchData.length >=10) {
+        if (fetchData.length >= 10) {
             _pageStatusObj.isNextPage = true
-        }else {
+        } else {
             _pageStatusObj.isNextPage = false
         }
     }
@@ -114,19 +126,23 @@ async function onClickFunctionForSearchSpectrum() {
     let fetchUrl = fetchAPI.generateGetUrlByParameter(getParameterObj, "/api/spectrum")
     _pageStatusObj.fetchUrl = fetchUrl
     _pageStatusObj.isFetching = true
-    let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    let response = await fetchAPI.fetchSpectrumDataByGetMethod(fetchUrl, {"method": "GET"})
+    if(response.status !== 200){
+        createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
+        _pageStatusObj.isNextPage === false
+        document.getElementById("loadingScreen").classList.add("hidden")
+    }
+    let fetchData = await response.json()
     _pageStatusObj.isFetching = false
     _pageStatusObj.isFirstLoad = true
-    if (typeof(fetchData) === "object") {
+    if (typeof (fetchData) === "object") {
         _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
-        if (fetchData.length >=10) {
+        if (fetchData.length >= 10) {
             _pageStatusObj.isNextPage = true
-        }else {
+        } else {
             _pageStatusObj.isNextPage = false
         }
     }
-
-
 
 
     document.getElementById("spectrum_container_div").innerHTML = ""
@@ -134,6 +150,12 @@ async function onClickFunctionForSearchSpectrum() {
         createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
         document.getElementById("loadingScreen").classList.add("hidden")
         return
+    }
+
+    //check ms2 spectrum or not
+    if (getParameterObj.ms2Spectrum != null && getParameterObj.ms2Spectrum !== "") {
+        _pageStatusObj.isMS2SpectrumSearch = true
+        _pageStatusObj.isNextPage = false
     }
 
     if (getParameterObj.ms2Spectrum != null && getParameterObj.ms2Spectrum !== "") {
@@ -255,22 +277,28 @@ function getSpectrumQueryParaFromForm() {
             getParameterObj.forwardWeight = parseFloat(document.getElementById("forward_para").value)
             getParameterObj.reverseWeight = parseFloat(document.getElementById("reverse_para").value)
             getParameterObj.ms2SimilarityAlgorithm = document.getElementById("algorithm_para").value
-            if (!isNaN(getParameterObj.ms2SpectrumSimilarityTolerance) && getParameterObj.ms2SpectrumSimilarityTolerance > 1){
+            if (!isNaN(getParameterObj.ms2SpectrumSimilarityTolerance) && getParameterObj.ms2SpectrumSimilarityTolerance > 1) {
                 alert("MS2 spectrum similarity tolerance not allow to larger than 1")
                 getParameterObj.isPassCheck = false
-                return null}
-            if (!isNaN(getParameterObj.forwardWeight) && getParameterObj.forwardWeight >1) {
+                return null
+            }
+            if (!isNaN(getParameterObj.forwardWeight) && getParameterObj.forwardWeight > 1) {
                 alert("sum of weight not allow to larger than 1")
                 getParameterObj.isPassCheck = false
                 return null
             }
-            if (!isNaN(getParameterObj.reverseWeight) && getParameterObj.reverseWeight >1) {
+            if (!isNaN(getParameterObj.reverseWeight) && getParameterObj.reverseWeight > 1) {
                 alert("sum of weight not allow to larger than 1")
                 getParameterObj.isPassCheck = false
                 return null
             }
-            if (!isNaN(getParameterObj.ms2PeakMatchTolerance) && getParameterObj.ms2PeakMatchTolerance > 100){
+            if (!isNaN(getParameterObj.ms2PeakMatchTolerance) && getParameterObj.ms2PeakMatchTolerance > 100) {
                 alert("MS2 peak match tolerance not allow to larger than 100")
+                getParameterObj.isPassCheck = false
+                return null
+            }
+            if (getParameterObj.minPrecursorMz === null || getParameterObj.maxPrecursorMz === null) {
+                alert("Please key-in precursor m/z & MS tolerance, when you want to search by MS2 spectrum")
                 getParameterObj.isPassCheck = false
                 return null
             }
@@ -299,7 +327,6 @@ function getSpectrumQueryParaFromForm() {
             }
 
 
-
         }
 
     } catch (e) {
@@ -313,7 +340,6 @@ function getSpectrumQueryParaFromForm() {
     if (getParameterObj.isPassCheck === false) {
         alert("Please check your input data")
     }
-    console.log(getParameterObj)
     return getParameterObj
 }
 
@@ -360,9 +386,9 @@ function createSpectrumItemElementBySpectrumData(spectrumDataObj) {
             typeof (spectrumDataObj[spectrumDataObjKeys[i]]) === "number" ? spectrumDataObj[spectrumDataObjKeys[i]] = spectrumDataObj[spectrumDataObjKeys[i]].toFixed(4) : spectrumDataObj[spectrumDataObjKeys[i]] = "N/A"
         }
     }
-    try{
+    try {
         spectrumDataObj.name = JSON.parse(spectrumDataObj.name.replace(/'/g, '"'))
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 
@@ -409,6 +435,7 @@ function createMessageIntoSpectrumContainer(message) {
 			<h1>${message}</h1>
 		</div>`
 }
+
 function insertMessageIntoSpectrumContainer(message) {
     let containerDiv = document.getElementById("spectrum_container_div");
     let item_div = document.createElement("div");
@@ -423,7 +450,7 @@ function searchDivDeFaultPara() {
     document.getElementById("exact_mass").value = "444.153"
     document.getElementById("precursor_mz").value = "443.146"
     document.getElementById("tolerance").value = "20"
-    document.getElementById("ms2Spectrum").innerHTML = `65.0397:1.632979
+    document.getElementById("ms2Spectrum").value = `65.0397:1.632979
 65.9986:5.718588 
 68.9982:4.494347 
 83.0503:1.145107 
@@ -483,22 +510,27 @@ function searchDivDeFaultPara() {
 }
 
 
-function createScrollDownObserverForNextPage(){
-    let scrollDownObserver = new IntersectionObserver(async(entries, observe)=>{
-        if(entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1){
+function createScrollDownObserverForNextPage() {
+    let scrollDownObserver = new IntersectionObserver(async (entries, observe) => {
+        if (entries[0].intersectionRatio < 1.1 && entries[0].isIntersecting > 0.1) {
             let targetElement = entries[0].target;
             observe.unobserve(entries[0].target);
-            if(_pageStatusObj.isFetching === true) return observe.observe(targetElement);
-            if(_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
-            if(_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
+            if (_pageStatusObj.isFetching === true) return observe.observe(targetElement);
+            if (_pageStatusObj.isNextPage === false) return observe.observe(targetElement);
+            if (_pageStatusObj.isFirstLoad === false) return observe.observe(targetElement);
             //add action of loading
 
-            let fetchData = await fetchAPI.fetchSpectrumDataByGetMethod(_pageStatusObj.fetchUrl + `&spectrumInit=${_pageStatusObj.nextPageSpectrumInit}`, {"method": "GET"})
-            if (typeof(fetchData) === "object") {
+            let response = await fetchAPI.fetchSpectrumDataByGetMethod(_pageStatusObj.fetchUrl + `&spectrumInit=${_pageStatusObj.nextPageSpectrumInit}`, {"method": "GET"})
+            if (response.status !== 200){
+                createMessageIntoSpectrumContainer("No spectrum data found, please check your parameter")
+                _pageStatusObj.isNextPage === false
+            }
+            let fetchData = await response.json()
+            if (typeof (fetchData) === "object") {
                 _pageStatusObj.nextPageSpectrumInit = _pageStatusObj.nextPageSpectrumInit + fetchData.length
-                if (fetchData.length >=10) {
+                if (fetchData.length >= 10) {
                     _pageStatusObj.isNextPage = true
-                }else {
+                } else {
                     _pageStatusObj.isNextPage = false
                 }
             }
@@ -515,17 +547,39 @@ function createScrollDownObserverForNextPage(){
 
                 });
                 document.getElementById("loadingScreen").classList.add("hidden")
-                if(_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("No more data.")
+                if (_pageStatusObj.isNextPage === false) insertMessageIntoSpectrumContainer("No more data.")
                 return observe.observe(targetElement);
 
             }
 
             observe.observe(targetElement);
-            }
-
-
+        }
 
 
     })
     scrollDownObserver.observe(document.querySelector(".footer"));
+}
+
+function resetParaAndSpectrumItem() {
+    document.getElementById("loadingScreen").classList.remove("hidden")
+    document.getElementById("spectrum_container_div").innerHTML = ""
+    _pageStatusObj.initialPara()
+    document.getElementById("msSearch").value = ""
+    document.getElementById("compound_name_para").value = ""
+    document.getElementById("formula").value = ""
+    document.getElementById("exact_mass").value = ""
+    document.getElementById("precursor_mz").value = ""
+    document.getElementById("tolerance").value = ""
+    document.getElementById("tolerance_unit").value = "ppm"
+    document.getElementById("charge").value = ""
+    document.getElementById("ms2Spectrum").innerHTML = ""
+    document.getElementById("ms2Spectrum").value = ""
+    document.getElementById("ms2_tolerance_para").value = ""
+    document.getElementById("ms2_similarity_para").value = ""
+    document.getElementById("forward_para").value = ""
+    document.getElementById("reverse_para").value = ""
+    document.getElementById("algorithm_para").value = "dotPlot"
+    createMessageIntoSpectrumContainer("Please key-in the parameter in the search bar and press the button to query for MS/MS spectrum.")
+
+    document.getElementById("loadingScreen").classList.add("hidden")
 }

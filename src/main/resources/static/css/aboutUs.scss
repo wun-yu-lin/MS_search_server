@@ -1,0 +1,51 @@
+.container {
+  padding: 20px;
+}
+
+.info_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    max-width: 1200px;
+    gap: 20px;
+    padding: 20px ;
+    background-color: #2D333B;
+  border-radius: 10px;
+  .about_lab_div, .about_author_div{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+  }
+}
+h1 {
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+}
+h2 {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+.contact_a, p {
+  color: white;
+}
+.contact_a:hover {
+  color: #487cfa;
+}
+
+.lab_img {
+  width: 80%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.author_img {
+  width: 50%;
+  object-fit: contain;
+  border-radius: 10px;
+}
