@@ -27,17 +27,17 @@ steps:
         avatar_url: https://woodpecker-ci.org/img/logo.svg
         message: >
           {{#success build.status}}
-          [PR] {{repo.name}}/#{{build.number}} succeeded. \n
-          Author: {{build.author}} {{build.event}} to {{build.branch}}. \n
-          CI Link: {{build.link}} \n
-          GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}} \n
-          Message: {{build.message}} \n
+          [PR] {{repo.name}}/#{{build.number}} succeeded. /n
+          Author: {{build.author}} {{build.event}} to {{build.branch}}. /n
+          CI Link: {{build.link}} /n
+          GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}} /n
+          Message: {{build.message}} /n
           {{else}}
-          [PR] {{repo.name}}/#{{build.number}} fail. \n
-          Author: {{build.author}} {{build.event}} to {{build.branch}}. \n
-          CI Link: {{build.link}} \n
-          GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}} \n
-          Message: {{build.message}} \n
+          [PR] {{repo.name}}/#{{build.number}} fail. /n
+          Author: {{build.author}} {{build.event}} to {{build.branch}}. /n
+          CI Link: {{build.link}} /n
+          GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}} /n
+          Message: {{build.message}} /n
           {{/success}}
       when:
         event:
