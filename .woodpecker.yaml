@@ -27,8 +27,21 @@ steps:
         avatar_url: https://woodpecker-ci.org/img/logo.svg
         message: >
           {{#success build.status}}
-            :white_check_mark: Build {{build.number}} succeeded in {{duration build.started build.finished}}.
+          [PR] {{repo.name}}/#{{build.number}} succeeded. {{build.author}} {{build.event}} to {{build.branch}}.
+          CI Link: {{build.link}}
+          GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
+          Message: {{build.message}}
           {{else}}
-            :x: Build {{build.number}} failed.
+          [PR] {{repo.name}}/#{{build.number}} fail. {{build.author}} {{build.event}} to {{build.branch}}.
+          CI Link: {{build.link}}
+          GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
+          Message: {{build.message}}
           {{/success}}
-          <{{build.link}}|Click here> for details.
+      when:
+        event:
+          - pull_request
+          - push
+        status:
+          - failure
+          - success
+
