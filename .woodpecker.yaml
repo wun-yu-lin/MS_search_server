@@ -1,15 +1,33 @@
 steps:
   build:
-    image: openjdk:17-jdk-slim
+    image: maven:3.8.1-openjdk-17
     commands:
       - echo "start run the build step "
     when:
-      event:
-        - pull_request
-  compileTest:
-    image: openjdk:17-jdk-slim
+      event: pull_request
+  compile:
+    image: maven:3.8.1-openjdk-17
     commands:
-      - ./mvn test
+      - mvn clean
+      - mvn compile
+      - echo "compile finish"
     when:
-      event:
-        - pull_request
+      event: pull_request
+#  test:
+#    image: maven:3.8.1-openjdk-17
+#    commands:
+#      - mvn test
+
+# 設定通知，這裡假設使用 Slack 作為通知工具
+#  notify:
+#    slack:
+#      webhook_url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+#      channel: "#ci-notifications"
+#      username: "woodpecker-bot"
+#      template: >
+#        {{#success build.status}}
+#          :white_check_mark: Build {{build.number}} succeeded in {{duration build.started build.finished}}.
+#        {{else}}
+#          :x: Build {{build.number}} failed.
+#        {{/success}}
+#        <{{build.link}}|Click here> for details.
