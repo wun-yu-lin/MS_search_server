@@ -3,6 +3,8 @@ steps:
     image: maven:3.8.1-openjdk-17
     commands:
       - echo "start run the build step"
+    when:
+      event: pull_request
   compile:
     image: maven:3.8.1-openjdk-17
     commands:
