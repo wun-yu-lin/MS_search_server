@@ -1,9 +1,9 @@
 steps:
   build:
-    image: openjdk:17-jdk-slim
+    image: openjdk:17-jdk
     commands:
       - echo "start run the build step "
   compileTest:
-    image: openjdk:17-jdk-slim
+    image: openjdk:17-jdk
     commands:
       - ./mvn test
