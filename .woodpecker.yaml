@@ -8,6 +8,7 @@ steps:
     commands:
       - mvn clean
       - mvn compile
+      - echo "compile finish"
 #  test:
 #    image: maven:3.8.1-openjdk-17
 #    commands:
