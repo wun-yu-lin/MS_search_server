@@ -18,16 +18,33 @@ steps:
 #    commands:
 #      - mvn test
 
-# 設定通知，這裡假設使用 Slack 作為通知工具
-#  notify:
-#    slack:
-#      webhook_url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
-#      channel: "#ci-notifications"
-#      username: "woodpecker-bot"
-#      template: >
-#        {{#success build.status}}
-#          :white_check_mark: Build {{build.number}} succeeded in {{duration build.started build.finished}}.
-#        {{else}}
-#          :x: Build {{build.number}} failed.
-#        {{/success}}
-#        <{{build.link}}|Click here> for details.
+# 設定通知，discord 作為通知工具
+  notify:
+      image: appleboy/drone-discord
+      settings:
+        webhook_id: 1261954462457663509
+        webhook_token: r_jyeEffW5fruirutU1k54Wzes__hn99klsFNUweSbHR8TuqO09cJ6r5hLxs1YedTH1A
+        avatar_url: https://woodpecker-ci.org/img/logo.svg
+        message: >
+          ---------------------------------
+          {{#success build.status}}
+            [PR] {{repo.name}}/#{{build.number}} succeeded
+            Author: {{build.author}} {{build.event}} to {{build.branch}}
+            CI Link: {{build.link}}
+            GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
+            Message: {{build.message}}
+          {{else}}
+          [PR] {{repo.name}}/#{{build.number}} fail.
+            Author: {{build.author}} {{build.event}} to {{build.branch}}.
+            CI Link: {{build.link}}
+            GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
+            Message: {{build.message}}
+          {{/success}}
+          ----------------------------------
+      when:
+        event:
+          - pull_request
+        status:
+          - failure
+          - success
+
