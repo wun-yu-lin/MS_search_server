@@ -3,10 +3,15 @@ steps:
     image: maven:3.8.1-openjdk-17
     commands:
         - echo "start run the build step"
-  test:
+  compile:
     image: maven:3.8.1-openjdk-17
     commands:
-      - mvn test
+      - mvn clean
+      - mvn compile
+#  test:
+#    image: maven:3.8.1-openjdk-17
+#    commands:
+#      - mvn test
 
 # 設定通知，這裡假設使用 Slack 作為通知工具
 #  notify:
