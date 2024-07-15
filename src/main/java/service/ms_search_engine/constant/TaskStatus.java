@@ -10,7 +10,7 @@ public enum TaskStatus {
     PROCESSING(2, "Processing"),
     FINISH(3, "Task finish"),
     ERROR(4, "Task error"),
-    DELETE(5, "Delete")dwdw
+    DELETE(5, "Delete")
     ;
 
     private final int statusCode;

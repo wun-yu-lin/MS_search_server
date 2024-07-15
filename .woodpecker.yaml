@@ -27,20 +27,6 @@ steps:
         avatar_url: https://woodpecker-ci.org/img/logo.svg
         link_names: true
         template: >
-
-#          {{#success build.status}}
-#            [PR] {{repo.name}}/#{{build.number}} succeeded
-#            Author: {{build.author}} {{build.event}} to {{build.branch}}
-#            CI Link: {{build.link}}
-#            GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
-#            Message: {{build.message}}
-#          {{else}}
-#            [PR] {{repo.name}}/#{{build.number}} failed.
-#            Author: {{build.author}} {{build.event}} to {{build.branch}}.
-#            CI Link: {{build.link}}
-#            GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
-#            Message: {{build.message}}
-#          {{/success}}
       when:
         event:
           - pull_request
