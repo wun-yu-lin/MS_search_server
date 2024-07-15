@@ -27,11 +27,6 @@ steps:
         avatar_url: https://woodpecker-ci.org/img/logo.svg
         link_names: true
         template: >
-          {{#success build.status}}
-            build {{build.number}} succeeded. Good job.
-          {{else}}
-            build {{build.number}} failed. Fix me please.
-          {{/success}}
 
 #          {{#success build.status}}
 #            [PR] {{repo.name}}/#{{build.number}} succeeded
