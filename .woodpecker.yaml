@@ -26,7 +26,7 @@ steps:
         webhook_token: r_jyeEffW5fruirutU1k54Wzes__hn99klsFNUweSbHR8TuqO09cJ6r5hLxs1YedTH1A
         avatar_url: https://woodpecker-ci.org/img/logo.svg
         link_names: true
-        template: >
+        message: >
           {{#success build.status}}
               [PR] {{repo.name}}/#{{build.number}} succeeded
               Author: {{build.author}} {{build.event}} to {{build.branch}}
