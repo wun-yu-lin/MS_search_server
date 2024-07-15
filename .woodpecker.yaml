@@ -25,7 +25,7 @@ steps:
         webhook_id: 1261954462457663509
         webhook_token: r_jyeEffW5fruirutU1k54Wzes__hn99klsFNUweSbHR8TuqO09cJ6r5hLxs1YedTH1A
         avatar_url: https://woodpecker-ci.org/img/logo.svg
-        message: >
+        template: >
           ---------------------------------
           {{#success build.status}}
             [PR] {{repo.name}}/#{{build.number}} succeeded
@@ -44,6 +44,7 @@ steps:
       when:
         event:
           - pull_request
+          - push
         status:
           - failure
           - success
