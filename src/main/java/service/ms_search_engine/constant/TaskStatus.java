@@ -11,7 +11,7 @@ public enum TaskStatus {
     FINISH(3, "Task finish"),
     ERROR(4, "Task error"),
     DELETE(5, "Delete")
-
+daasd
     ;
 
     private final int statusCode;
