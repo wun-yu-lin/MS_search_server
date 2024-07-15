@@ -30,6 +30,8 @@ steps:
           {{#success build.status}}
             [PR] {{repo.name}}/#{{build.number}} succeeded
             {{build}}
+            {{repo}}
+            {{pull_request}}
             Author: {{build.author}} {{build.event}} to {{build.branch}}
             CI Link: {{build.link}}
             GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
