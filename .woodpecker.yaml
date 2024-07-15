@@ -32,6 +32,7 @@ steps:
           {{else}}
             build {{build.number}} failed. Fix me please.
           {{/success}}
+
 #          {{#success build.status}}
 #            [PR] {{repo.name}}/#{{build.number}} succeeded
 #            Author: {{build.author}} {{build.event}} to {{build.branch}}
