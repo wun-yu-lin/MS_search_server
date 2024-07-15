@@ -33,7 +33,7 @@ steps:
             GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
             Message: {{build.message}}
           {{else}}
-          [PR] {{repo.name}}/#{{build.number}} fail.
+            [PR] {{repo.name}}/#{{build.number}} fail.
             Author: {{build.author}} {{build.event}} to {{build.branch}}.
             CI Link: {{build.link}}
             GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
