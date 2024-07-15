@@ -28,13 +28,14 @@ steps:
         link_names: true
         message: >
           {{#success build.status}}
-            [PR] {{repo.name}}/#{{repo.number}} succeeded
+            [PR] {{repo.name}}/#{{build.number}} succeeded
+            {{build}}
             Author: {{build.author}} {{build.event}} to {{build.branch}}
             CI Link: {{build.link}}
             GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
             Message: {{build.message}}
           {{else}}
-            [PR] {{repo.name}}/#{{repo.number}} fail.
+            [PR] {{repo.name}}/#{{build.number}} fail.
             Author: {{build.author}} {{build.event}} to {{build.branch}}.
             CI Link: {{build.link}}
             GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
