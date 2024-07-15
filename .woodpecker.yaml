@@ -1,0 +1,35 @@
+steps:
+  build:
+    image: maven:3.8.1-openjdk-17
+    commands:
+      - echo "start run the build step "
+    when:
+      event: pull_request
+  compile:
+    image: maven:3.8.1-openjdk-17
+    commands:
+      - mvn clean
+      - mvn compile
+      - echo "compile finish"
+    when:
+      event: pull_request
+#  test:
+#    image: maven:3.8.1-openjdk-17
+#    commands:
+#      - mvn test
+
+# 設定通知，discord 作為通知工具
+  notify:
+      image: appleboy/drone-discord
+      settings:
+        webhook_id: 1261954462457663509
+        webhook_token: r_jyeEffW5fruirutU1k54Wzes__hn99klsFNUweSbHR8TuqO09cJ6r5hLxs1YedTH1A
+        avatar_url: https://woodpecker-ci.org/img/logo.svg
+        link_names: true
+        template: >
+      when:
+        event:
+          - pull_request
+        status:
+          - failure
+          - success
