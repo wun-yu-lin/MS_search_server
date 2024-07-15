@@ -41,6 +41,7 @@ steps:
             GIT Link: https://github.com/{{repo.owner}}/{{repo.name}}/pull/{{build.pull}}
             Message: {{build.message}}
           {{/success}}
+
       when:
         event:
           - pull_request
