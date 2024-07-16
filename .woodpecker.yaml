@@ -3,6 +3,10 @@ steps:
     image: maven:3.8.1-openjdk-17
     commands:
       - echo "start run the build step "
+      - echo $${WOODPECKER_NOTIFY_DISCORD_ID}
+      - echo $${WOODPECKER_NOTIFY_DISCORD_TOKEN}
+    secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
+
     when:
       event: pull_request
   compile:
