@@ -1,7 +1,6 @@
 steps:
   build:
     image: maven:3.8.1-openjdk-17
-    secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
     commands:
       - echo "start run the build step "
     when:
@@ -23,6 +22,7 @@ steps:
 # 設定通知，discord 作為通知工具
   notify:
     image: appleboy/drone-discord
+    secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
     settings:
       webhook_id: ${WOODPECKER_NOTIFY_DISCORD_ID}
       webhook_token: ${WOODPECKER_NOTIFY_DISCORD_TOKEN}
