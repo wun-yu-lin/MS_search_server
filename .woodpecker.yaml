@@ -3,8 +3,8 @@ steps:
     image: maven:3.8.1-openjdk-17
     commands:
       - echo "start run the build step "
-    when:
-      event: pull_request
+      - echo "$WOODPECKER_NOTIFY_DISCORD_ID"
+      - echo "$WOODPECKER_NOTIFY_DISCORD_TOKEN"
   compile:
     image: maven:3.8.1-openjdk-17
     commands:
@@ -23,9 +23,9 @@ steps:
     image: appleboy/drone-discord
     settings:
       webhook_id:
-        from_secret: WOODPECKER_NOTIFY_DISCORD_ID
+        - WOODPECKER_NOTIFY_DISCORD_ID
       webhook_token:
-        from_secret: WOODPECKER_NOTIFY_DISCORD_TOKEN
+        - WOODPECKER_NOTIFY_DISCORD_TOKEN
       avatar_url: https://woodpecker-ci.org/img/logo.svg
       link_names: true
       template: >
