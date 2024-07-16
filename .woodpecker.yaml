@@ -24,8 +24,8 @@ steps:
     image: appleboy/drone-discord
     secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
     settings:
-      webhook_id: ${WOODPECKER_NOTIFY_DISCORD_ID}
-      webhook_token: ${WOODPECKER_NOTIFY_DISCORD_TOKEN}
+      webhook_id: ${{WOODPECKER_NOTIFY_DISCORD_ID}}
+      webhook_token: ${{WOODPECKER_NOTIFY_DISCORD_TOKEN}}
       avatar_url: https://woodpecker-ci.org/img/logo.svg
       link_names: true
       template: >
