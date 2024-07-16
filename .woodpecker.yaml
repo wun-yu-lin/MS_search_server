@@ -22,14 +22,15 @@ steps:
   notify:
       image: appleboy/drone-discord
       settings:
-        webhook_id: 1261954462457663509
-        webhook_token: r_jyeEffW5fruirutU1k54Wzes__hn99klsFNUweSbHR8TuqO09cJ6r5hLxs1YedTH1A
+        webhook_id: ${{ secrets.WOODPECKER_NOTIFY_DISCORD_ID}}
+        webhook_token: ${{ secrets.WOODPECKER_NOTIFY_DISCORD_TOKEN}}
         avatar_url: https://woodpecker-ci.org/img/logo.svg
         link_names: true
         template: >
       when:
         event:
           - pull_request
+          - push
         status:
           - failure
           - success
