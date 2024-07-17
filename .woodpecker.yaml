@@ -25,7 +25,6 @@ steps:
 # 設定通知，discord 作為通知工具
   notify:
     image: appleboy/drone-discord
-    secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
     settings:
       webhook_id: 
         from_secret: woodpecker_notify_discord_id
