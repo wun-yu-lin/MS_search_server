@@ -23,7 +23,7 @@ steps:
     commands:
       - mvn clean
       - mvn compile
-      - mvn spotbugs:spotbugs
+      - mvn spotbugs:check -Dspotbugs.excludeFilterFile=./findbugs-exclude.xml #exclude bug list
     when:
       event: pull_request
 
