@@ -1,5 +1,6 @@
 package service.ms_search_engine.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -147,8 +148,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
                 ", collision_energy, mz_error, last_modify, date_created, data_source, tool_type, instrument, ion_mode, ms2_spectrum," +
                 " precursor_type, cd.name, cd.formula, cd.inchi_key, cd.inchi, cd.cas, cd.kind, cd.smile from spectrum_data sd left join ms_search_library.compound_data cd on sd.compound_data_id = cd.id where ";
         Map<String, Object> map = new HashMap<>();
-
-        if (spectrumQueryParaDto.getKeyWord() == null || spectrumQueryParaDto.getKeyWord() == "") {
+        if (StringUtils.isEmpty(spectrumQueryParaDto.getKeyWord())) {
             throw new QueryParameterException("KeyWord is empty");
         }
         //process keyWord
@@ -160,7 +160,7 @@ public class SpectrumDaoImpl implements SpectrumDao {
         }
         for (int i = 0; i < keyWordArray.length; i++) {
             //當是數字
-            if (keyWordArray[i] == "") {
+            if (StringUtils.isEmpty(keyWordArray[i])) {
                 continue;
             }
             if (keyWordArray[i].matches("-?\\d+(\\.\\d+)?")) {

@@ -33,8 +33,8 @@ public class BatchSpectrumSearchResultsVO {
     //compound info
     private String formula;
     private String name;
-    private String InChiKey;
-    private String InChi;
+    private String inChiKey;
+    private String inChi;
     private String cas;
     private String kind;
     private String smile;

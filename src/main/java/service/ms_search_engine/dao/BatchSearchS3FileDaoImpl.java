@@ -48,7 +48,8 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             try (FileOutputStream fos1 = new FileOutputStream(peakListFile)) {
                 fos1.write(batchSpectrumSearchDto.getPeakListFile().getBytes());
             } catch (Exception e) {
-                throw new S3DataUploadException("PeakList file upload failed");
+                boolean isDeletePeakListFile = peakListFile.delete();
+                throw new S3DataUploadException("PeakList file upload failed: " + e);
             }
             String peakListFileName = "peak_list_" + baseFileName + "." + FilenameUtils.getExtension(batchSpectrumSearchDto.getPeakListFile().getOriginalFilename());
             //upload file to s3
@@ -64,9 +65,9 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
                 batchSpectrumSearchDto.setPeakListS3FileSrc(peakListFileName);
 
             } catch (Exception e) {
-                throw new S3DataUploadException("PeakList file upload failed");
+                throw new S3DataUploadException("PeakList file upload failed: " + e);
             } finally {
-                peakListFile.delete();
+                boolean isDeletePeakListFile = peakListFile.delete();
             }
 
         }
@@ -77,6 +78,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             try (FileOutputStream fos2 = new FileOutputStream(ms2SpectrumFile)) {
                 fos2.write(batchSpectrumSearchDto.getMs2File().getBytes());
             } catch (Exception e) {
+                boolean isDeleteMs2File = ms2SpectrumFile.delete();
                 throw new S3DataUploadException("MS2 spectrum file upload failed");
             }
             String ms2SpectrumFileName = "ms2Spectrum_" + baseFileName + "." + FilenameUtils.getExtension(batchSpectrumSearchDto.getMs2File().getOriginalFilename());
@@ -90,9 +92,9 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
                 s3Client.putObject(ms2SpectrumRequest);
                 batchSpectrumSearchDto.setMs2S3FileSrc(ms2SpectrumFileName);
             } catch (Exception e) {
-                throw new S3DataUploadException("Ms2 file upload failed");
+                throw new S3DataUploadException("Ms2 file upload failed: " + e);
             } finally {
-                ms2SpectrumFile.delete();
+                boolean isDeleteMs2File = ms2SpectrumFile.delete();
             }
         }
 
@@ -102,7 +104,8 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             try (FileOutputStream fos3 = new FileOutputStream(resultPeakListFile)) {
                 fos3.write(batchSpectrumSearchDto.getResultPeakListFile().getBytes());
             } catch (Exception e) {
-                throw new S3DataUploadException("Results spectrum file upload failed");
+                boolean isDeleteResultFile = resultPeakListFile.delete();
+                throw new S3DataUploadException("Results spectrum file upload failed: " + e);
             }
             String resultPeakListFileName = "ResultPeakList_" + baseFileName + "." + FilenameUtils.getExtension(batchSpectrumSearchDto.getResultPeakListFile().getName());
             try {
@@ -115,9 +118,9 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
                 s3Client.putObject(resultPeakListRequest);
                 batchSpectrumSearchDto.setResultPeakListS3FileSrc(resultPeakListFileName);
             } catch (Exception e) {
-                throw new S3DataUploadException("Ms2 file upload failed");
+                throw new S3DataUploadException("Ms2 file upload failed: " + e);
             } finally {
-                resultPeakListFile.delete();
+                boolean isDeleteResultFile = resultPeakListFile.delete();
             }
         }
 
@@ -131,7 +134,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
         try {
             s3Client.deleteObject(bucketName, key);
         } catch (Exception e) {
-            throw new S3DataUploadException("file delete failed");
+            throw new S3DataUploadException("file delete failed: " + e);
         }
         return true;
     }
