@@ -12,13 +12,11 @@ import service.ms_search_engine.dao.BatchSearchS3FileDao;
 import service.ms_search_engine.exception.S3DataDownloadException;
 import service.ms_search_engine.redisService.RedisSentTaskMailVO;
 
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import java.io.File;
 import java.io.IOException;
 
 @Component
-public class sentMailServiceImpl implements sentMailService{
+public class SentMailServiceImpl implements SentMailService{
     private final JavaMailSender javaMailSender;
     private final BatchSearchS3FileDao batchSearchS3FileDao;
 
@@ -30,7 +28,7 @@ public class sentMailServiceImpl implements sentMailService{
     private static final String footer ="__________________ <br>"+ "Best regards, <br>" + "MS search team , <br>" + "<a href='https://ms-search.us'>ms-search</a> <br>" ;
 
     @Autowired
-    public sentMailServiceImpl(JavaMailSender javaMailSender, BatchSearchS3FileDao batchSearchS3FileDao) {
+    public SentMailServiceImpl(JavaMailSender javaMailSender, BatchSearchS3FileDao batchSearchS3FileDao) {
         this.javaMailSender = javaMailSender;
         this.batchSearchS3FileDao = batchSearchS3FileDao;
     }
@@ -217,9 +215,8 @@ public class sentMailServiceImpl implements sentMailService{
 
         javaMailSender.send(mimeMessage);
         File file = new File(attFileUrl.getURI());
-        file.delete();
 
-        return true;
+        return file.delete();
     }
 
     @Override

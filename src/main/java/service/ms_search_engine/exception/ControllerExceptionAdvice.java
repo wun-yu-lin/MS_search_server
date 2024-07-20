@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.io.IOException;
 
 @ControllerAdvice
-public class ControllerException {
+public class ControllerExceptionAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> prepareResponseForRunTimeException(RuntimeException exception){
@@ -62,5 +62,11 @@ public class ControllerException {
     public ResponseEntity<String> prepareResponseForS3DataDownloadException(S3DataDownloadException exception){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("S3DataDownloadException: " + exception.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> prepareResponseForException(Exception exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("BaseException: " + exception.getMessage());
     }
 }

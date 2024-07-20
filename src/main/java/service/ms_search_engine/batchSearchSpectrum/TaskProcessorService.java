@@ -37,7 +37,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -309,8 +308,8 @@ public class TaskProcessorService {
                         columnMapper.put("ms2SpectrumSimilarity", 20);
                         columnMapper.put("formula", 21);
                         columnMapper.put("name", 22);
-                        columnMapper.put("InChiKey", 23);
-                        columnMapper.put("InChi", 24);
+                        columnMapper.put("inChiKey", 23);
+                        columnMapper.put("inChi", 24);
                         columnMapper.put("cas", 25);
                         columnMapper.put("kind", 26);
                         columnMapper.put("smile", 27);
@@ -364,7 +363,7 @@ public class TaskProcessorService {
                             throw new DatabaseUpdateErrorException("Error writing results to file: " + e.getMessage());
 
                         } finally {
-                            f.delete();
+                            boolean isFileDelete = f.delete();
                         }
 
 
@@ -385,6 +384,7 @@ public class TaskProcessorService {
                         System.out.println("Processing task: " + taskDataStr);
                     } catch (Exception e) {
                         System.out.println("Error processing task: " + e.getMessage());
+                        e.printStackTrace();
                         Thread.sleep(1000);
                         //update task status to error in database and send email
                         batchSpectrumSearchDto.setTaskStatus(TaskStatus.ERROR);
@@ -400,8 +400,8 @@ public class TaskProcessorService {
 //                        //process end, delete the file in disk
                         File ms2File = new File((batchSearchProcessorDto.getMs2spectrumResourceUrl().getURI()));
                         File peakListFile = new File((batchSearchProcessorDto.getPeakListResourceUrl().getURI()));
-                        ms2File.delete();
-                        peakListFile.delete();
+                        boolean isDeleteMs2File = ms2File.delete();
+                        boolean isDeletePeakListFile = peakListFile.delete();
                     }
 
 //                processTask(taskData);
@@ -415,6 +415,7 @@ public class TaskProcessorService {
                 }
             } catch (Exception e) {
                 System.out.println("Error processing task: " + e.getMessage());
+                e.printStackTrace();
             }
 
         }

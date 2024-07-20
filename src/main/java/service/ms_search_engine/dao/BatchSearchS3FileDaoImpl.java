@@ -48,7 +48,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             try (FileOutputStream fos1 = new FileOutputStream(peakListFile)) {
                 fos1.write(batchSpectrumSearchDto.getPeakListFile().getBytes());
             } catch (Exception e) {
-                peakListFile.delete();
+                boolean isDeletePeakListFile = peakListFile.delete();
                 throw new S3DataUploadException("PeakList file upload failed: " + e);
             }
             String peakListFileName = "peak_list_" + baseFileName + "." + FilenameUtils.getExtension(batchSpectrumSearchDto.getPeakListFile().getOriginalFilename());
@@ -67,7 +67,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             } catch (Exception e) {
                 throw new S3DataUploadException("PeakList file upload failed: " + e);
             } finally {
-                peakListFile.delete();
+                boolean isDeletePeakListFile = peakListFile.delete();
             }
 
         }
@@ -78,7 +78,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             try (FileOutputStream fos2 = new FileOutputStream(ms2SpectrumFile)) {
                 fos2.write(batchSpectrumSearchDto.getMs2File().getBytes());
             } catch (Exception e) {
-                ms2SpectrumFile.delete();
+                boolean isDeleteMs2File = ms2SpectrumFile.delete();
                 throw new S3DataUploadException("MS2 spectrum file upload failed");
             }
             String ms2SpectrumFileName = "ms2Spectrum_" + baseFileName + "." + FilenameUtils.getExtension(batchSpectrumSearchDto.getMs2File().getOriginalFilename());
@@ -94,7 +94,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             } catch (Exception e) {
                 throw new S3DataUploadException("Ms2 file upload failed: " + e);
             } finally {
-                ms2SpectrumFile.delete();
+                boolean isDeleteMs2File = ms2SpectrumFile.delete();
             }
         }
 
@@ -104,7 +104,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             try (FileOutputStream fos3 = new FileOutputStream(resultPeakListFile)) {
                 fos3.write(batchSpectrumSearchDto.getResultPeakListFile().getBytes());
             } catch (Exception e) {
-                resultPeakListFile.delete();
+                boolean isDeleteResultFile = resultPeakListFile.delete();
                 throw new S3DataUploadException("Results spectrum file upload failed: " + e);
             }
             String resultPeakListFileName = "ResultPeakList_" + baseFileName + "." + FilenameUtils.getExtension(batchSpectrumSearchDto.getResultPeakListFile().getName());
@@ -120,7 +120,7 @@ public class BatchSearchS3FileDaoImpl implements BatchSearchS3FileDao {
             } catch (Exception e) {
                 throw new S3DataUploadException("Ms2 file upload failed: " + e);
             } finally {
-                resultPeakListFile.delete();
+                boolean isDeleteResultFile = resultPeakListFile.delete();
             }
         }
 

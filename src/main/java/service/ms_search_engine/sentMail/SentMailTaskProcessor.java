@@ -15,13 +15,13 @@ import service.ms_search_engine.redisService.RedisSentTaskMailVO;
 @Service
 @Component
 @ConditionalOnProperty(name = "SentMailTaskProcessorService.enable", matchIfMissing = false)
-public class sentMailTaskProcessor {
+public class SentMailTaskProcessor {
 
-    private final sentMailService sentMailService;
+    private final SentMailService sentMailService;
     private final RedisMailQueueService redisMailQueueService;
 
     @Autowired
-    public sentMailTaskProcessor(service.ms_search_engine.sentMail.sentMailService sentMailService, RedisMailQueueService redisMailQueueService) {
+    public SentMailTaskProcessor(service.ms_search_engine.sentMail.SentMailService sentMailService, RedisMailQueueService redisMailQueueService) {
         this.sentMailService = sentMailService;
         this.redisMailQueueService = redisMailQueueService;
     }
