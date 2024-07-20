@@ -25,9 +25,9 @@ public class sentMailServiceImpl implements sentMailService{
     @Value("${spring.mail.username}")
     private String username;
 
-    private final String headImg = "<img style=\"width: 30px; height: 30px;\" src=\"https://purple-cold-033.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F3bbb6125-1f4c-4a9e-8239-419e9cd63397%2F7a768929-d7f0-442c-95d6-f7dc0c9e8ed8%2FwebIcon.png?table=block&id=69d8d0e5-24cb-4127-a1ae-6b17b7cab6b7&spaceId=3bbb6125-1f4c-4a9e-8239-419e9cd63397&width=250&userId=&cache=v2\">";
-    private final String head = "<h3>" +headImg+  "  MS search task notice mail</h3> <br>";
-    private final String footer ="__________________ <br>"+ "Best regards, <br>" + "MS search team , <br>" + "<a href='https://ms-search.us'>ms-search</a> <br>" ;
+    private static final String headImg = "<img style=\"width: 30px; height: 30px;\" src=\"https://purple-cold-033.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F3bbb6125-1f4c-4a9e-8239-419e9cd63397%2F7a768929-d7f0-442c-95d6-f7dc0c9e8ed8%2FwebIcon.png?table=block&id=69d8d0e5-24cb-4127-a1ae-6b17b7cab6b7&spaceId=3bbb6125-1f4c-4a9e-8239-419e9cd63397&width=250&userId=&cache=v2\">";
+    private static final String head = "<h3>" +headImg+  "  MS search task notice mail</h3> <br>";
+    private static final String footer ="__________________ <br>"+ "Best regards, <br>" + "MS search team , <br>" + "<a href='https://ms-search.us'>ms-search</a> <br>" ;
 
     @Autowired
     public sentMailServiceImpl(JavaMailSender javaMailSender, BatchSearchS3FileDao batchSearchS3FileDao) {
