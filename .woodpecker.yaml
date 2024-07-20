@@ -27,6 +27,15 @@ steps:
     when:
       event: pull_request
 
+  pmd:
+    image: maven:3.8.1-openjdk-17
+    commands:
+      - mvn clean
+      - mvn compile
+      - mvn pmd:pmd
+    when:
+      event: pull_request
+
 #  test:
 #    image: maven:3.8.1-openjdk-17
 #    commands:
