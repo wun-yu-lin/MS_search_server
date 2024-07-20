@@ -118,7 +118,7 @@
             <artifactId>aws-java-sdk-bom</artifactId>
             <version>1.11.1000</version>
             <type>pom</type>
-            <scope>import</scope>
+<!--            <scope>import</scope>-->
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -239,6 +239,31 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.8.6.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>4.8.6</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.22.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version> <!-- 確保使用的是最新版本 -->
+                <configuration>
+                    <source>true</source> <!-- 或者確保這個標籤存在 -->
+                </configuration>
             </plugin>
         </plugins>
     </build>
