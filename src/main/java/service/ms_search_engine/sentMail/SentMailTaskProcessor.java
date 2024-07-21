@@ -2,15 +2,15 @@ package service.ms_search_engine.sentMail;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import service.ms_search_engine.constant.TaskStatus;
 import service.ms_search_engine.redisService.RedisMailQueueService;
 import service.ms_search_engine.redisService.RedisSentTaskMailVO;
+
+import java.util.concurrent.FutureTask;
 
 @Service
 @Component
@@ -18,17 +18,28 @@ import service.ms_search_engine.redisService.RedisSentTaskMailVO;
 public class SentMailTaskProcessor {
 
     private final SentMailService sentMailService;
+
     private final RedisMailQueueService redisMailQueueService;
+
+    private FutureTask<Boolean> futureTask;
 
     @Autowired
     public SentMailTaskProcessor(service.ms_search_engine.sentMail.SentMailService sentMailService, RedisMailQueueService redisMailQueueService) {
         this.sentMailService = sentMailService;
         this.redisMailQueueService = redisMailQueueService;
+        runFutureTaskListener();
     }
 
-    @PostConstruct
-    @Bean
-    public void listenForMailTask() {
+    private synchronized void runFutureTaskListener(){
+        if (futureTask == null){
+            futureTask = new FutureTask<>(this::listenForMailTask);
+            new Thread(futureTask).start();
+            System.out.println("Starting SentMailTaskProcessor runFutureTaskListener...  ");
+        }
+    }
+
+
+    private boolean listenForMailTask() {
             while (true) {
                 try {
                     if (redisMailQueueService.queueExists()) {

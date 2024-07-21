@@ -5,12 +5,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
 import com.opencsv.ICSVWriter;
-import jakarta.annotation.PostConstruct;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -39,6 +37,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 @Service
 @Component
@@ -46,13 +45,20 @@ import java.util.List;
 public class TaskProcessorService {
 
     private final RedisTaskQueueService redisTaskQueueService;
+
     private final RedisMailQueueService redisMailQueueService;
+
     private final BatchSearchRdbDao batchSearchRdbDao;
+
     private final BatchSearchS3FileDao batchSearchS3FileDao;
+
     private final SpectrumDao spectrumDao;
+
 
     @Value("${aws.cloudFront.endpoint}")
     private String awsCloudFrontEndpoint;
+
+    private FutureTask<Boolean> futureTask;
 
     @Autowired
     public TaskProcessorService(RedisTaskQueueService redisTaskQueueService, RedisMailQueueService redisMailQueueService, BatchSearchRdbDao batchSearchRdbDao, BatchSearchS3FileDao batchSearchS3FileDao, SpectrumDao spectrumDao) {
@@ -61,11 +67,20 @@ public class TaskProcessorService {
         this.batchSearchRdbDao = batchSearchRdbDao;
         this.batchSearchS3FileDao = batchSearchS3FileDao;
         this.spectrumDao = spectrumDao;
+        runFutureTaskListener();
     }
 
-    @PostConstruct
-    @Bean
-    public void listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException, InterruptedException {
+    private synchronized void runFutureTaskListener(){
+        if (this.futureTask == null){
+            this.futureTask = new FutureTask<>(this::listenForTasks);
+            new Thread(this.futureTask).start();
+            System.out.println("starting TaskProcessorService runFutureTaskListener...");
+        }
+
+    }
+
+
+    private boolean listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException, InterruptedException {
         while (true) {
             try {
                 if (redisTaskQueueService.queueExists()) {
