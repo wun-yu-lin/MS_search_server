@@ -20,6 +20,7 @@ public class SentMailTaskProcessor {
     private final SentMailService sentMailService;
     private final RedisMailQueueService redisMailQueueService;
 
+
     @Autowired
     public SentMailTaskProcessor(service.ms_search_engine.sentMail.SentMailService sentMailService, RedisMailQueueService redisMailQueueService) {
         this.sentMailService = sentMailService;
