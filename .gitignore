@@ -43,5 +43,5 @@ build/
 *.out
 *.sql
 
-*.mgf
-*.csv
+#*.mgf
+#*.csv
