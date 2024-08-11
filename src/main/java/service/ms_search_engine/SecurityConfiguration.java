@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 )
                 .headers(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
 
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
@@ -81,8 +81,8 @@ public class SecurityConfiguration {
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         return new InMemoryUserDetailsManager(
-                User.withUsername("admin")
-                        .password("{noop}ccl-22840485")
+                User.withUsername(adminUsername)
+                        .password("{noop}"+adminPassword)
                         .authorities("ADMIN", "USER")
                         .roles("ADMIN", "USER")
                         .build());
