@@ -83,6 +83,7 @@ public class TaskProcessorService {
     private boolean listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException, InterruptedException {
         while (true) {
             try {
+                Thread.sleep(1000); //避免 cpu loading 過高
                 if (redisTaskQueueService.queueExists()) {
 
                     String taskDataStr = redisTaskQueueService.getAndPopLastTask();
