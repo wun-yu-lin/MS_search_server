@@ -1,18 +1,19 @@
 package service.ms_search_engine.controller;
 
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.ms_search_engine.service.WebStatusService;
-import service.ms_search_engine.vo.MemberVO;
 import service.ms_search_engine.vo.WebStatusVo;
 
 @RestController
 @RequestMapping("/api/webStatus")
-public class WebStatusController {
+@Scope("request")
+public class WebStatusController extends BaseController {
 
     private final WebStatusService webStatusService;
 

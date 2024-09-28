@@ -1,11 +1,13 @@
 package service.ms_search_engine.controller;
 
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HtmlController {
+@Scope("request")
+public class HtmlController extends BaseController {
 
     @GetMapping("/")
     public String index(){
