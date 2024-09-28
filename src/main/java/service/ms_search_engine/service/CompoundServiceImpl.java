@@ -34,8 +34,8 @@ public class CompoundServiceImpl implements CompoundService{
     }
 
     @Override
-    public Boolean postCompoundData(CompoundDataModel compoundDataModel) throws DatabaseInsertErrorException, QueryParameterException {
-        return compoundDao.postCompoundData(compoundDataModel);
+    public void postCompoundData(CompoundDataModel compoundDataModel) throws DatabaseInsertErrorException, QueryParameterException {
+        compoundDao.postCompoundData(compoundDataModel);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CompoundServiceImpl implements CompoundService{
     }
 
     @Override
-    public Boolean postCompoundClassification(CompoundClassificationModel compoundClassificationModel) throws DatabaseInsertErrorException, QueryParameterException {
-        return compoundDao.postCompoundClassification(compoundClassificationModel);
+    public void postCompoundClassification(CompoundClassificationModel compoundClassificationModel) throws DatabaseInsertErrorException, QueryParameterException {
+        compoundDao.postCompoundClassification(compoundClassificationModel);
     }
 }

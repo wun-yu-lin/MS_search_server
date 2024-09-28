@@ -70,14 +70,11 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
 
     @Override
     @Transactional
-    public Boolean postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
+    public void postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
 
         //save submit to database
         batchSpectrumSearchDto.setTaskStatus(TaskStatus.SUBMIT_IN_WAITING);
-        Boolean isRdbUpdateSuccess = batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
-        if (!isRdbUpdateSuccess) {
-            throw new DatabaseUpdateErrorException("update task info failed");
-        }
+        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
         ObjectMapper mapper = new ObjectMapper();
         String taskString = mapper.writeValueAsString(batchSpectrumSearchDto);
         redisTaskQueueService.newTask(taskString);
@@ -103,18 +100,9 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
         redisSentTaskMailVO.setMs1Ms2matchRtTolerance(batchSpectrumSearchDto.getMs1Ms2matchRtTolerance());
         redisSentTaskMailVO.setTaskDescription(batchSpectrumSearchDto.getTaskDescription());
 
-
         String mailString = mapper.writeValueAsString(redisSentTaskMailVO);
         redisMailQueueService.newMail(mailString);
 
-
-//        String taskString = redisTaskQueueService.getAndPopLastTask();
-//        BatchSpectrumSearchDto  batchSpectrumSearchDto1 = mapper.readValue(taskString, BatchSpectrumSearchDto.class);
-
-
-
-
-        return true;
     }
 
     @Override
@@ -138,15 +126,15 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
     public List<BatchSpectrumSearchModel> getTaskInfoByParameter(BatchTaskSearchDto batchTaskSearchDto) throws QueryParameterException, SQLException {
 
         List<BatchSpectrumSearchModel> batchSpectrumSearchModelList = batchSearchRdbDao.getTaskByParameter(batchTaskSearchDto);
-        for (int i = 0; i < batchSpectrumSearchModelList.size(); i++) {
-            if (batchSpectrumSearchModelList.get(i).getS3Ms2FileSrc() != null) {
-                batchSpectrumSearchModelList.get(i).setS3Ms2FileSrc(awsCloudFrontEndpoint + batchSpectrumSearchModelList.get(i).getS3Ms2FileSrc());
+        for (BatchSpectrumSearchModel batchSpectrumSearchModel : batchSpectrumSearchModelList) {
+            if (batchSpectrumSearchModel.getS3Ms2FileSrc() != null) {
+                batchSpectrumSearchModel.setS3Ms2FileSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3Ms2FileSrc());
             }
-            if (batchSpectrumSearchModelList.get(i).getS3PeakListSrc() != null) {
-                batchSpectrumSearchModelList.get(i).setS3PeakListSrc(awsCloudFrontEndpoint + batchSpectrumSearchModelList.get(i).getS3PeakListSrc());
+            if (batchSpectrumSearchModel.getS3PeakListSrc() != null) {
+                batchSpectrumSearchModel.setS3PeakListSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3PeakListSrc());
             }
-            if (batchSpectrumSearchModelList.get(i).getS3ResultsSrc() != null) {
-                batchSpectrumSearchModelList.get(i).setS3ResultsSrc(awsCloudFrontEndpoint + batchSpectrumSearchModelList.get(i).getS3ResultsSrc());
+            if (batchSpectrumSearchModel.getS3ResultsSrc() != null) {
+                batchSpectrumSearchModel.setS3ResultsSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3ResultsSrc());
             }
         }
         return batchSpectrumSearchModelList;
@@ -154,7 +142,7 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
 
     @Override
     @Transactional
-    public Boolean deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException {
+    public void deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException {
         BatchSpectrumSearchModel batchSpectrumSearchModel = batchSearchRdbDao.getTaskInfoById(id);
             batchSearchS3FileDao.deleteFileByKey(batchSpectrumSearchModel.getS3Ms2FileSrc());
             batchSearchS3FileDao.deleteFileByKey(batchSpectrumSearchModel.getS3PeakListSrc());
@@ -162,12 +150,11 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
             if (!batchSearchRdbDao.deleteTaskById(id)) {
                 throw new S3DataUploadException("delete task failed");
             }
-        return true;
     }
 
     @Override
     @Transactional
-    public Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException, S3DataUploadException {
+    public void changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException, S3DataUploadException {
         BatchSpectrumSearchModel batchSpectrumSearchModel = batchSearchRdbDao.getTaskInfoById(id);
         batchSearchS3FileDao.deleteFileByKey(batchSpectrumSearchModel.getS3Ms2FileSrc());
         batchSearchS3FileDao.deleteFileByKey(batchSpectrumSearchModel.getS3PeakListSrc());
@@ -175,6 +162,5 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
         if (!batchSearchRdbDao.changeTaskStatusToDelete(id)) {
             throw new S3DataUploadException("change task status to delete is failed");
         }
-        return true;
     }
 }

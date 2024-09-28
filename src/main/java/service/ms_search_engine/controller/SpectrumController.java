@@ -127,10 +127,7 @@ public class SpectrumController {
     @PostMapping("")
     public ResponseEntity<String> postSpectrum(@RequestBody SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException{
         log.info("Post request for spectrum");
-        Boolean isPostSuccess = spectrumService.postSpectrum(spectrumDataModel);
-        if (!isPostSuccess) {
-            throw new DatabaseInsertErrorException("post spectrum failed");
-        }
+        spectrumService.postSpectrum(spectrumDataModel);
         return ResponseEntity.status(HttpStatus.OK.value()).body("post spectrum success");
     }
 
