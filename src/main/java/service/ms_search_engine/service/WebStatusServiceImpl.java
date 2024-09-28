@@ -22,10 +22,10 @@ public class WebStatusServiceImpl implements WebStatusService{
     @Override
     public WebStatusVo getWebStatus() {
         MemberModel lastMember = memberDao.getLastMember();
-        BatchSpectrumSearchModel batchSpectrumSearchModel = batchSearchRdbDao.getLastTask();
+        Integer taskId = batchSearchRdbDao.getLastTask();
         WebStatusVo webStatusVo = new WebStatusVo();
         webStatusVo.setUserCount(lastMember.getId());
-        webStatusVo.setTaskCount(batchSpectrumSearchModel.getId());
+        webStatusVo.setTaskCount(taskId);
 
         return webStatusVo;
     }

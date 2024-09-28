@@ -74,10 +74,7 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
 
         //save submit to database
         batchSpectrumSearchDto.setTaskStatus(TaskStatus.SUBMIT_IN_WAITING);
-        Boolean isRdbUpdateSuccess = batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
-        if (!isRdbUpdateSuccess) {
-            throw new DatabaseUpdateErrorException("update task info failed");
-        }
+        batchSearchRdbDao.updateTaskInfo(batchSpectrumSearchDto);
         ObjectMapper mapper = new ObjectMapper();
         String taskString = mapper.writeValueAsString(batchSpectrumSearchDto);
         redisTaskQueueService.newTask(taskString);
