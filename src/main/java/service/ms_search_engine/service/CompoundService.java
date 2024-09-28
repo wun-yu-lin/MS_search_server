@@ -13,12 +13,12 @@ public interface CompoundService {
     //compound data
     List<CompoundDataModel> getCompoundDataByParameter(CompoundQueryParaDto compoundQueryParaDto) throws QueryParameterException;
     CompoundDataModel getCompoundDataByID(int id) throws QueryParameterException;
-    Boolean postCompoundData(CompoundDataModel compoundDataModel) throws DatabaseInsertErrorException, QueryParameterException;
+    void postCompoundData(CompoundDataModel compoundDataModel) throws DatabaseInsertErrorException, QueryParameterException;
 
     //compound classification
     List<CompoundClassificationModel> getCompoundClassificationByParameter(CompoundQueryParaDto compoundQueryParaDto) throws QueryParameterException;
     CompoundClassificationModel getCompoundClassificationByID(int id) throws QueryParameterException;
-    Boolean postCompoundClassification(CompoundClassificationModel compoundClassificationModel) throws DatabaseInsertErrorException, QueryParameterException;
+    void postCompoundClassification(CompoundClassificationModel compoundClassificationModel) throws DatabaseInsertErrorException, QueryParameterException;
 
 
 
