@@ -12,5 +12,5 @@ public interface SpectrumService {
     public SpectrumDataModel getSpectrumByID(int id);
     public List<SpectrumDataModel> getSpectrumByParameter(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException;
     public List<SpectrumDataModel> getSpectrumByFuzzySearch(SpectrumQueryParaDto spectrumQueryParaDto) throws QueryParameterException;
-    public Boolean postSpectrum(SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException;
+    public void postSpectrum(SpectrumDataModel spectrumDataModel) throws DatabaseInsertErrorException, QueryParameterException;
 }
