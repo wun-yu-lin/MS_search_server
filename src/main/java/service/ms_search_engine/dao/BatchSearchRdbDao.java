@@ -14,12 +14,12 @@ import java.util.List;
 public interface BatchSearchRdbDao{
     BatchSpectrumSearchModel postFileUploadInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseInsertErrorException, QueryParameterException;
     BatchSpectrumSearchModel postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseInsertErrorException, QueryParameterException;
-    Boolean updateTaskInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseUpdateErrorException, QueryParameterException;
+    void updateTaskInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseUpdateErrorException, QueryParameterException;
     BatchSpectrumSearchModel getTaskInfoById(int id) throws QueryParameterException, SQLException;
     List<BatchSpectrumSearchModel> getTaskByParameter(BatchTaskSearchDto batchTaskSearchDto) throws QueryParameterException, SQLException;
     Boolean deleteTaskById(int id) throws QueryParameterException, DatabaseDeleteErrorException;
 
     Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException;
 
-    BatchSpectrumSearchModel getLastTask();
+    Integer getLastTask();
 }
