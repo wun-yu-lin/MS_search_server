@@ -131,10 +131,7 @@ public class BatchSpectrumSearchController {
         batchSpectrumSearchDto.setMs1Ms2matchRtTolerance(batchSpectrumSearchModel.getMs1Ms2matchRtTolerance());
         batchSpectrumSearchDto.setTaskDescription(batchSpectrumSearchModel.getTaskDescription());
 
-        Boolean isSuccessSubmit = batchSpectrumSearchService.postTaskSubmit(batchSpectrumSearchDto);
-        if (!isSuccessSubmit) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("submit task failed");
-        }
+        batchSpectrumSearchService.postTaskSubmit(batchSpectrumSearchDto);
         return ResponseEntity.status(HttpStatus.OK).body("submit task success");
     }
 
