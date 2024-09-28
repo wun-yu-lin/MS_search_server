@@ -126,15 +126,15 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
     public List<BatchSpectrumSearchModel> getTaskInfoByParameter(BatchTaskSearchDto batchTaskSearchDto) throws QueryParameterException, SQLException {
 
         List<BatchSpectrumSearchModel> batchSpectrumSearchModelList = batchSearchRdbDao.getTaskByParameter(batchTaskSearchDto);
-        for (int i = 0; i < batchSpectrumSearchModelList.size(); i++) {
-            if (batchSpectrumSearchModelList.get(i).getS3Ms2FileSrc() != null) {
-                batchSpectrumSearchModelList.get(i).setS3Ms2FileSrc(awsCloudFrontEndpoint + batchSpectrumSearchModelList.get(i).getS3Ms2FileSrc());
+        for (BatchSpectrumSearchModel batchSpectrumSearchModel : batchSpectrumSearchModelList) {
+            if (batchSpectrumSearchModel.getS3Ms2FileSrc() != null) {
+                batchSpectrumSearchModel.setS3Ms2FileSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3Ms2FileSrc());
             }
-            if (batchSpectrumSearchModelList.get(i).getS3PeakListSrc() != null) {
-                batchSpectrumSearchModelList.get(i).setS3PeakListSrc(awsCloudFrontEndpoint + batchSpectrumSearchModelList.get(i).getS3PeakListSrc());
+            if (batchSpectrumSearchModel.getS3PeakListSrc() != null) {
+                batchSpectrumSearchModel.setS3PeakListSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3PeakListSrc());
             }
-            if (batchSpectrumSearchModelList.get(i).getS3ResultsSrc() != null) {
-                batchSpectrumSearchModelList.get(i).setS3ResultsSrc(awsCloudFrontEndpoint + batchSpectrumSearchModelList.get(i).getS3ResultsSrc());
+            if (batchSpectrumSearchModel.getS3ResultsSrc() != null) {
+                batchSpectrumSearchModel.setS3ResultsSrc(awsCloudFrontEndpoint + batchSpectrumSearchModel.getS3ResultsSrc());
             }
         }
         return batchSpectrumSearchModelList;
