@@ -1,9 +1,9 @@
 package service.ms_search_engine.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -18,18 +18,19 @@ import service.ms_search_engine.model.BatchSpectrumSearchModel;
 import service.ms_search_engine.utility.BatchSpectrumSearchRowMapper;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
-public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
+public class BatchSearchRdbDaoImpl extends BaseDao implements BatchSearchRdbDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private final JdbcTemplate jdbcTemplate;
+
     @Autowired
-    public BatchSearchRdbDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public BatchSearchRdbDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -38,13 +39,32 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
                 batchSpectrumSearchDto.getPeakListS3FileSrc() == null ||
                 batchSpectrumSearchDto.getMs2spectrumDataSource() == null ||
                 batchSpectrumSearchDto.getMail() == null
-//            batchSpectrumSearchDto.getAuthorId()==null
+
         ) {
             throw new QueryParameterException("parameter is not complete");
         }
-        String sqlString = "INSERT INTO ms_search_library.batch_task_info (s3_peakList_src, s3_ms2file_src, author_id, " +
-                "task_status, mail, ms2spectrumDataSource, task_description) " +
-                "VALUES (:s3_peakList_src, :s3_ms2file_src, :author_id, :task_status, :mail, :ms2spectrumDataSource, :taskDescription);";
+        StringBuffer sb = new StringBuffer();
+        sb.append(" INSERT INTO ");
+        sb.append("  batch_task_info ");
+        sb.append(" ( ");
+        sb.append("     s3_peakList_src ");
+        sb.append("     ,s3_ms2file_src ");
+        sb.append("     ,author_id ");
+        sb.append("     ,task_status ");
+        sb.append("     ,mail ");
+        sb.append("     ,ms2spectrumDataSource ");
+        sb.append("     ,task_description ");
+        sb.append(" ) ");
+        sb.append(" VALUES ");
+        sb.append(" ( ");
+        sb.append("     :s3_peakList_src ");
+        sb.append("     ,:s3_ms2file_src ");
+        sb.append("     ,:author_id ");
+        sb.append("     ,:task_status ");
+        sb.append("     ,:mail ");
+        sb.append("     ,:ms2spectrumDataSource ");
+        sb.append("     ,:taskDescription ");
+        sb.append("  ) ");
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -58,7 +78,7 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         map.addValue("taskDescription", batchSpectrumSearchDto.getTaskDescription());
 
 
-        int insertStatus = namedParameterJdbcTemplate.update(sqlString, map, keyHolder);
+        int insertStatus = namedParameterJdbcTemplate.update(sb.toString(), map, keyHolder);
         if (insertStatus == 0) {
             throw new DatabaseInsertErrorException("insert failed");
         }
