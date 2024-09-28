@@ -42,6 +42,7 @@ public class SentMailTaskProcessor {
     private boolean listenForMailTask() {
             while (true) {
                 try {
+                    Thread.sleep(1000); // 避免CPU負載過高
                     if (redisMailQueueService.queueExists()) {
                         ObjectMapper mapper = new ObjectMapper();
                         String MailString = redisMailQueueService.getAndPopLastMail();
