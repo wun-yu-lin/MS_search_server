@@ -9,10 +9,12 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.constant.TaskStatus;
 import service.ms_search_engine.dao.BatchSearchRdbDao;
 import service.ms_search_engine.dao.BatchSearchS3FileDao;
@@ -55,8 +57,8 @@ public class TaskProcessorService {
     private final SpectrumDao spectrumDao;
 
 
-    @Value("${aws.cloudFront.endpoint}")
-    private String awsCloudFrontEndpoint;
+    @Autowired
+    private ServerConfig config;
 
     private FutureTask<Boolean> futureTask;
 
@@ -81,11 +83,11 @@ public class TaskProcessorService {
 
 
     private boolean listenForTasks() throws RedisErrorException, JsonProcessingException, QueryParameterException, DatabaseUpdateErrorException, InterruptedException {
+
         while (true) {
             try {
-                Thread.sleep(1000); //避免 cpu loading 過高
                 if (redisTaskQueueService.queueExists()) {
-
+                    String awsCloudFrontEndpoint = config.getAwsCloudFrontEndpoint();
                     String taskDataStr = redisTaskQueueService.getAndPopLastTask();
                     ObjectMapper mapper = new ObjectMapper();
                     BatchSpectrumSearchDto batchSpectrumSearchDto = mapper.readValue(taskDataStr, BatchSpectrumSearchDto.class);
