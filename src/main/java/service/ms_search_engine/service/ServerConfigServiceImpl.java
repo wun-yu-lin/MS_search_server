@@ -1,9 +1,9 @@
 package service.ms_search_engine.service;
 
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.constant.RedisConstant;
@@ -28,7 +28,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
     ServerConfig serverConfig;
 
     @Override
-    @Bean
+    @PostConstruct
     public void loadServerConfigFromRedis() throws IllegalAccessException, RedisErrorException {
         String redisStr = (String) redisUtil.getString(RedisConstant.SERVER_CONFIG);
         if (redisStr == null) {
@@ -49,7 +49,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
     }
 
     @Override
-    @Bean
+    @PostConstruct
     public String sendServerTokenToAdminMail() {
 
         if (serverConfig.getServerMode().isApi()) {

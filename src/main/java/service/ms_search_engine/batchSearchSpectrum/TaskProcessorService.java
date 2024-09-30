@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
 import com.opencsv.ICSVWriter;
+import jakarta.annotation.PostConstruct;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,9 +70,9 @@ public class TaskProcessorService {
         this.batchSearchRdbDao = batchSearchRdbDao;
         this.batchSearchS3FileDao = batchSearchS3FileDao;
         this.spectrumDao = spectrumDao;
-        runFutureTaskListener();
     }
 
+    @PostConstruct
     private synchronized void runFutureTaskListener(){
         if (this.futureTask == null){
             this.futureTask = new FutureTask<>(this::listenForTasks);

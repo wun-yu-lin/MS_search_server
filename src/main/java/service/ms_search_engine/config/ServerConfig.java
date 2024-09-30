@@ -1,10 +1,10 @@
 package service.ms_search_engine.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.PostConstruct;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.utility.JacksonUtils;
@@ -117,7 +117,7 @@ public class ServerConfig {
         }
     }
 
-    @Bean
+    @PostConstruct
     private void genRandomToken() {
         setServerMode();
         if (serverMode.isApi()){
