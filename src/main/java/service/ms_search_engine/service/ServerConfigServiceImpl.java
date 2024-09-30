@@ -56,7 +56,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
             String token = serverConfig.getServerConfigToken();
             String adminMail = serverConfig.getAdminMail();
             try {
-                sentMailService.sendMailWithText(adminMail, "MS searach server token", "token: " + token);
+                sentMailService.sendMailWithText(adminMail, "MS search server token", "token: " + token);
             } catch (Exception e) {
                 log.warn("sendServerTokenToAdminMail send mail failed: ", e);
             }
