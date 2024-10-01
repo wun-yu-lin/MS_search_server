@@ -1,9 +1,10 @@
 package service.ms_search_engine.exception;
 
-import org.springframework.http.ResponseEntity;
 
-public class S3DataUploadException extends Exception {
+import service.ms_search_engine.constant.StatusCode;
+
+public class S3DataUploadException extends MsApiException {
     public S3DataUploadException(String message) {
-        super(message);
+        super(StatusCode.Base.BASE_REDIS_ERROR, message);
     }
 }

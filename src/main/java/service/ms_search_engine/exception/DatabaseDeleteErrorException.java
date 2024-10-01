@@ -1,9 +1,9 @@
 package service.ms_search_engine.exception;
 
-import java.sql.SQLException;
+import service.ms_search_engine.constant.StatusCode;
 
-public class DatabaseDeleteErrorException extends SQLException {
+public class DatabaseDeleteErrorException extends MsApiException {
     public DatabaseDeleteErrorException(String message){
-        super(message);
+        super(StatusCode.Base.BASE_DB_ERROR, message);
     }
 }

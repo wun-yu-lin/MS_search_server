@@ -62,6 +62,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/picture/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/demoData/**").authenticated()
 
+                        .requestMatchers(HttpMethod.POST, "/api/config/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()

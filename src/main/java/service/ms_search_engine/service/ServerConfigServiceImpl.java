@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.constant.RedisConstant;
@@ -29,6 +30,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
 
     @Override
     @PostConstruct
+    @Scheduled(cron = "0 */15 * * * ?") // 每 15 分鐘刷新一次
     public void loadServerConfigFromRedis() throws IllegalAccessException, RedisErrorException {
         String redisStr = (String) redisUtil.getString(RedisConstant.SERVER_CONFIG);
         if (redisStr == null) {
@@ -36,6 +38,13 @@ public class ServerConfigServiceImpl implements ServerConfigService {
             redisUtil.setString(RedisConstant.SERVER_CONFIG, redisStr);
         }
         serverConfig.loadServerConfig(JacksonUtils.jsonToObject(redisStr, ServerConfig.class));
+    }
+
+    @Override
+    public void uploadAndLoadServerConfigToRedis(ServerConfig updateConfig) throws IllegalAccessException, RedisErrorException {
+        serverConfig.loadServerConfig(updateConfig);
+        String redisStr = serverConfig.getPropertiesString();
+        redisUtil.setString(RedisConstant.SERVER_CONFIG, redisStr);
     }
 
     @Override

@@ -64,6 +64,13 @@ public class ControllerExceptionAdvice {
                 .body("S3DataDownloadException: " + exception.getMessage());
     }
 
+    @ExceptionHandler(MsApiException.class)
+    public ResponseEntity<String> prepareResponseForMsApiException(MsApiException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(MsApiException.class + exception.getMessage());
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> prepareResponseForException(Exception exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

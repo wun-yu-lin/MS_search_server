@@ -1,5 +1,6 @@
 package service.ms_search_engine.service;
 
+import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.exception.RedisErrorException;
 
 public interface ServerConfigService {
@@ -8,6 +9,12 @@ public interface ServerConfigService {
      * 載入所有 SeverConfig from Redis
      */
     void loadServerConfigFromRedis() throws IllegalAccessException, RedisErrorException;
+
+
+    /**
+     * 寫入有提供的參數到 redis, 並刷新 serverConfig
+     */
+    void uploadAndLoadServerConfigToRedis(ServerConfig serverConfig) throws IllegalAccessException, RedisErrorException;
 
     String getServiceConfigToken();
 
