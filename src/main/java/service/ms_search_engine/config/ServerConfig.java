@@ -63,11 +63,6 @@ public class ServerConfig {
     @Value("${redis.taskQueue.maxTotal}")
     private int redisTaskQueueMaxTotal;
 
-    @Value("${server-config.private-key}")
-    @JsonIgnore
-    @Getter(AccessLevel.NONE)
-    private String serverConfigPrivateKey;
-
     @JsonIgnore
     private String serverConfigToken;
 
