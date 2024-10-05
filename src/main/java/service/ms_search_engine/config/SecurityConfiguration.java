@@ -26,10 +26,15 @@ public class SecurityConfiguration extends BaseConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .loginPage("/login") // 自定義的登錄頁面
+                        .defaultSuccessUrl("/be", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
-                        .defaultSuccessUrl("/OAuthSuccess", false)
+                        .defaultSuccessUrl("/OAuthSuccess", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
