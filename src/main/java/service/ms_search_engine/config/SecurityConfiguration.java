@@ -14,13 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {
-
-    @Value("spring.security.admin.username")
-    private String adminUsername;
-
-    @Value("spring.security.admin.password")
-    private String adminPassword;
+public class SecurityConfiguration extends BaseConfig {
 
     private static final String[] AUTH_WHITELIST = {
             "/api-doc/**",
@@ -82,8 +76,8 @@ public class SecurityConfiguration {
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         return new InMemoryUserDetailsManager(
-                User.withUsername(adminUsername)
-                        .password("{noop}"+adminPassword)
+                User.withUsername(serverConfig.getAdminUsername())
+                        .password("{noop}"+serverConfig.getAdminPassword())
                         .authorities("ADMIN", "USER")
                         .roles("ADMIN", "USER")
                         .build());

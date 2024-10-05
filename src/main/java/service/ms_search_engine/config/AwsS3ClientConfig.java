@@ -12,14 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AwsS3ClientConfig {
-
-    @Autowired
-    private ServerConfig config;
+public class AwsS3ClientConfig extends BaseConfig {
 
     @Bean
     public AmazonS3 initS3Client() {
-        AWSCredentials credentials = new BasicAWSCredentials(config.getAwsS3AccessKey() , config.getAwsS3SecretKey());
+        AWSCredentials credentials = new BasicAWSCredentials(serverConfig.getAwsS3AccessKey() , serverConfig.getAwsS3SecretKey());
         return AmazonS3ClientBuilder.standard()
                 .withRegion(Regions.AP_NORTHEAST_1)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

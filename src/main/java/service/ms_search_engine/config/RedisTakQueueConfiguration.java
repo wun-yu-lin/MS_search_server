@@ -14,10 +14,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import java.time.Duration;
 
 @Configuration
-public class RedisTakQueueConfiguration {
+public class RedisTakQueueConfiguration extends BaseConfig {
 
-    @Autowired
-    ServerConfig serverConfig;
 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {

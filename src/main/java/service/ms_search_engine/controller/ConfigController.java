@@ -15,8 +15,6 @@ import service.ms_search_engine.service.ServerConfigService;
 @RequestMapping("/api/config")
 public class ConfigController extends BaseController {
 
-    @Autowired
-    private ServerConfig serverConfig;
 
     @Autowired
     private ServerConfigService serverConfigService;

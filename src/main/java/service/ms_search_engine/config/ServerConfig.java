@@ -2,7 +2,6 @@ package service.ms_search_engine.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.PostConstruct;
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -79,6 +78,15 @@ public class ServerConfig {
 
     @Value("${spring.mail.username}")
     private String adminMail;
+
+    @Value("spring.security.admin.username")
+    @JsonIgnore
+    private String adminUsername;
+
+    @Value("spring.security.admin.password")
+    @JsonIgnore
+    private String adminPassword;
+
 
     public enum ServerMode {
         API,
