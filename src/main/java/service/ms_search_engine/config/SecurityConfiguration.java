@@ -26,6 +26,7 @@ public class SecurityConfiguration extends BaseConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
                         .defaultSuccessUrl("/OAuthSuccess", false)
@@ -34,7 +35,6 @@ public class SecurityConfiguration extends BaseConfig {
                 )
                 .headers(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         //swagger hub
