@@ -25,13 +25,8 @@ public class SecurityConfiguration extends BaseConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(form -> form
-                        .loginPage("/login") // 自定義的登錄頁面
-                        .defaultSuccessUrl("/be", true)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                )
+                //.csrf(AbstractHttpConfigurer::disable)
+                .formLogin(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
                         .defaultSuccessUrl("/OAuthSuccess", true)
