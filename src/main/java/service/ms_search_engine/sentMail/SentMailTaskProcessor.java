@@ -2,6 +2,7 @@ package service.ms_search_engine.sentMail;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -27,9 +28,9 @@ public class SentMailTaskProcessor {
     public SentMailTaskProcessor(service.ms_search_engine.sentMail.SentMailService sentMailService, RedisMailQueueService redisMailQueueService) {
         this.sentMailService = sentMailService;
         this.redisMailQueueService = redisMailQueueService;
-        runFutureTaskListener();
     }
 
+    @PostConstruct
     private synchronized void runFutureTaskListener(){
         if (futureTask == null){
             futureTask = new FutureTask<>(this::listenForMailTask);

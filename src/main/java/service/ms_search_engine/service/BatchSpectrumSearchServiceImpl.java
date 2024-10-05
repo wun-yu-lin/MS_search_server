@@ -154,7 +154,7 @@ public class BatchSpectrumSearchServiceImpl implements BatchSpectrumSearchServic
 
     @Override
     @Transactional
-    public Boolean deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException {
+    public Boolean deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException, DatabaseDeleteErrorException {
         BatchSpectrumSearchModel batchSpectrumSearchModel = batchSearchRdbDao.getTaskInfoById(id);
             batchSearchS3FileDao.deleteFileByKey(batchSpectrumSearchModel.getS3Ms2FileSrc());
             batchSearchS3FileDao.deleteFileByKey(batchSpectrumSearchModel.getS3PeakListSrc());

@@ -1,4 +1,4 @@
-package service.ms_search_engine;
+package service.ms_search_engine.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,13 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {
-
-    @Value("spring.security.admin.username")
-    private String adminUsername;
-
-    @Value("spring.security.admin.password")
-    private String adminPassword;
+public class SecurityConfiguration extends BaseConfig {
 
     private static final String[] AUTH_WHITELIST = {
             "/api-doc/**",
@@ -62,6 +56,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/picture/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/demoData/**").authenticated()
 
+                        .requestMatchers(HttpMethod.POST, "/api/config/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
@@ -81,8 +76,8 @@ public class SecurityConfiguration {
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         return new InMemoryUserDetailsManager(
-                User.withUsername(adminUsername)
-                        .password("{noop}"+adminPassword)
+                User.withUsername(serverConfig.getAdminUsername())
+                        .password("{noop}"+serverConfig.getAdminPassword())
                         .authorities("ADMIN", "USER")
                         .roles("ADMIN", "USER")
                         .build());
