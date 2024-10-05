@@ -79,11 +79,11 @@ public class ServerConfig {
     @Value("${spring.mail.username}")
     private String adminMail;
 
-    @Value("spring.security.admin.username")
+    @Value("${spring.security.admin.username}")
     @JsonIgnore
     private String adminUsername;
 
-    @Value("spring.security.admin.password")
+    @Value("${spring.security.admin.password}")
     @JsonIgnore
     private String adminPassword;
 
