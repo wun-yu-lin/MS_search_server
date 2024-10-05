@@ -28,14 +28,13 @@ public class SecurityConfiguration extends BaseConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
-                        .defaultSuccessUrl("/OAuthSuccess", true)
+                        .defaultSuccessUrl("/OAuthSuccess", false)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .headers(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
-
+                .formLogin(Customizer.withDefaults())
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         //swagger hub
@@ -45,9 +44,11 @@ public class SecurityConfiguration extends BaseConfig {
 
                         //static page
                         .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/be/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/be/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/be/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/logIn").permitAll()
                         //static resources
                         //loaderio
                         .requestMatchers("/loaderio-4ec2846ed840a5bee0888f814d57dd62.txt").permitAll()
@@ -57,7 +58,8 @@ public class SecurityConfiguration extends BaseConfig {
                         .requestMatchers(HttpMethod.GET, "/picture/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/demoData/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/api/config/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/config/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/config/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
