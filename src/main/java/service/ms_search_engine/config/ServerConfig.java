@@ -127,6 +127,8 @@ public class ServerConfig {
             serverConfigToken = UUID.randomUUID().toString().replace("-", "");
         }
         System.out.println("serverConfigToken: " + serverConfigToken);
+        System.out.println("spring.security.admin.username:" + adminUsername);
+        System.out.println("spring.security.admin.password:" +  adminPassword);
     }
     @JsonIgnore
     private void setServerMode(){

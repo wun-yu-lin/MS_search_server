@@ -1,0 +1,72 @@
+// Container for the admin dashboard
+.admin-dashboard {
+  display: flex;
+  height: 80vh;
+  background-color: #f8f9fa;
+  margin: 50px;
+}
+
+// Sidebar (Navigation)
+.admin-nav {
+  width: 220px;
+  background-color: #2c3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 15px;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 12px 15px;
+    display: block;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background-color: #34495e;
+      border-radius: 4px;
+    }
+  }
+}
+
+// Main content area
+.admin-content {
+  flex-grow: 1;
+  padding: 30px;
+  background-color: #ecf0f1;
+
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 15px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+  }
+
+  // Placeholder for dynamic content
+  .content-placeholder {
+    background-color: #ffffff;
+    border: 1px solid #bdc3c7;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    p {
+      color: #2c3e50;
+    }
+  }
+}
