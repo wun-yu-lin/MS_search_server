@@ -1,0 +1,111 @@
+@charset "UTF-8";
+.config-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 800px;
+  margin: 30px auto;
+  text-align: left;
+}
+.config-form h2 {
+  color: dimgrey; /* 將字體顏色改為白色 */
+  text-align: center; /* 讓標題居中 */
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+.form-group input[type=text],
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  resize: none;
+}
+.form-group input[type=text]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.form-group button {
+  padding: 8px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.form-group button.success {
+  background-color: #28a745;
+  color: #fff;
+}
+.form-group button.fail {
+  background-color: #dc3545;
+  color: #fff;
+}
+.form-group #fetchConfigBtn {
+  background-color: #007bff;
+  color: white;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.form-group #fetchConfigBtn:hover {
+  background-color: #0056b3;
+}
+
+.reload-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.reload-section #updateConfigBtn,
+.reload-section #reloadBtn {
+  background-color: #28a745;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.reload-section #updateConfigBtn:hover,
+.reload-section #reloadBtn:hover {
+  background-color: #218838;
+}
+.reload-section #status-message {
+  margin-left: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.reload-section #status-message.success {
+  color: green;
+}
+.reload-section #status-message.fail {
+  color: red;
+}
+
+.response-section label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+.response-section .response-box {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  height: 100px;
+  overflow-y: auto;
+}
+
+/*# sourceMappingURL=serverConfig.css.map */

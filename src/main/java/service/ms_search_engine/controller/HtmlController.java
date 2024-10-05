@@ -52,4 +52,10 @@ public class HtmlController extends BaseController {
 
         return "OAuthSuccessPage";
     }
+
+    @GetMapping("/be/serverConfig")
+    public String config(){
+
+        return "serverConfig";
+    }
 }

@@ -79,11 +79,11 @@ public class ServerConfig {
     @Value("${spring.mail.username}")
     private String adminMail;
 
-    @Value("spring.security.admin.username")
+    @Value("${spring.security.admin.username}")
     @JsonIgnore
     private String adminUsername;
 
-    @Value("spring.security.admin.password")
+    @Value("${spring.security.admin.password}")
     @JsonIgnore
     private String adminPassword;
 
@@ -127,6 +127,8 @@ public class ServerConfig {
             serverConfigToken = UUID.randomUUID().toString().replace("-", "");
         }
         System.out.println("serverConfigToken: " + serverConfigToken);
+        System.out.println("spring.security.admin.username:" + adminUsername);
+        System.out.println("spring.security.admin.password:" +  adminPassword);
     }
     @JsonIgnore
     private void setServerMode(){
