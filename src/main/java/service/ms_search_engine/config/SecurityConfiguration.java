@@ -25,8 +25,8 @@ public class SecurityConfiguration extends BaseConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                //.csrf(AbstractHttpConfigurer::disable)
-                .formLogin(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+//                .formLogin(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
                         .defaultSuccessUrl("/OAuthSuccess", true)
