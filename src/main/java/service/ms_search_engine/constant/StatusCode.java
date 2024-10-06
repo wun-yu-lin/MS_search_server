@@ -19,7 +19,9 @@ public class StatusCode {
 
         BASE_REDIS_ERROR("E9903"),
 
-        BASE_S3_ERROR("E9904");
+        BASE_S3_ERROR("E9904"),
+
+        BASE_AUTH_ERROR("E9905");
 
         @JsonValue
         private final String status;
