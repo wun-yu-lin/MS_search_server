@@ -1,6 +1,5 @@
 package service.ms_search_engine.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +10,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -44,8 +47,9 @@ public class SecurityConfiguration extends BaseConfig {
 
                         //static page
                         .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/be/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/","/msSearch", "/be").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/be").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/be/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logIn").permitAll()
                         //static resources

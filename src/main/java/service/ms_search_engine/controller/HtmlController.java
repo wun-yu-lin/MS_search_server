@@ -56,11 +56,13 @@ public class HtmlController extends BaseController {
     }
 
     @GetMapping("/be")
+    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
     public String be(){
         return "be";
     }
 
     @GetMapping("/be/serverConfig")
+    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
     public String config(){
 
         return "serverConfig";
