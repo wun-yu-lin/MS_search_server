@@ -38,15 +38,14 @@ public class SecurityConfiguration extends BaseConfig {
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         //swagger hub
-                        //.requestMatchers(AUTH_WHITELIST).authenticated()
+                        .requestMatchers(AUTH_WHITELIST).authenticated()
                         .requestMatchers(AUTH_WHITELIST).hasAnyRole("ADMIN")
 
 
                         //static page
                         .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
                         .requestMatchers(HttpMethod.GET, "/be/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/be").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/","/msSearch", "/be").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logIn").permitAll()
                         //static resources
@@ -69,7 +68,7 @@ public class SecurityConfiguration extends BaseConfig {
                         .requestMatchers("/api/member/auth").permitAll()
                         .requestMatchers("/api/member/**").authenticated()
 
-//                        .anyRequest().denyAll()
+                        .anyRequest().denyAll()
                 );
 
 
