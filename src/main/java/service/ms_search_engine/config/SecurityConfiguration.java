@@ -69,7 +69,7 @@ public class SecurityConfiguration extends BaseConfig {
                         .requestMatchers("/api/member/auth").permitAll()
                         .requestMatchers("/api/member/**").authenticated()
 
-                        .anyRequest().denyAll()
+//                        .anyRequest().denyAll()
                 );
 
 
