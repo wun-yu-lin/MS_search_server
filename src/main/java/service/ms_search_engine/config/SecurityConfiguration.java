@@ -45,6 +45,7 @@ public class SecurityConfiguration extends BaseConfig {
                         //static page
                         .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
                         .requestMatchers(HttpMethod.GET, "/be/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/be").authenticated()
                         .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logIn").permitAll()
