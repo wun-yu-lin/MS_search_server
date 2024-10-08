@@ -55,14 +55,14 @@ public class HtmlController extends BaseController {
         return "OAuthSuccessPage";
     }
 
-    @GetMapping("/be")
+    @GetMapping("/setting")
 //    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
     public String be(){
         System.out.println("test");
-        return "be";
+        return "setting";
     }
 
-    @GetMapping("/be/serverConfig")
+    @GetMapping("/setting/serverConfig")
     @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
     public String config(){
 
