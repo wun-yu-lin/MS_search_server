@@ -56,8 +56,9 @@ public class HtmlController extends BaseController {
     }
 
     @GetMapping("/be")
-    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
+//    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
     public String be(){
+        System.out.println("test");
         return "be";
     }
 
