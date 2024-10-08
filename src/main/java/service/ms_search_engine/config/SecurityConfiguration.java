@@ -30,9 +30,7 @@ public class SecurityConfiguration extends BaseConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors
-                        .configurationSource(createCorsConfig())
-                )
+                .cors(Customizer.withDefaults())
 //                .formLogin(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
