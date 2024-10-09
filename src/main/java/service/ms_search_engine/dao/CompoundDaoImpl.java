@@ -13,6 +13,7 @@ import service.ms_search_engine.utility.CompoundDataRowMapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class CompoundDaoImpl implements CompoundDao {
@@ -28,15 +29,29 @@ public class CompoundDaoImpl implements CompoundDao {
     @Override
     public List<CompoundDataModel> getCompoundDataByParameter(CompoundQueryParaDto compoundQueryParaDto) throws QueryParameterException {
 
-        String sqlString = "SELECT cd.compound_classification_id, cd.id, cd.name, cd.inchi_key, cd.inchi, cd.formula, cd.smile, cd.cas, cd.exact_mass, cd.mole_file, cd.kind FROM ms_search_library.compound_data cd WHERE 1=1";
-        HashMap<String, Object> map = new HashMap<>();
+        StringBuffer sqlBuffer = new StringBuffer();
+        sqlBuffer.append(" SELECT ");
+        sqlBuffer.append("     cd.compound_classification_id, ");
+        sqlBuffer.append("     cd.id, ");
+        sqlBuffer.append("     cd.name, ");
+        sqlBuffer.append("     cd.inchi_key, ");
+        sqlBuffer.append("     cd.inchi, ");
+        sqlBuffer.append("     cd.formula, ");
+        sqlBuffer.append("     cd.smile, ");
+        sqlBuffer.append("     cd.cas, ");
+        sqlBuffer.append("     cd.exact_mass, ");
+        sqlBuffer.append("     cd.mole_file, ");
+        sqlBuffer.append("     cd.kind ");
+        sqlBuffer.append(" FROM ms_search_library.compound_data cd ");
+        sqlBuffer.append(" WHERE 1=1 ");
+
+        Map<String, Object> map = new HashMap<>();
         if (compoundQueryParaDto.getInChiKey() != null) {
-            sqlString = sqlString + " AND cd.inchi_key = :inChiKey";
+            sqlBuffer.append(" AND cd.inchi_key = :inChiKey ");
             map.put("inChiKey", compoundQueryParaDto.getInChiKey());
         }
 
-        List<CompoundDataModel> compoundDataModelList = namedParameterJdbcTemplate.query(sqlString, map, new CompoundDataRowMapper());
-        return compoundDataModelList;
+        return namedParameterJdbcTemplate.query(sqlBuffer.toString(), map, new CompoundDataRowMapper());
     }
 
     @Override
@@ -44,16 +59,29 @@ public class CompoundDaoImpl implements CompoundDao {
         if (id < 0) {
             throw new QueryParameterException("SQL query failed, id must be positive integer");
         }
+        StringBuffer sqlBuffer = new StringBuffer();
+        sqlBuffer.append(" SELECT ");
+        sqlBuffer.append("     cd.compound_classification_id, ");
+        sqlBuffer.append("     cd.id, ");
+        sqlBuffer.append("     cd.name, ");
+        sqlBuffer.append("     cd.inchi_key, ");
+        sqlBuffer.append("     cd.inchi, ");
+        sqlBuffer.append("     cd.formula, ");
+        sqlBuffer.append("     cd.smile, ");
+        sqlBuffer.append("     cd.cas, ");
+        sqlBuffer.append("     cd.exact_mass, ");
+        sqlBuffer.append("     cd.mole_file, ");
+        sqlBuffer.append("     cd.kind ");
+        sqlBuffer.append(" FROM ms_search_library.compound_data cd ");
+        sqlBuffer.append(" WHERE cd.id = :id;");
 
-        String sqlString = "SELECT cd.compound_classification_id, cd.id, cd.name, cd.inchi_key, cd.inchi, cd.formula, cd.smile, cd.cas, cd.exact_mass, cd.mole_file, cd.kind FROM ms_search_library.compound_data cd WHERE id = :id;";
-        HashMap<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", id);
-        CompoundDataModel compoundDataModel = namedParameterJdbcTemplate.queryForObject(sqlString, map, new CompoundDataRowMapper());
-        return compoundDataModel;
+        return namedParameterJdbcTemplate.queryForObject(sqlBuffer.toString(), map, new CompoundDataRowMapper());
     }
 
     @Override
-    public Boolean postCompoundData(CompoundDataModel compoundDataModel) throws DatabaseInsertErrorException, QueryParameterException {
+    public void postCompoundData(CompoundDataModel compoundDataModel) throws DatabaseInsertErrorException, QueryParameterException {
         //check if the compound data with the same InChiKey already exists in the database, throw error
         CompoundQueryParaDto compoundQueryParaDto = new CompoundQueryParaDto();
         compoundQueryParaDto.setInChiKey(compoundDataModel.getInChiKey());
@@ -62,9 +90,34 @@ public class CompoundDaoImpl implements CompoundDao {
             throw new DatabaseInsertErrorException("The compound data with the same InChiKey already exists in the database");
         }
 
-        String sqlString = "INSERT INTO ms_search_library.compound_data (compound_classification_id, name, inchi_key, inchi, formula, smile, cas, exact_mass, mole_file, kind) VALUES" +
-                "(:compoundClassificationId, :name, :inChiKey, :inChi, :formula, :smile, :cas, :exactMass, :moleFile, :kind)";
-        HashMap<String, Object> map = new HashMap<>();
+        StringBuffer sqlBuffer = new StringBuffer();
+        sqlBuffer.append(" INSERT INTO ms_search_library.compound_data ");
+        sqlBuffer.append(" ( ");
+        sqlBuffer.append("     compound_classification_id, ");
+        sqlBuffer.append("     name, ");
+        sqlBuffer.append("     inchi_key, ");
+        sqlBuffer.append("     inchi, ");
+        sqlBuffer.append("     formula, ");
+        sqlBuffer.append("     smile, ");
+        sqlBuffer.append("     cas, ");
+        sqlBuffer.append("     exact_mass, ");
+        sqlBuffer.append("     mole_file, ");
+        sqlBuffer.append("     kind ");
+        sqlBuffer.append(" ) ");
+        sqlBuffer.append(" VALUES ");
+        sqlBuffer.append(" ( ");
+        sqlBuffer.append("     :compoundClassificationId, ");
+        sqlBuffer.append("     :name, ");
+        sqlBuffer.append("     :inChiKey, ");
+        sqlBuffer.append("     :inChi, ");
+        sqlBuffer.append("     :formula, ");
+        sqlBuffer.append("     :smile, ");
+        sqlBuffer.append("     :cas, ");
+        sqlBuffer.append("     :exactMass, ");
+        sqlBuffer.append("     :moleFile, ");
+        sqlBuffer.append("     :kind ");
+        sqlBuffer.append(" ); ");
+        Map<String, Object> map = new HashMap<>();
         map.put("compoundClassificationId", compoundDataModel.getCompoundClassificationId());
         map.put("name", compoundDataModel.getName());
         map.put("inChiKey", compoundDataModel.getInChiKey());
@@ -76,26 +129,32 @@ public class CompoundDaoImpl implements CompoundDao {
         map.put("moleFile", compoundDataModel.getMoleFile());
         map.put("kind", compoundDataModel.getKind());
 
-        int insertStatus = namedParameterJdbcTemplate.update(sqlString, map);
-
-        return insertStatus == 1;
+        int insertStatus = namedParameterJdbcTemplate.update(sqlBuffer.toString(), map);
+        if (insertStatus == 0) {
+            throw new DatabaseInsertErrorException("postCompoundData error!");
+        }
     }
 
     @Override
     public List<CompoundClassificationModel> getCompoundClassificationByParameter(CompoundQueryParaDto compoundQueryParaDto) throws QueryParameterException {
-        String sqlString = "SELECT cc.id, cc.classification_kingdom, cc.classification_superclass, cc.classification_class, cc.classification_subclass, cc.classification_direct_parent FROM ms_search_library.compound_classification cc WHERE 1=1 ";
-        HashMap<String, Object> map = new HashMap<>();
+        StringBuffer sqlBuffer = new StringBuffer();
+        sqlBuffer.append(" SELECT ");
+        sqlBuffer.append("     cc.id, ");
+        sqlBuffer.append("     cc.classification_kingdom, ");
+        sqlBuffer.append("     cc.classification_superclass, ");
+        sqlBuffer.append("     cc.classification_class, ");
+        sqlBuffer.append("     cc.classification_subclass, ");
+        sqlBuffer.append("     cc.classification_direct_parent ");
+        sqlBuffer.append(" FROM ms_search_library.compound_classification cc ");
+        sqlBuffer.append(" WHERE 1=1 ");
+        Map<String, Object> map = new HashMap<>();
         if (compoundQueryParaDto.getClassificationDirectParent() == null) {
             throw new QueryParameterException("SQL query failed, classificationDirectParent must not be null");
         }
-        if (compoundQueryParaDto.getClassificationDirectParent() != null) {
-            sqlString = sqlString + " AND cc.classification_direct_parent = :classificationDirectParent";
-            map.put("classificationDirectParent", compoundQueryParaDto.getClassificationDirectParent());
-        }
+        sqlBuffer.append(" AND cc.classification_direct_parent = :classificationDirectParent ");
+        map.put("classificationDirectParent", compoundQueryParaDto.getClassificationDirectParent());
 
-        List<CompoundClassificationModel> compoundClassificationModelList = namedParameterJdbcTemplate.query(sqlString, map, new CompoundClassificationRowMapper());
-
-        return compoundClassificationModelList;
+        return namedParameterJdbcTemplate.query(sqlBuffer.toString(), map, new CompoundClassificationRowMapper());
     }
 
     @Override
@@ -103,16 +162,25 @@ public class CompoundDaoImpl implements CompoundDao {
         if (id < 0) {
             throw new QueryParameterException("SQL query failed, id must be positive integer");
         }
-        String sqlString = "SELECT cc.id, cc.classification_kingdom, cc.classification_superclass, cc.classification_class, cc.classification_subclass, cc.classification_direct_parent FROM ms_search_library.compound_classification cc WHERE cc.id = :id;";
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        CompoundClassificationModel compoundClassificationModel = namedParameterJdbcTemplate.queryForObject(sqlString, map, new CompoundClassificationRowMapper());
+        StringBuffer sqlBuffer = new StringBuffer();
+        sqlBuffer.append("SELECT ");
+        sqlBuffer.append("    cc.id, ");
+        sqlBuffer.append("    cc.classification_kingdom, ");
+        sqlBuffer.append("    cc.classification_superclass, ");
+        sqlBuffer.append("    cc.classification_class, ");
+        sqlBuffer.append("    cc.classification_subclass, ");
+        sqlBuffer.append("    cc.classification_direct_parent ");
+        sqlBuffer.append("FROM ms_search_library.compound_classification cc ");
+        sqlBuffer.append("WHERE cc.id = :id ");
 
-        return compoundClassificationModel;
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+
+        return namedParameterJdbcTemplate.queryForObject(sqlBuffer.toString(), map, new CompoundClassificationRowMapper());
     }
 
     @Override
-    public Boolean postCompoundClassification(CompoundClassificationModel compoundClassificationModel) throws DatabaseInsertErrorException, QueryParameterException {
+    public void postCompoundClassification(CompoundClassificationModel compoundClassificationModel) throws DatabaseInsertErrorException, QueryParameterException {
         //check if the compound classification table with the same data already exists in the database, throw error
         CompoundQueryParaDto compoundQueryParaDto = new CompoundQueryParaDto();
         compoundQueryParaDto.setClassificationDirectParent(compoundClassificationModel.getClassificationDirectParent());
@@ -126,7 +194,7 @@ public class CompoundDaoImpl implements CompoundDao {
                 " (:classificationKingdom, :classificationSuperclass, :classificationClass, " +
                 " :classificationSubclass, :classificationDirectParent);";
 
-        HashMap<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("classificationKingdom", compoundClassificationModel.getClassificationKingdom());
         map.put("classificationSuperclass", compoundClassificationModel.getClassificationSuperclass());
         map.put("classificationClass", compoundClassificationModel.getClassificationClass());
@@ -134,6 +202,8 @@ public class CompoundDaoImpl implements CompoundDao {
         map.put("classificationDirectParent", compoundClassificationModel.getClassificationDirectParent());
 
         int insertStatus = namedParameterJdbcTemplate.update(sqlString, map);
-        return insertStatus == 1;
+        if (insertStatus == 0){
+            throw new DatabaseInsertErrorException("postCompoundClassification error!");
+        }
     }
 }

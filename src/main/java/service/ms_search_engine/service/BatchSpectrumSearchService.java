@@ -11,12 +11,12 @@ import java.util.List;
 
 public interface BatchSpectrumSearchService {
     BatchSpectrumSearchModel postFileUpload(BatchSpectrumSearchDto batchSpectrumSearchDto) throws S3DataUploadException, QueryParameterException, DatabaseInsertErrorException;
-    Boolean postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException;
+    void postTaskSubmit(BatchSpectrumSearchDto batchSpectrumSearchDto) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException;
     BatchSpectrumSearchModel getTaskInfoById(int id) throws QueryParameterException, SQLException;
 
     List<BatchSpectrumSearchModel> getTaskInfoByParameter(BatchTaskSearchDto batchTaskSearchDto) throws QueryParameterException, SQLException;
-    Boolean deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException, DatabaseDeleteErrorException;
+    void deleteTaskById(int id) throws QueryParameterException, SQLException, S3DataUploadException;
 
-    Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException, S3DataUploadException;
+    void changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException, S3DataUploadException;
 
 }

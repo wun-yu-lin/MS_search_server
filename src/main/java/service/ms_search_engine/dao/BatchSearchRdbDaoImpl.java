@@ -1,9 +1,10 @@
 package service.ms_search_engine.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -15,21 +16,20 @@ import service.ms_search_engine.exception.DatabaseInsertErrorException;
 import service.ms_search_engine.exception.DatabaseUpdateErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.BatchSpectrumSearchModel;
-import service.ms_search_engine.utility.BatchSpectrumSearchRowMapper;
-
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
-public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
+public class BatchSearchRdbDaoImpl extends BaseDao implements BatchSearchRdbDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private final JdbcTemplate jdbcTemplate;
+
     @Autowired
-    public BatchSearchRdbDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public BatchSearchRdbDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -38,13 +38,32 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
                 batchSpectrumSearchDto.getPeakListS3FileSrc() == null ||
                 batchSpectrumSearchDto.getMs2spectrumDataSource() == null ||
                 batchSpectrumSearchDto.getMail() == null
-//            batchSpectrumSearchDto.getAuthorId()==null
+
         ) {
             throw new QueryParameterException("parameter is not complete");
         }
-        String sqlString = "INSERT INTO ms_search_library.batch_task_info (s3_peakList_src, s3_ms2file_src, author_id, " +
-                "task_status, mail, ms2spectrumDataSource, task_description) " +
-                "VALUES (:s3_peakList_src, :s3_ms2file_src, :author_id, :task_status, :mail, :ms2spectrumDataSource, :taskDescription);";
+        StringBuffer sb = new StringBuffer();
+        sb.append(" INSERT INTO ");
+        sb.append("  batch_task_info ");
+        sb.append(" ( ");
+        sb.append("     s3_peakList_src ");
+        sb.append("     ,s3_ms2file_src ");
+        sb.append("     ,author_id ");
+        sb.append("     ,task_status ");
+        sb.append("     ,mail ");
+        sb.append("     ,ms2spectrumDataSource ");
+        sb.append("     ,task_description ");
+        sb.append(" ) ");
+        sb.append(" VALUES ");
+        sb.append(" ( ");
+        sb.append("     :s3_peakList_src ");
+        sb.append("     ,:s3_ms2file_src ");
+        sb.append("     ,:author_id ");
+        sb.append("     ,:task_status ");
+        sb.append("     ,:mail ");
+        sb.append("     ,:ms2spectrumDataSource ");
+        sb.append("     ,:taskDescription ");
+        sb.append("  ) ");
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -58,7 +77,7 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         map.addValue("taskDescription", batchSpectrumSearchDto.getTaskDescription());
 
 
-        int insertStatus = namedParameterJdbcTemplate.update(sqlString, map, keyHolder);
+        int insertStatus = namedParameterJdbcTemplate.update(sb.toString(), map, keyHolder);
         if (insertStatus == 0) {
             throw new DatabaseInsertErrorException("insert failed");
         }
@@ -82,7 +101,7 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
     }
 
     @Override
-    public Boolean updateTaskInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseUpdateErrorException, QueryParameterException {
+    public void updateTaskInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseUpdateErrorException, QueryParameterException {
         if (batchSpectrumSearchDto.getTaskId() == null ||
                 batchSpectrumSearchDto.getMsTolerance() == null ||
                 batchSpectrumSearchDto.getMsmsTolerance() == null ||
@@ -95,14 +114,26 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         ) {
             throw new QueryParameterException("parameter is not complete");
         }
+        StringBuffer sb = new StringBuffer();
+        sb.append(" UPDATE batch_task_info ");
+        sb.append(" SET ");
+        sb.append("     task_status = :taskStatus, ");
+        sb.append("     MS_tolerance = :MSTolerance, ");
+        sb.append("     s3_results_src = :s3ResultsSrc, ");
+        sb.append("     MSMS_tolerance = :msmsTolerance, ");
+        sb.append("     forward_weight = :forwardWeight, ");
+        sb.append("     reverse_weight = :reverseWeight, ");
+        sb.append("     finish_time = :finishTime, ");
+        sb.append("     similarity_algorithm = :similarityAlgorithm, ");
+        sb.append("     ion_mode = :ionMode, ");
+        sb.append("     similarity_tolerance = :similarityTolerance, ");
+        sb.append("     mail = :mail, ");
+        sb.append("     ms1ms2_match_mz_tolerance = :ms1Ms2MatchMzTolerance, ");
+        sb.append("     ms1ms2_match_rt_tolerance = :ms1Ms2MatchRtTolerance, ");
+        sb.append("     task_description = :taskDescription ");
+        sb.append(" WHERE id = :taskId;");
 
-
-        String sqlStr = "UPDATE ms_search_library.batch_task_info SET task_status=:taskStatus, MS_tolerance=:MSTolerance, s3_results_src=:s3ResultsSrc, " +
-                " MSMS_tolerance=:msmsTolerance, forward_weight=:forwardWeight, reverse_weight=:reverseWeight, finish_time=:finishTime,  " +
-                " similarity_algorithm=:similarityAlgorithm, ion_mode=:ionMode, similarity_tolerance=:similarityTolerance, mail=:mail, " +
-                " ms1ms2_match_mz_tolerance=:ms1Ms2MatchMzTolerance, ms1ms2_match_rt_tolerance=:ms1Ms2MatchRtTolerance, task_description = :taskDescription WHERE id=:taskId;";
-
-        HashMap<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("taskStatus", batchSpectrumSearchDto.getTaskStatus().getStatusCode());
         map.put("MSTolerance", batchSpectrumSearchDto.getMsTolerance());
         map.put("msmsTolerance", batchSpectrumSearchDto.getMsmsTolerance());
@@ -124,27 +155,44 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
             map.put("s3ResultsSrc", batchSpectrumSearchDto.getResultPeakListS3FileSrc());
         }
 
-        int upDataResult = namedParameterJdbcTemplate.update(sqlStr, map);
+        int upDataResult = namedParameterJdbcTemplate.update(sb.toString(), map);
 
         if (upDataResult == 0) {
             throw new DatabaseUpdateErrorException("update task info failed");
         }
-
-
-        return true;
     }
 
     @Override
     public BatchSpectrumSearchModel getTaskInfoById(int id) throws QueryParameterException, SQLException {
-        String sqlStr = "SELECT id, s3_peakList_src, s3_ms2file_src, s3_results_src, author_id, task_status, create_time, finish_time, MS_tolerance, " +
-                "MSMS_tolerance, forward_weight, reverse_weight, similarity_algorithm, ion_mode, mail, similarity_tolerance, ms2spectrumDataSource, " +
-                " ms1ms2_match_mz_tolerance, ms1ms2_match_rt_tolerance, task_description" +
-                " FROM ms_search_library.batch_task_info bi WHERE bi.id=:id;";
+        StringBuffer sb = new StringBuffer();
+        sb.append(" SELECT ");
+        sb.append("     id, ");
+        sb.append("     s3_peakList_src as s3PeakListSrc, ");
+        sb.append("     s3_ms2file_src as s3Ms2FileSrc, ");
+        sb.append("     s3_results_src as s3ResultsSrc, ");
+        sb.append("     author_id, ");
+        sb.append("     task_status, ");
+        sb.append("     create_time, ");
+        sb.append("     finish_time, ");
+        sb.append("     MS_tolerance, ");
+        sb.append("     MSMS_tolerance, ");
+        sb.append("     forward_weight, ");
+        sb.append("     reverse_weight, ");
+        sb.append("     similarity_algorithm, ");
+        sb.append("     ion_mode, ");
+        sb.append("     mail, ");
+        sb.append("     similarity_tolerance, ");
+        sb.append("     ms2spectrumDataSource, ");
+        sb.append("     ms1ms2_match_mz_tolerance as ms1Ms2matchMzTolerance, ");
+        sb.append("     ms1ms2_match_rt_tolerance as ms1Ms2matchRtTolerance, ");
+        sb.append("     task_description ");
+        sb.append(" FROM ms_search_library.batch_task_info bi ");
+        sb.append(" WHERE bi.id = ? ");
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        return namedParameterJdbcTemplate.queryForObject(sqlStr, map, new BatchSpectrumSearchRowMapper());
+        List<Object> attrs = new ArrayList<>();
+        attrs.add(id);
 
+        return jdbcTemplate.queryForObject(sb.toString(), attrs.toArray(), new BeanPropertyRowMapper<>(BatchSpectrumSearchModel.class));
     }
 
     @Override
@@ -156,22 +204,42 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
         ) {
             throw new QueryParameterException("parameter is not complete");
         }
+        StringBuffer sb = new StringBuffer();
+        List<Object> attrs = new ArrayList<>();
+        sb.append(" SELECT ");
+        sb.append("     id, ");
+        sb.append("     s3_peakList_src as s3PeakListSrc, ");
+        sb.append("     s3_ms2file_src as s3Ms2FileSrc, ");
+        sb.append("     s3_results_src as s3ResultsSrc, ");
+        sb.append("     author_id, ");
+        sb.append("     task_status, ");
+        sb.append("     create_time, ");
+        sb.append("     finish_time, ");
+        sb.append("     MS_tolerance, ");
+        sb.append("     MSMS_tolerance, ");
+        sb.append("     forward_weight, ");
+        sb.append("     reverse_weight, ");
+        sb.append("     similarity_algorithm, ");
+        sb.append("     ion_mode, ");
+        sb.append("     mail, ");
+        sb.append("     similarity_tolerance, ");
+        sb.append("     ms2spectrumDataSource, ");
+        sb.append("     ms1ms2_match_mz_tolerance as ms1Ms2matchMzTolerance, ");
+        sb.append("     ms1ms2_match_rt_tolerance as ms1Ms2matchRtTolerance, ");
+        sb.append("     task_description ");
+        sb.append(" FROM batch_task_info bi ");
+        sb.append(" WHERE bi.author_id = ? ");
+        attrs.add(batchTaskSearchDto.getAuthorId());
+        sb.append(" AND task_status != ? ");
+        attrs.add(TaskStatus.DELETE.getStatusCode());
 
-        String sqlStr = "SELECT id, s3_peakList_src, s3_ms2file_src, s3_results_src, author_id, task_status, create_time, finish_time, MS_tolerance, " +
-                "MSMS_tolerance, forward_weight, reverse_weight, similarity_algorithm, ion_mode, mail, similarity_tolerance, ms2spectrumDataSource, " +
-                "ms1ms2_match_mz_tolerance, ms1ms2_match_rt_tolerance, task_description FROM ms_search_library.batch_task_info bi WHERE bi.author_id=:authorId and task_status !=:noEqualTaskStatus " +
-                " ORDER BY bi.id DESC limit :taskInit, :taskOffset;";
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("authorId", batchTaskSearchDto.getAuthorId());
-        map.put("taskInit", batchTaskSearchDto.getTaskInit());
-        map.put("taskOffset", batchTaskSearchDto.getTaskOffset());
-        map.put("noEqualTaskStatus", TaskStatus.DELETE.getStatusCode());
+        sb.append(" ORDER BY bi.id DESC ");
+        sb.append(" LIMIT ?, ?;");
+        attrs.add(batchTaskSearchDto.getTaskInit());
+        attrs.add(batchTaskSearchDto.getTaskOffset());
 
-        List<BatchSpectrumSearchModel> batchSpectrumSearchModelList = namedParameterJdbcTemplate.query(sqlStr, map, new BatchSpectrumSearchRowMapper());
-
-
-        return batchSpectrumSearchModelList;
+        return jdbcTemplate.query(sb.toString(), attrs.toArray(), new BeanPropertyRowMapper<>(BatchSpectrumSearchModel.class));
     }
 
     @Override
@@ -205,11 +273,8 @@ public class BatchSearchRdbDaoImpl implements BatchSearchRdbDao {
     }
 
     @Override
-    public BatchSpectrumSearchModel getLastTask() {
-        String sqlStr = "select * from ms_search_library.batch_task_info order by id desc limit 0,1;";
-
-        BatchSpectrumSearchModel batchSpectrumSearchModel = namedParameterJdbcTemplate.queryForObject(sqlStr, new HashMap<>(), new BatchSpectrumSearchRowMapper());
-
-        return batchSpectrumSearchModel;
+    public Integer getLastTask() {
+        String sqlStr = "select id from ms_search_library.batch_task_info order by id desc limit 0,1;";
+        return jdbcTemplate.queryForObject(sqlStr, Integer.class);
     }
 }

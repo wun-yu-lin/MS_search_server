@@ -33,7 +33,7 @@ public class SpectrumServiceImpl implements SpectrumService{
     }
 
     @Override
-    public Boolean postSpectrum(SpectrumDataModel spectrumDataModel) throws QueryParameterException, DatabaseInsertErrorException {
-        return spectrumDao.postSpectrum(spectrumDataModel);
+    public void postSpectrum(SpectrumDataModel spectrumDataModel) throws QueryParameterException, DatabaseInsertErrorException {
+        spectrumDao.postSpectrum(spectrumDataModel);
     }
 }

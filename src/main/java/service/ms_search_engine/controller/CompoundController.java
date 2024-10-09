@@ -68,10 +68,7 @@ public class CompoundController extends BaseController {
             @RequestBody CompoundDataModel compoundDataModel
     ) throws QueryParameterException, DatabaseInsertErrorException {
 
-        Boolean isPostSuccess = compoundService.postCompoundData(compoundDataModel);
-        if (!isPostSuccess) {
-            throw new DatabaseInsertErrorException("post compound data failed");
-        }
+        compoundService.postCompoundData(compoundDataModel);
         return ResponseEntity.status(HttpStatus.OK).body("post compound data success");
     }
 
@@ -79,10 +76,7 @@ public class CompoundController extends BaseController {
     public ResponseEntity<String> postCompoundClassification(
             @RequestBody CompoundClassificationModel  compoundClassificationModel
     ) throws QueryParameterException, DatabaseInsertErrorException {
-        Boolean isPostSuccess = compoundService.postCompoundClassification(compoundClassificationModel);
-        if (!isPostSuccess) {
-            throw new DatabaseInsertErrorException("post compound classification data failed");
-        }
+        compoundService.postCompoundClassification(compoundClassificationModel);
         return ResponseEntity.status(HttpStatus.OK).body("post compound classification data success");
     }
 
