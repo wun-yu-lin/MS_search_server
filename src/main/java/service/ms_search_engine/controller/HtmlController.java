@@ -57,14 +57,14 @@ public class HtmlController extends BaseController {
 
     @GetMapping("/setting")
 //    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
-    public String be(){
+    public String setting(){
         System.out.println("test");
         return "setting";
     }
 
     @GetMapping("/setting/serverConfig")
     @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
-    public String config(){
+    public String serverConfig(){
 
         return "serverConfig";
     }
