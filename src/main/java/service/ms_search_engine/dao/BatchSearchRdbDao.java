@@ -17,9 +17,9 @@ public interface BatchSearchRdbDao{
     void updateTaskInfo(BatchSpectrumSearchDto batchSpectrumSearchDto) throws DatabaseUpdateErrorException, QueryParameterException;
     BatchSpectrumSearchModel getTaskInfoById(int id) throws QueryParameterException, SQLException;
     List<BatchSpectrumSearchModel> getTaskByParameter(BatchTaskSearchDto batchTaskSearchDto) throws QueryParameterException, SQLException;
-    Boolean deleteTaskById(int id) throws QueryParameterException, DatabaseDeleteErrorException;
+    void deleteTaskById(int id) throws QueryParameterException, DatabaseDeleteErrorException;
 
-    Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException;
+    void changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException;
 
     Integer getLastTask();
 }
