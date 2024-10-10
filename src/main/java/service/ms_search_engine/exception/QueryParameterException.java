@@ -1,8 +1,10 @@
 package service.ms_search_engine.exception;
 
-public class QueryParameterException extends Exception{
+import service.ms_search_engine.constant.StatusCode;
+
+public class QueryParameterException extends MsApiException{
     public QueryParameterException(String message){
-        super(message);
+        super(StatusCode.Base.BASE_PARA_ERROR, message);
     }
 
 }

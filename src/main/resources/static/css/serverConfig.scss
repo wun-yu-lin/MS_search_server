@@ -1,0 +1,123 @@
+.config-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 800px;
+  margin: 30px auto;
+  text-align: left;
+
+  h2 {
+    color: dimgrey; /* 將字體顏色改為白色 */
+    text-align: center; /* 讓標題居中 */
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+}
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: none;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+  }
+
+  button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &.success {
+      background-color: #28a745;
+      color: #fff;
+    }
+
+    &.fail {
+      background-color: #dc3545;
+      color: #fff;
+    }
+  }
+
+  #fetchConfigBtn {
+    background-color: #007bff;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+}
+
+.reload-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  #updateConfigBtn,
+  #reloadBtn {
+    background-color: #28a745;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #218838;
+    }
+  }
+
+  #status-message {
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: bold;
+
+    &.success {
+      color: green;
+    }
+
+    &.fail {
+      color: red;
+    }
+  }
+}
+
+.response-section {
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .response-box {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    height: 100px;
+    overflow-y: auto;
+  }
+}

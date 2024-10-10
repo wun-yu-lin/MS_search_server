@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="en"
+	  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	  layout:decorate="~{layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>MS search BE - serverConfig  </title>
+	<link rel="stylesheet" th:href="@{/css/serverConfig.css}">
+
+</head>
+<body>
+<div layout:fragment="content">
+
+	<div class="config-form">
+		<h2>Server Configuration</h2>
+		<div class="form-group">
+			<label for="serverToken">Server Token:</label>
+			<input type="text" id="serverToken" placeholder="Enter your server token">
+			<button id="fetchConfigBtn">Fetch Config</button>
+		</div>
+
+		<div class="form-group">
+			<label for="requestJson">Request JSON:</label>
+			<textarea id="requestJson" placeholder="Enter JSON request"></textarea>
+		</div>
+
+		<div class="reload-section">
+			<button id="updateConfigBtn">Update config</button>
+			<button id="reloadBtn">Reload Server</button>
+			<span id="status-message" class="status-message"> </span>
+		</div>
+
+		<div class="response-section">
+			<label for="responseDisplay">Response:</label>
+			<div id="responseDisplay" class="response-box">No response yet...</div>
+		</div>
+	</div>
+
+
+
+</div>
+</body>
+<div layout:fragment="script">
+	<script type="module" th:src="@{/js/serverConfig.js}"></script>
+</div>
+</html>

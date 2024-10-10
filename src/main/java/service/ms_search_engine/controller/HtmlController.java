@@ -1,11 +1,15 @@
 package service.ms_search_engine.controller;
 
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import service.ms_search_engine.annotation.MSUserAuth;
+import service.ms_search_engine.constant.MSConstant;
 
 @Controller
-public class HtmlController {
+@Scope("request")
+public class HtmlController extends BaseController {
 
     @GetMapping("/")
     public String index(){
@@ -49,5 +53,19 @@ public class HtmlController {
     public String OAuthSuccess(){
 
         return "OAuthSuccessPage";
+    }
+
+    @GetMapping("/setting")
+    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
+    public String setting(){
+
+        return "setting";
+    }
+
+    @GetMapping("/setting/serverConfig")
+    @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN})
+    public String serverConfig(){
+
+        return "serverConfig";
     }
 }

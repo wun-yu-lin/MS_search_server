@@ -243,7 +243,7 @@ public class BatchSearchRdbDaoImpl extends BaseDao implements BatchSearchRdbDao 
     }
 
     @Override
-    public Boolean deleteTaskById(int id) throws QueryParameterException, DatabaseDeleteErrorException {
+    public void deleteTaskById(int id) throws QueryParameterException, DatabaseDeleteErrorException {
         String sqlStr = "DELETE FROM ms_search_library.batch_task_info WHERE id=:id;";
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
@@ -251,13 +251,10 @@ public class BatchSearchRdbDaoImpl extends BaseDao implements BatchSearchRdbDao 
         if (deleteStatus == 0) {
             throw new DatabaseDeleteErrorException("delete failed");
         }
-
-
-        return true;
     }
 
     @Override
-    public Boolean changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException {
+    public void changeTaskStatusToDelete(int id) throws QueryParameterException, SQLException {
         if (id==0){throw new QueryParameterException("Error para");};
 
         String sqlStr = "UPDATE ms_search_library.batch_task_info SET task_status=:taskStatus WHERE id = :id;";
@@ -268,8 +265,6 @@ public class BatchSearchRdbDaoImpl extends BaseDao implements BatchSearchRdbDao 
         if (updateStatus == 0) {
             throw new SQLException("update failed");
         }
-
-        return true;
     }
 
     @Override

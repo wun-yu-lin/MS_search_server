@@ -14,13 +14,12 @@ import service.ms_search_engine.model.CompoundClassificationModel;
 import service.ms_search_engine.model.CompoundDataModel;
 import service.ms_search_engine.service.CompoundService;
 
-import javax.swing.*;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/compound")
-public class CompoundController {
+public class CompoundController extends BaseController {
 
     private final CompoundService compoundService;
 
