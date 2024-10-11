@@ -32,49 +32,48 @@ public class SecurityConfiguration {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                ;
-//                .oauth2Login(oauth2 -> oauth2
-//                        .loginPage("/logIn")
-//                        .defaultSuccessUrl("/OAuthSuccess", true)
-//                        .failureUrl("/login?error=true")
-//                        .permitAll()
-//                )
-//                .headers(Customizer.withDefaults())
-//                .httpBasic(Customizer.withDefaults())
-////                .formLogin(Customizer.withDefaults())
-//
-//
-//                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-//                        //swagger hub
-//                        //.requestMatchers(AUTH_WHITELIST).authenticated()
-//                        .requestMatchers(AUTH_WHITELIST).hasAnyRole("ADMIN")
-//
-//
-//                        //static page
-//                        .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
-//                        .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
-//                        .requestMatchers("/login").permitAll()
-//                        //static resources
-//                        //loaderio
-//                        .requestMatchers("/loaderio-4ec2846ed840a5bee0888f814d57dd62.txt").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/css/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/js/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/icon/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/picture/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/demoData/**").authenticated()
-//
-//                        .requestMatchers(HttpMethod.POST, "/api/config/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/webStatus/**").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/api/spectrum/**","/api/compound/**").hasRole("ADMIN")
-//                        .requestMatchers( "/api/batchSearch/**").authenticated()
-//                        .requestMatchers("/api/member/auth").permitAll()
-//                        .requestMatchers("/api/member/**").authenticated()
-//
-//                        .anyRequest().denyAll()
-//                );
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/logIn")
+                        .defaultSuccessUrl("/OAuthSuccess", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .headers(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
+
+
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        //swagger hub
+                        //.requestMatchers(AUTH_WHITELIST).authenticated()
+                        .requestMatchers(AUTH_WHITELIST).hasAnyRole("ADMIN")
+
+
+                        //static page
+                        .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        //static resources
+                        //loaderio
+                        .requestMatchers("/loaderio-4ec2846ed840a5bee0888f814d57dd62.txt").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/css/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/js/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/icon/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/picture/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/demoData/**").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/api/config/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/webStatus/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/spectrum/**","/api/compound/**").hasRole("ADMIN")
+                        .requestMatchers( "/api/batchSearch/**").authenticated()
+                        .requestMatchers("/api/member/auth").permitAll()
+                        .requestMatchers("/api/member/**").authenticated()
+
+                        .anyRequest().denyAll()
+                );
 
 
         return http.build();
