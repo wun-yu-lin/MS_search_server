@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>MS search setting - home  </title>
+  <link rel="stylesheet" th:href="@{/css/behome.css}">
+
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="admin-dashboard">
+    <!-- Navigation Bar -->
+    <nav class="admin-nav">
+      <ul>
+        <li><a href="/setting">Dashboard</a></li>
+        <li><a href="/setting/serverConfig">Server config</a></li>
+        <li><a href="/logout">Log out</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+      <h1>Welcome to the Admin Dashboard</h1>
+      <p>Select an option from the sidebar to navigate to different backend functionalities.</p>
+
+      <!-- Placeholder for dynamic content -->
+      <div class="content-placeholder">
+        <p>1. ServerConfig provides various server-related settings, such as fetching configurations, uploading settings, and refreshing configurations.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<div layout:fragment="script">
+</div>
+</html>

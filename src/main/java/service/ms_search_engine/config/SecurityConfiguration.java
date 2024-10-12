@@ -1,6 +1,5 @@
-package service.ms_search_engine;
+package service.ms_search_engine.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,16 +10,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {
-
-    @Value("spring.security.admin.username")
-    private String adminUsername;
-
-    @Value("spring.security.admin.password")
-    private String adminPassword;
+public class SecurityConfiguration extends BaseConfig {
 
     private static final String[] AUTH_WHITELIST = {
             "/api-doc/**",
@@ -32,6 +30,8 @@ public class SecurityConfiguration {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/logIn")
                         .defaultSuccessUrl("/OAuthSuccess", true)
@@ -40,19 +40,20 @@ public class SecurityConfiguration {
                 )
                 .headers(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
-
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         //swagger hub
-                        //.requestMatchers(AUTH_WHITELIST).authenticated()
+                        .requestMatchers(AUTH_WHITELIST).authenticated()
                         .requestMatchers(AUTH_WHITELIST).hasAnyRole("ADMIN")
 
 
                         //static page
                         .requestMatchers(HttpMethod.GET, "/batchSearch", "/taskView", "/OAuthSuccess").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/","/msSearch").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/setting").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/setting/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/", "/msSearch").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/logIn").permitAll()
                         //static resources
                         //loaderio
                         .requestMatchers("/loaderio-4ec2846ed840a5bee0888f814d57dd62.txt").permitAll()
@@ -62,12 +63,14 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/picture/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/demoData/**").authenticated()
 
+                        .requestMatchers(HttpMethod.GET, "/api/config/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/config/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/compound/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/compoundData/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/spectrum/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/webStatus/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/spectrum/**","/api/compound/**").hasRole("ADMIN")
-                        .requestMatchers( "/api/batchSearch/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/spectrum/**", "/api/compound/**").hasRole("ADMIN")
+                        .requestMatchers("/api/batchSearch/**").authenticated()
                         .requestMatchers("/api/member/auth").permitAll()
                         .requestMatchers("/api/member/**").authenticated()
 
@@ -78,11 +81,24 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    private CorsConfigurationSource createCorsConfig() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         return new InMemoryUserDetailsManager(
-                User.withUsername(adminUsername)
-                        .password("{noop}"+adminPassword)
+                User.withUsername(serverConfig.getAdminUsername())
+                        .password("{noop}" + serverConfig.getAdminPassword())
                         .authorities("ADMIN", "USER")
                         .roles("ADMIN", "USER")
                         .build());

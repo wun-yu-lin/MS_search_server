@@ -1,10 +1,9 @@
 package service.ms_search_engine.exception;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import service.ms_search_engine.constant.StatusCode;
 
-public class DatabaseInsertErrorException extends SQLException {
+public class DatabaseInsertErrorException extends MsApiException {
     public DatabaseInsertErrorException(String message){
-        super(message);
+        super(StatusCode.Base.BASE_DB_ERROR, message);
     }
 }

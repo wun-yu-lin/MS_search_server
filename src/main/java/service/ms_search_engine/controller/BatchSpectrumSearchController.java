@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -29,7 +30,8 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/batchSearch/")
-public class BatchSpectrumSearchController {
+@Scope("request")
+public class BatchSpectrumSearchController extends BaseController {
     // post /api/batchSearch/file/upload   -> upload file s3, check file, save file path to db, return task id vv
     // post /api/batchSearch/task/submit -> submit task, check parameter, save task to db, sent to task queue
     // get /api/batchSearch/task -> get all task status of user by parameter (page, size, sort)

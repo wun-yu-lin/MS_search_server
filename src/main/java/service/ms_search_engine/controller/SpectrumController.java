@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/spectrum")
 @Validated
-public class SpectrumController {
+@Scope("request")
+public class SpectrumController extends BaseController {
 
     //log operation setting
     private final static Logger log = LoggerFactory.getLogger(SpectrumController.class);

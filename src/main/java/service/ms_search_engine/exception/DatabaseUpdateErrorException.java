@@ -1,7 +1,9 @@
 package service.ms_search_engine.exception;
 
-public class DatabaseUpdateErrorException extends Exception{
+import service.ms_search_engine.constant.StatusCode;
+
+public class DatabaseUpdateErrorException extends MsApiException{
     public DatabaseUpdateErrorException(String message){
-        super(message);
+        super(StatusCode.Base.BASE_DB_ERROR, message);
     }
 }

@@ -3,6 +3,7 @@ package service.ms_search_engine.controller;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,14 +20,12 @@ import service.ms_search_engine.exception.QueryParameterException;
 import service.ms_search_engine.model.MemberModel;
 import service.ms_search_engine.service.MemberService;
 import service.ms_search_engine.vo.MemberVO;
-
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/member")
-public class MemberController {
+@Scope("request")
+public class MemberController extends BaseController {
 
     private final MemberService memberService;
     private final OAuth2AuthorizedClientService authorizedClientService;

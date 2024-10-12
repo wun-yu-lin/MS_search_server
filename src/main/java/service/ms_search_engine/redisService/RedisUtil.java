@@ -295,7 +295,7 @@ public class RedisUtil {
             }
             return true;
         } catch (Exception ex) {
-            throw new RedisErrorException("獲取緩存List中的內容失敗了！" + key);
+            throw new RedisErrorException("獲取緩存List中的內容失敗了！" + key, ex);
         }
     }
 
