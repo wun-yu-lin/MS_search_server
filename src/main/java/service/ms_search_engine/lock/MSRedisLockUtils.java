@@ -62,11 +62,33 @@ public class MSRedisLockUtils  {
         lock.unlock();
     }
 
+
+    public void executeWithLock(MSLockGroup msLockGroup, String lockKey, long microSecondTimeOut, Runnable cb) throws MsApiException {
+        Lock lock = getLock(msLockGroup, lockKey);
+        logger.info("tryLockWithExecute, lockName: {}", lock);
+        try {
+            if (lock.tryLock(microSecondTimeOut, TimeUnit.MICROSECONDS)) {
+                try {
+                    cb.run();
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                logger.info("tryLockWithExecute failed! lockName: {}", lock);
+                throw new MsApiException(StatusCode.Base.BASE_LOCK_ERROR, "try lock failed");
+            }
+        } catch (Exception e) {
+            logger.info("tryLockWithExecute failed! ", e);
+            throw new MsApiException(StatusCode.Base.BASE_LOCK_ERROR, "try lock failed");
+        }
+    }
+
     private static String genLockName(MSLockGroup msLockGroup, String lockKey){
         StringBuffer sb = new StringBuffer();
         sb.append(REDIS_LOCK_TITLE);
         if (msLockGroup != null) {
             sb.append(msLockGroup.name());
+            sb.append("_");
         }
         if (lockKey == null || lockKey.isEmpty()) {
             throw new IllegalArgumentException("Not allow empty key");
