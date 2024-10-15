@@ -77,7 +77,7 @@ public class MSRedisLockUtils  {
                 logger.info("tryLockWithExecute failed! lockName: {}", lock);
                 throw new MsApiException(StatusCode.Base.BASE_LOCK_ERROR, "try lock failed");
             }
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             logger.info("tryLockWithExecute failed! ", e);
             throw new MsApiException(StatusCode.Base.BASE_LOCK_ERROR, "try lock failed");
         }
