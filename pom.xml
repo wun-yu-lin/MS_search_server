@@ -201,6 +201,12 @@
             <version>2.10.1</version>
         </dependency>
 
+        <!-- Redisson-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.37.0</version>
+        </dependency>
 
     </dependencies>
 

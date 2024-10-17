@@ -21,7 +21,9 @@ public class StatusCode {
 
         BASE_S3_ERROR("E9904"),
 
-        BASE_AUTH_ERROR("E9905");
+        BASE_AUTH_ERROR("E9905"),
+
+        BASE_LOCK_ERROR("E9906");
 
         @JsonValue
         private final String status;

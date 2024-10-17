@@ -39,28 +39,28 @@ public class ServerConfig {
 
     //Redis
     @Value("${redis.taskQueue.host}")
-    private String redisTaskQueueHost;
+    private String redisHost;
 
     @Value("${redis.taskQueue.port}")
-    private int redisTaskQueuePort;
+    private int redisPort;
 
     @Value("${redis.taskQueue.password}")
-    private String redisTaskQueuePassword;
+    private String redisPassword;
 
     @Value("${redis.taskQueue.database}")
-    private int redisTaskQueueDatabase;
+    private int redisDatabase;
 
     @Value("${redis.taskQueue.maxWaitMillis}")
-    private long redisTaskQueueMaxWaitMillis;
+    private long redisMaxWaitMillis;
 
     @Value("${redis.taskQueue.maxIdle}")
-    private int redisTaskQueueMaxIdle;
+    private int redisMaxIdle;
 
     @Value("${redis.taskQueue.minIdle}")
-    private int redisTaskQueueMinIdle;
+    private int redisMinIdle;
 
     @Value("${redis.taskQueue.maxTotal}")
-    private int redisTaskQueueMaxTotal;
+    private int redisMaxTotal;
 
     @JsonIgnore
     private String serverConfigToken;
