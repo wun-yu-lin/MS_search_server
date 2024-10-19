@@ -23,13 +23,13 @@ public class ConfigController extends BaseController {
     @PostMapping("/server/get")
     @ResponseBody
     @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN}, checkServerToken = true)
-    public ServerConfigResp getServerConfigResp(@Valid @RequestBody ServerConfigReq serverConfigReq) throws MsApiException {
+    public ServerConfigResp getServerConfigResp(@Valid @RequestBody ServerConfigReq serverConfigReq) {
         return new ServerConfigResp(serverConfig);
     }
 
     @PostMapping("/server/update")
     @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN}, checkServerToken = true)
-    public ResponseEntity<String> updateServerConfig(@Valid @RequestBody ServerConfigReq serverConfigReq) throws MsApiException, IllegalAccessException {
+    public ResponseEntity<String> updateServerConfig(@Valid @RequestBody ServerConfigReq serverConfigReq) throws IllegalAccessException {
         ServerConfig updateServerConfig = serverConfigReq.getServerConfig();
         serverConfigService.uploadAndLoadServerConfigToRedis(updateServerConfig);
         return ResponseEntity.ok().body("ok");
@@ -37,7 +37,7 @@ public class ConfigController extends BaseController {
 
     @PostMapping("/server/reload")
     @MSUserAuth(userRoles = {MSConstant.USER_ROLE.ADMIN}, checkServerToken = true)
-    public ResponseEntity<String> reloadServerConfig(@Valid @RequestBody ServerConfigReq serverConfigReq) throws MsApiException, IllegalAccessException {
+    public ResponseEntity<String> reloadServerConfig(@Valid @RequestBody ServerConfigReq serverConfigReq) throws IllegalAccessException {
         serverConfigService.loadServerConfigFromRedis();
         return ResponseEntity.ok().body("ok");
     }

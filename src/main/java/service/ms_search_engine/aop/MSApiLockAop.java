@@ -2,6 +2,8 @@ package service.ms_search_engine.aop;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,7 +37,7 @@ public class MSApiLockAop extends BaseAop {
             + "    || @annotation(org.springframework.web.bind.annotation.PostMapping)"
             + "    || @annotation(org.springframework.web.bind.annotation.GetMapping))"
             + " && @annotation(service.ms_search_engine.annotation.MSApiLock)")
-    public void checkUserAuth(ProceedingJoinPoint joinPoint) throws MsApiException, IllegalAccessException, JsonProcessingException, Throwable {
+    public void msRedisLockTryLock(ProceedingJoinPoint joinPoint) throws Throwable {
         MSApiLock msApiLock = (MSApiLock) getAnnotation(joinPoint, MSApiLock.class);
         BaseRequest request = getBaseReqBody(joinPoint);
         validate(msApiLock);
@@ -60,7 +62,7 @@ public class MSApiLockAop extends BaseAop {
     }
 
 
-    private void validate(MSApiLock msApiLock) throws MsApiException {
+    private void validate(MSApiLock msApiLock) {
         if (msApiLock.reqBodyNames().length == 0 && msApiLock.reqBodyClass() == null) {
             throw new MsApiException(StatusCode.Base.BASE_PARA_ERROR, "Not allow req body class is empty");
         }
@@ -105,10 +107,14 @@ public class MSApiLockAop extends BaseAop {
         for (String reqName : reqNames) {
             JsonNode node = findNodeByPath(reqName, rootNode);
             if (node != null && node.isValueNode()) {
+                String nodeText = node.asText();
+                if (node instanceof NullNode || StringUtils.isEmpty(nodeText)) {
+                    throw new MsApiException(StatusCode.Base.BASE_LOCK_ERROR, "Not allow lockName value is Empty String or Null");
+                }
                 sb.append("_");
                 sb.append(reqName);
                 sb.append("_");
-                sb.append(node.asText());
+                sb.append(nodeText);
             }
         }
         return sb.toString();

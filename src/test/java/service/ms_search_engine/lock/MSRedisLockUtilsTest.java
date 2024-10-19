@@ -46,7 +46,7 @@ class MSRedisLockUtilsTest {
         when(redissonClient.getLock(anyString())).thenReturn(rLock);
         when(rLock.tryLock(anyLong(), eq(TimeUnit.MICROSECONDS))).thenReturn(true);
 
-        Lock lock = msRedisLockUtils.getLock(MSRedisLockUtils.MSLockGroup.SUMMIT_TASK_BY_TASK_ID, randomLockKey);
+        Lock lock = msRedisLockUtils.getLock(MSRedisLockUtils.MSLockGroup.MSMS_SEARCH_TASK_ID, randomLockKey);
 
         // 檢查是否可以成功取得鎖
         boolean isLocked = msRedisLockUtils.tryLock(lock, 100);
@@ -73,8 +73,8 @@ class MSRedisLockUtilsTest {
                 .thenReturn(true)   // 第一次嘗試鎖成功
                 .thenReturn(false); // 第二次嘗試鎖失敗，因為鎖已被占用
 
-        Lock lock1 = msRedisLockUtils.getLock(MSRedisLockUtils.MSLockGroup.SUMMIT_TASK_BY_TASK_ID, randomLockKey);
-        Lock lock2 = msRedisLockUtils.getLock(MSRedisLockUtils.MSLockGroup.SUMMIT_TASK_BY_TASK_ID, randomLockKey);
+        Lock lock1 = msRedisLockUtils.getLock(MSRedisLockUtils.MSLockGroup.MSMS_SEARCH_TASK_ID, randomLockKey);
+        Lock lock2 = msRedisLockUtils.getLock(MSRedisLockUtils.MSLockGroup.MSMS_SEARCH_TASK_ID, randomLockKey);
 
         // 第一次鎖定
         boolean isLocked1 = msRedisLockUtils.tryLock(lock1, 100);
@@ -103,7 +103,7 @@ class MSRedisLockUtilsTest {
 
     @Test
     @DisplayName("MultiLock 相同 lockName 應拋出 MsApiException")
-    void getMultiLock_sameLockName_shouldThrowException() throws MsApiException {
+    void getMultiLock_sameLockName_shouldThrowException() {
         // 模擬兩個具有相同 lockName 的 RLock
         RLock rLock1 = mock(RLock.class);
         RLock rLock2 = mock(RLock.class);

@@ -13,13 +13,17 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import service.ms_search_engine.annotation.MSApiLock;
 import service.ms_search_engine.constant.Ms2SpectrumDataSource;
 import service.ms_search_engine.dao.MemberDao;
+import service.ms_search_engine.data.BatchSearchReqJson;
 import service.ms_search_engine.dto.BatchSpectrumSearchDto;
 import service.ms_search_engine.dto.BatchTaskSearchDto;
 import service.ms_search_engine.exception.*;
+import service.ms_search_engine.lock.MSRedisLockUtils;
 import service.ms_search_engine.model.BatchSpectrumSearchModel;
 import service.ms_search_engine.service.BatchSpectrumSearchService;
+import service.ms_search_engine.utility.JacksonUtils;
 
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -105,33 +109,35 @@ public class BatchSpectrumSearchController extends BaseController {
     }
 
     @PostMapping("task/submit")
+    @MSApiLock(tryLockTime = 0, reqBodyClass = BatchSearchReqJson.class, reqBodyNames = {"id"}, //
+            msLockGroup = MSRedisLockUtils.MSLockGroup.MSMS_SEARCH_TASK_ID)
     public ResponseEntity<String> postTaskSubmit(
-            @RequestBody BatchSpectrumSearchModel batchSpectrumSearchModel,
+            @RequestBody BatchSearchReqJson batchSearchReqJson,
             OAuth2AuthenticationToken authentication
     ) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
         //check authorId
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-        if (batchSpectrumSearchModel.getAuthorId()  != memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId()) {
+        if (batchSearchReqJson.getAuthorId()  != memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId()) {
             throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
         }
 
         BatchSpectrumSearchDto batchSpectrumSearchDto = new BatchSpectrumSearchDto();
-        batchSpectrumSearchDto.setPeakListS3FileSrc(batchSpectrumSearchModel.getS3PeakListSrc());
-        batchSpectrumSearchDto.setMs2S3FileSrc(batchSpectrumSearchModel.getS3Ms2FileSrc());
-        batchSpectrumSearchDto.setMail(batchSpectrumSearchModel.getMail());
-        batchSpectrumSearchDto.setMs2spectrumDataSource(Ms2SpectrumDataSource.valueOf(batchSpectrumSearchModel.getMs2spectrumDataSource()));
-        batchSpectrumSearchDto.setTaskId(batchSpectrumSearchModel.getId());
-        batchSpectrumSearchDto.setAuthorId(batchSpectrumSearchModel.getAuthorId());
-        batchSpectrumSearchDto.setMsTolerance(batchSpectrumSearchModel.getMsTolerance());
-        batchSpectrumSearchDto.setMsmsTolerance(batchSpectrumSearchModel.getMsmsTolerance());
-        batchSpectrumSearchDto.setSimilarityTolerance(batchSpectrumSearchModel.getSimilarityTolerance());
-        batchSpectrumSearchDto.setForwardWeight(batchSpectrumSearchModel.getForwardWeight());
-        batchSpectrumSearchDto.setReverseWeight(batchSpectrumSearchModel.getReverseWeight());
-        batchSpectrumSearchDto.setSimilarityAlgorithm(batchSpectrumSearchModel.getSimilarityAlgorithm());
-        batchSpectrumSearchDto.setIonMode(batchSpectrumSearchModel.getIonMode());
-        batchSpectrumSearchDto.setMs1Ms2matchMzTolerance(batchSpectrumSearchModel.getMs1Ms2matchMzTolerance());
-        batchSpectrumSearchDto.setMs1Ms2matchRtTolerance(batchSpectrumSearchModel.getMs1Ms2matchRtTolerance());
-        batchSpectrumSearchDto.setTaskDescription(batchSpectrumSearchModel.getTaskDescription());
+        batchSpectrumSearchDto.setPeakListS3FileSrc(batchSearchReqJson.getS3PeakListSrc());
+        batchSpectrumSearchDto.setMs2S3FileSrc(batchSearchReqJson.getS3Ms2FileSrc());
+        batchSpectrumSearchDto.setMail(batchSearchReqJson.getMail());
+        batchSpectrumSearchDto.setMs2spectrumDataSource(Ms2SpectrumDataSource.valueOf(batchSearchReqJson.getMs2spectrumDataSource()));
+        batchSpectrumSearchDto.setTaskId(batchSearchReqJson.getId());
+        batchSpectrumSearchDto.setAuthorId(batchSearchReqJson.getAuthorId());
+        batchSpectrumSearchDto.setMsTolerance(batchSearchReqJson.getMsTolerance());
+        batchSpectrumSearchDto.setMsmsTolerance(batchSearchReqJson.getMsmsTolerance());
+        batchSpectrumSearchDto.setSimilarityTolerance(batchSearchReqJson.getSimilarityTolerance());
+        batchSpectrumSearchDto.setForwardWeight(batchSearchReqJson.getForwardWeight());
+        batchSpectrumSearchDto.setReverseWeight(batchSearchReqJson.getReverseWeight());
+        batchSpectrumSearchDto.setSimilarityAlgorithm(batchSearchReqJson.getSimilarityAlgorithm());
+        batchSpectrumSearchDto.setIonMode(batchSearchReqJson.getIonMode());
+        batchSpectrumSearchDto.setMs1Ms2matchMzTolerance(batchSearchReqJson.getMs1Ms2matchMzTolerance());
+        batchSpectrumSearchDto.setMs1Ms2matchRtTolerance(batchSearchReqJson.getMs1Ms2matchRtTolerance());
+        batchSpectrumSearchDto.setTaskDescription(batchSearchReqJson.getTaskDescription());
 
         batchSpectrumSearchService.postTaskSubmit(batchSpectrumSearchDto);
         return ResponseEntity.status(HttpStatus.OK).body("submit task success");
@@ -169,7 +175,8 @@ public class BatchSpectrumSearchController extends BaseController {
         return ResponseEntity.status(HttpStatus.OK).body(batchSpectrumSearchModelList);
     }
 
-    @DeleteMapping("task/{id}")
+    @RequestMapping(method = {RequestMethod.DELETE}, value = "task/{id}")
+    @MSApiLock(tryLockTime = 0, paramNames = {"id"}, msLockGroup = MSRedisLockUtils.MSLockGroup.MSMS_SEARCH_TASK_ID)
     public ResponseEntity<String> deleteTaskById(@PathVariable @NotNull int id, OAuth2AuthenticationToken authentication) throws QueryParameterException, S3DataUploadException, SQLException {
 
         //check authorId

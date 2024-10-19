@@ -29,7 +29,8 @@ public class MSRedisLockUtils  {
 
     public enum MSLockGroup {
         MSMS_JOB_QUEUE_BY_TASK_ID,
-        SUMMIT_TASK_BY_TASK_ID
+        MSMS_SEARCH_TASK_ID,
+
 
     }
 
@@ -46,7 +47,7 @@ public class MSRedisLockUtils  {
         return redissonClient.getReadWriteLock(lockName);
     }
 
-    public RedissonMultiLock getMultiLock(RLock... locks) throws MsApiException {
+    public RedissonMultiLock getMultiLock(RLock... locks) {
         checkMultiLock(locks);
         logger.info("getMultiLock, locks: {}", Arrays.toString(locks));
         return (RedissonMultiLock) redissonClient.getMultiLock(locks);
@@ -63,7 +64,7 @@ public class MSRedisLockUtils  {
     }
 
 
-    public void executeWithLock(MSLockGroup msLockGroup, String lockKey, long microSecondTimeOut, Runnable cb) throws MsApiException {
+    public void executeWithLock(MSLockGroup msLockGroup, String lockKey, long microSecondTimeOut, Runnable cb) {
         Lock lock = getLock(msLockGroup, lockKey);
         logger.info("tryLockWithExecute, lockName: {}", lock);
         try {
@@ -98,7 +99,7 @@ public class MSRedisLockUtils  {
     }
 
     //不允許有相同 lock name 的 lock
-    private void checkMultiLock(RLock... locks) throws MsApiException {
+    private void checkMultiLock(RLock... locks) {
         Set<String> lockNameSet = new HashSet<>();
         for (RLock lock : locks) {
             if (lockNameSet.contains(lock.getName())) {
