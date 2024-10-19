@@ -22,6 +22,7 @@ import service.ms_search_engine.dto.BatchTaskSearchDto;
 import service.ms_search_engine.exception.*;
 import service.ms_search_engine.lock.MSRedisLockUtils;
 import service.ms_search_engine.model.BatchSpectrumSearchModel;
+import service.ms_search_engine.model.MemberModel;
 import service.ms_search_engine.service.BatchSpectrumSearchService;
 import service.ms_search_engine.utility.JacksonUtils;
 
@@ -117,7 +118,8 @@ public class BatchSpectrumSearchController extends BaseController {
     ) throws RedisErrorException, QueryParameterException, DatabaseUpdateErrorException, JsonProcessingException {
         //check authorId
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
-        if (batchSearchReqJson.getAuthorId()  != memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName()).getId()) {
+        MemberModel memberModel = memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName());
+        if (!batchSearchReqJson.getAuthorId().equals(memberModel.getId())) {
             throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
         }
 
