@@ -41,7 +41,7 @@ public class MSUserAuthAop extends BaseAop {
             + "    || @annotation(org.springframework.web.bind.annotation.PostMapping)"
             + "    || @annotation(org.springframework.web.bind.annotation.GetMapping))"
             + " && @annotation(service.ms_search_engine.annotation.MSUserAuth)")
-    public void checkUserAuth(JoinPoint joinPoint) throws MsApiException {
+    public void checkUserAuth(JoinPoint joinPoint) {
         MSUserAuth msUserAuth = (MSUserAuth) getAnnotation(joinPoint, MSUserAuth.class);
         USER_ROLE[] roles = msUserAuth.userRoles();
         boolean isCheckServerToken = msUserAuth.checkServerToken();
@@ -56,7 +56,7 @@ public class MSUserAuthAop extends BaseAop {
     }
 
 
-    private void checkUserRole(USER_ROLE[] roles, OAuth2AuthenticationToken token) throws MsApiException {
+    private void checkUserRole(USER_ROLE[] roles, OAuth2AuthenticationToken token) {
         if (token == null) {
             throw new MsApiException(StatusCode.Base.BASE_AUTH_ERROR, "token is null");
         }
@@ -88,7 +88,7 @@ public class MSUserAuthAop extends BaseAop {
 
 
 
-    private void checkServerToken(BaseAuthRequest req) throws MsApiException {
+    private void checkServerToken(BaseAuthRequest req) {
 
         if (req == null || serverConfig.getServerConfigToken() == null) {
             throw new MsApiException(StatusCode.Base.BASE_PARA_ERROR, "server token is null");

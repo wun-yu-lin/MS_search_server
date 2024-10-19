@@ -2,6 +2,7 @@ package service.ms_search_engine.utility;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Field;
@@ -72,5 +73,14 @@ public class JacksonUtils {
             }
         }
         return map;
+    }
+
+    public static JsonNode getJsonRootNode(String json) throws JsonProcessingException {
+        return objectMapper.readTree(json);
+    }
+
+    public static JsonNode getJsonRootNode(Object object) throws JsonProcessingException {
+        String json = objectToJson(object);
+        return objectMapper.readTree(json);
     }
 }

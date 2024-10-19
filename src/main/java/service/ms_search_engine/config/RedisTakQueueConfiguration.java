@@ -2,7 +2,6 @@ package service.ms_search_engine.config;
 
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -20,19 +19,19 @@ public class RedisTakQueueConfiguration extends BaseConfig {
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-        config.setHostName(serverConfig.getRedisTaskQueueHost());
-        config.setPort(serverConfig.getRedisTaskQueuePort()); // Redis的預設埠號
-        config.setPassword(serverConfig.getRedisTaskQueuePassword()); // 放Redis的密碼，這裡暫時沒有設
-        config.setDatabase(serverConfig.getRedisTaskQueueDatabase());
+        config.setHostName(serverConfig.getRedisHost());
+        config.setPort(serverConfig.getRedisPort()); // Redis的預設埠號
+        config.setPassword(serverConfig.getRedisPassword()); // 放Redis的密碼，這裡暫時沒有設
+        config.setDatabase(serverConfig.getRedisDatabase());
         GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
-        poolConfig.setMaxWaitMillis(serverConfig.getRedisTaskQueueMaxWaitMillis()); // 當連線取完時，欲取得連線的最大的等待時間
-        poolConfig.setMaxIdle(serverConfig.getRedisTaskQueueMaxIdle()); // 最大空閒連線數
-        poolConfig.setMinIdle(serverConfig.getRedisTaskQueueMinIdle()); // 最小空閒連線數
-        poolConfig.setMaxTotal(serverConfig.getRedisTaskQueueMaxTotal()); // 最大連線數
+        poolConfig.setMaxWaitMillis(serverConfig.getRedisMaxWaitMillis()); // 當連線取完時，欲取得連線的最大的等待時間
+        poolConfig.setMaxIdle(serverConfig.getRedisMaxIdle()); // 最大空閒連線數
+        poolConfig.setMinIdle(serverConfig.getRedisMinIdle()); // 最小空閒連線數
+        poolConfig.setMaxTotal(serverConfig.getRedisMaxTotal()); // 最大連線數
 
         LettucePoolingClientConfiguration poolingClientConfig =
                 LettucePoolingClientConfiguration.builder()
-                        .commandTimeout(Duration.ofMillis(serverConfig.getRedisTaskQueueMaxWaitMillis()))
+                        .commandTimeout(Duration.ofMillis(serverConfig.getRedisMaxWaitMillis()))
                         .poolConfig(poolConfig)
                         .build();
 

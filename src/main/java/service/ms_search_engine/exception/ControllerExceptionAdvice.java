@@ -13,7 +13,7 @@ public class ControllerExceptionAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> prepareResponseForRunTimeException(RuntimeException exception){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("RunTimeException: " + exception.getMessage());
     }
 
