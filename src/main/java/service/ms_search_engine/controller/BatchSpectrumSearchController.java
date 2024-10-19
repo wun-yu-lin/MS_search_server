@@ -119,7 +119,7 @@ public class BatchSpectrumSearchController extends BaseController {
         //check authorId
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
         MemberModel memberModel = memberDao.getMemberByPrincipalName(authorizedClient.getPrincipalName());
-        if (!batchSearchReqJson.getAuthorId().equals(memberModel.getId())) {
+        if (batchSearchReqJson.getAuthorId().compareTo(memberModel.getId()) == 0) {
             throw new QueryParameterException("authorId is not valid, authorId must be the same as the user id");
         }
 

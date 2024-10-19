@@ -14,7 +14,7 @@ public class MsApiException extends RuntimeException {
     }
 
     public MsApiException(Enum<?> statusCode, Throwable e) {
-        super(buildErrorMessage(statusCode.name(), null), e);
+        super(buildErrorMessage(statusCode.name()), e);
         this.status = statusCode;
     }
 
