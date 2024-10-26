@@ -3,9 +3,12 @@ package service.ms_search_engine.config;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import service.ms_search_engine.annotation.NoLogging;
 import service.ms_search_engine.utility.JacksonUtils;
 
 import java.lang.reflect.Field;
@@ -24,14 +27,20 @@ import java.util.UUID;
 @Getter
 public class ServerConfig {
 
+    @JsonIgnore
+    @NoLogging
+    private final static Logger logger = LoggerFactory.getLogger(ServerConfig.class);
+
     //AWS
     @Value("${aws.s3.bucket.name}")
     private String awsS3BucketName;
 
     @Value("${aws.s3.secretKey}")
+    @NoLogging
     private String awsS3SecretKey;
 
     @Value("${aws.s3.accessKey}")
+    @NoLogging
     private String awsS3AccessKey;
 
     @Value("${aws.cloudFront.endpoint}")
@@ -45,6 +54,7 @@ public class ServerConfig {
     private int redisPort;
 
     @Value("${redis.taskQueue.password}")
+    @NoLogging
     private String redisPassword;
 
     @Value("${redis.taskQueue.database}")
@@ -63,6 +73,7 @@ public class ServerConfig {
     private int redisMaxTotal;
 
     @JsonIgnore
+    @Value("${server.serverConfigToken}")
     private String serverConfigToken;
 
     @JsonIgnore
@@ -85,6 +96,7 @@ public class ServerConfig {
 
     @Value("${spring.security.admin.password}")
     @JsonIgnore
+    @NoLogging
     private String adminPassword;
 
 
@@ -120,18 +132,9 @@ public class ServerConfig {
         }
     }
 
-    @PostConstruct
-    private void genRandomToken() {
-        setServerMode();
-        if (serverMode.isApi()){
-            serverConfigToken = UUID.randomUUID().toString().replace("-", "");
-        }
-        System.out.println("serverConfigToken: " + serverConfigToken);
-        System.out.println("spring.security.admin.username:" + adminUsername);
-        System.out.println("spring.security.admin.password:" +  adminPassword);
-    }
     @JsonIgnore
-    private void setServerMode(){
+    @PostConstruct
+    public void setServerMode(){
         //判斷 server 的模式
         if (sentMailTaskProcessorServiceEnable) {
             serverMode = ServerMode.REMOTE;
@@ -149,6 +152,25 @@ public class ServerConfig {
         Map<String, Object> map = JacksonUtils.objectToMap(this);
         ServerConfig serverConfig = JacksonUtils.mapToObject(map, ServerConfig.class);
         return JacksonUtils.objectToJson(serverConfig);
+    }
+
+    public void loggingAllConfig(){
+        Class<?> clazz = this.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            if (!field.isAnnotationPresent(NoLogging.class)) {
+                // 取得欄位名稱和對應的值
+                String fieldName = field.getName();
+                String fieldValue = null;
+                try {
+                    fieldValue = String.valueOf(field.get(this));
+                } catch (Exception e) {
+                   logger.warn("get field: {} failed", fieldName);
+                }
+                logger.info("serverConfig: {}={}", fieldName, fieldValue);
+            }
+        }
+
     }
 
 

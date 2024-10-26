@@ -17,7 +17,7 @@ import service.ms_search_engine.utility.JacksonUtils;
 public class ServerConfigServiceImpl implements ServerConfigService {
 
     //log operation setting
-    private final static Logger log = LoggerFactory.getLogger(ServerConfigServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(ServerConfigServiceImpl.class);
 
     @Autowired
     SentMailService sentMailService;
@@ -30,6 +30,13 @@ public class ServerConfigServiceImpl implements ServerConfigService {
 
     @Override
     @PostConstruct
+    public void initServerConfig() throws IllegalAccessException {
+        logger.info("initServerConfig...");
+        loadServerConfigFromRedis();
+        serverConfig.loggingAllConfig();
+    }
+
+    @Override
     @Scheduled(cron = "0 */15 * * * ?") // 每 15 分鐘刷新一次
     public void loadServerConfigFromRedis() throws IllegalAccessException, RedisErrorException {
         String redisStr = (String) redisUtil.getString(RedisConstant.SERVER_CONFIG);
@@ -67,7 +74,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
             try {
                 sentMailService.sendMailWithText(adminMail, "MS search server token", "token: " + token);
             } catch (Exception e) {
-                log.warn("sendServerTokenToAdminMail send mail failed: ", e);
+                logger.warn("sendServerTokenToAdminMail send mail failed: ", e);
             }
         }
         return null;
