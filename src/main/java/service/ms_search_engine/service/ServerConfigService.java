@@ -6,6 +6,12 @@ import service.ms_search_engine.exception.RedisErrorException;
 public interface ServerConfigService {
 
     /**
+     * server init 執行的 method, 不可由任何其他來源 invoke
+     */
+    void initServerConfig() throws IllegalAccessException;
+
+
+    /**
      * 載入所有 SeverConfig from Redis
      */
     void loadServerConfigFromRedis() throws IllegalAccessException, RedisErrorException;
