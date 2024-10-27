@@ -3,17 +3,19 @@ package service.ms_search_engine.config;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.annotation.NoLogging;
+import service.ms_search_engine.constant.StatusCode;
+import service.ms_search_engine.exception.MsApiException;
 import service.ms_search_engine.utility.JacksonUtils;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 此 config 裝載所有 MS search 服務所需之設定值
@@ -98,6 +100,41 @@ public class ServerConfig {
     @JsonIgnore
     @NoLogging
     private String adminPassword;
+
+    //開頭需要是PROD, SIT, DEV
+    @JsonIgnore
+    @Value("${server.deployEnvironment}")
+    private String deployEnvironment = "DEV";
+
+    public DeployEnv getDeployEnv(){
+        if (StringUtils.startsWith(deployEnvironment, "PROD")) {
+            return DeployEnv.PRODUCTION;
+        }
+        if (StringUtils.startsWith(deployEnvironment, "SIT")) {
+            return DeployEnv.SIT;
+        }
+        if (StringUtils.startsWith(deployEnvironment, "DEV")) {
+           return DeployEnv.DEV;
+        }
+        throw new MsApiException(StatusCode.Base.BASE_PARA_ERROR, "Not allow deploy environment setting");
+    }
+
+    public enum DeployEnv {
+        DEV,
+        SIT,
+        PRODUCTION;
+        public boolean isDev(){
+            return this == DeployEnv.DEV;
+        }
+        public boolean isProd(){
+            return this == DeployEnv.PRODUCTION;
+        }
+
+        public boolean isSit(){
+            return this == DeployEnv.SIT;
+        }
+    }
+
 
 
     public enum ServerMode {

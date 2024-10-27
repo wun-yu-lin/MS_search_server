@@ -66,17 +66,22 @@ public class ServerConfigServiceImpl implements ServerConfigService {
 
     @Override
     @PostConstruct
-    public String sendServerTokenToAdminMail() {
+    public void sendServerTokenToAdminMail() {
 
-        if (serverConfig.getServerMode().isApi()) {
-            String token = serverConfig.getServerConfigToken();
-            String adminMail = serverConfig.getAdminMail();
-            try {
-                sentMailService.sendMailWithText(adminMail, "MS search server token", "token: " + token);
-            } catch (Exception e) {
-                logger.warn("sendServerTokenToAdminMail send mail failed: ", e);
-            }
+        if (!serverConfig.getServerMode().isApi()) {
+            return;
         }
-        return null;
+        ServerConfig.DeployEnv deployEnv = serverConfig.getDeployEnv();
+        if (!deployEnv.isProd() && !deployEnv.isSit()) {
+            return;
+        }
+
+        String token = serverConfig.getServerConfigToken();
+        String adminMail = serverConfig.getAdminMail();
+        try {
+            sentMailService.sendMailWithText(adminMail, "MS search server token, deploy env: " + serverConfig.getDeployEnvironment(), "token: " + token);
+        } catch (Exception e) {
+            logger.warn("sendServerTokenToAdminMail send mail failed: ", e);
+        }
     }
 }
