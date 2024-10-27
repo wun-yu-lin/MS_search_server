@@ -106,6 +106,7 @@ public class ServerConfig {
     @Value("${server.deployEnvironment}")
     private String deployEnvironment = "DEV";
 
+    @JsonIgnore
     public DeployEnv getDeployEnv(){
         if (StringUtils.startsWith(deployEnvironment, "PROD")) {
             return DeployEnv.PRODUCTION;
@@ -191,6 +192,7 @@ public class ServerConfig {
         return JacksonUtils.objectToJson(serverConfig);
     }
 
+    @JsonIgnore
     public void loggingAllConfig(){
         Class<?> clazz = this.getClass();
         for (Field field : clazz.getDeclaredFields()) {
