@@ -32,6 +32,6 @@ public interface ServerConfigService {
     /**
      * 寄信給 ServerToken 給 admin, 只有 api 的 server 會寄信
      */
-    String sendServerTokenToAdminMail();
+    void sendServerTokenToAdminMail();
 
 }
