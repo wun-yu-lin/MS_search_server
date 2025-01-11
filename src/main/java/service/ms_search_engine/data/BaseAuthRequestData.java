@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class BaseAuthRequest extends BaseRequest {
+public class BaseAuthRequestData extends BaseRequestData {
     @NotBlank
     private String serverTokenFromMember;
 }

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.annotation.MSApiLock;
 import service.ms_search_engine.constant.StatusCode;
-import service.ms_search_engine.data.BaseRequest;
+import service.ms_search_engine.data.BaseRequestData;
 import service.ms_search_engine.exception.MsApiException;
 import service.ms_search_engine.lock.MSRedisLockUtils;
 import service.ms_search_engine.utility.JacksonUtils;
@@ -39,7 +39,7 @@ public class MSApiLockAop extends BaseAop {
             + " && @annotation(service.ms_search_engine.annotation.MSApiLock)")
     public void msRedisLockTryLock(ProceedingJoinPoint joinPoint) throws Throwable {
         MSApiLock msApiLock = (MSApiLock) getAnnotation(joinPoint, MSApiLock.class);
-        BaseRequest request = getBaseReqBody(joinPoint);
+        BaseRequestData request = getBaseReqBody(joinPoint);
         validate(msApiLock);
         Lock lock = genLock(msApiLock, request, joinPoint);
         logger.info("gen lock, lock name: {}", lock);
@@ -73,7 +73,7 @@ public class MSApiLockAop extends BaseAop {
     }
 
 
-    private Lock genLock(MSApiLock msApiLock, BaseRequest request, JoinPoint joinPoint) throws IllegalAccessException, JsonProcessingException {
+    private Lock genLock(MSApiLock msApiLock, BaseRequestData request, JoinPoint joinPoint) throws IllegalAccessException, JsonProcessingException {
         //key argName on Method, value arg value
         Map<String, Object> argMap = getArgsMap(joinPoint);
         String[] params = msApiLock.paramNames();
@@ -101,7 +101,7 @@ public class MSApiLockAop extends BaseAop {
         return sb.toString();
     }
 
-    private String genReqNamesLockKey(String[] reqNames, BaseRequest baseRequest, Class<?> clazz) throws IllegalAccessException, JsonProcessingException {
+    private String genReqNamesLockKey(String[] reqNames, BaseRequestData baseRequest, Class<?> clazz) throws IllegalAccessException, JsonProcessingException {
         StringBuffer sb = new StringBuffer();
         JsonNode rootNode = JacksonUtils.getJsonRootNode(baseRequest);
         for (String reqName : reqNames) {

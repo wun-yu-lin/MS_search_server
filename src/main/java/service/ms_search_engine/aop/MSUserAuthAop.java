@@ -15,7 +15,7 @@ import service.ms_search_engine.annotation.MSUserAuth;
 import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.constant.MSConstant.*;
 import service.ms_search_engine.constant.StatusCode;
-import service.ms_search_engine.data.BaseAuthRequest;
+import service.ms_search_engine.data.BaseAuthRequestData;
 import service.ms_search_engine.exception.MsApiException;
 import service.ms_search_engine.model.MemberModel;
 import service.ms_search_engine.service.MemberService;
@@ -45,7 +45,7 @@ public class MSUserAuthAop extends BaseAop {
         MSUserAuth msUserAuth = (MSUserAuth) getAnnotation(joinPoint, MSUserAuth.class);
         USER_ROLE[] roles = msUserAuth.userRoles();
         boolean isCheckServerToken = msUserAuth.checkServerToken();
-        BaseAuthRequest request =  getBaseAuthReqBody(joinPoint);
+        BaseAuthRequestData request =  getBaseAuthReqBody(joinPoint);
         if (isCheckServerToken) {
             checkServerToken(request);
         }
@@ -88,7 +88,7 @@ public class MSUserAuthAop extends BaseAop {
 
 
 
-    private void checkServerToken(BaseAuthRequest req) {
+    private void checkServerToken(BaseAuthRequestData req) {
 
         if (req == null || serverConfig.getServerConfigToken() == null) {
             throw new MsApiException(StatusCode.Base.BASE_PARA_ERROR, "server token is null");
