@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import service.ms_search_engine.annotation.MSApiLock;
 import service.ms_search_engine.constant.StatusCode;
-import service.ms_search_engine.data.BaseRequestData;
+import service.ms_search_engine.data.base.BaseRequestData;
 import service.ms_search_engine.exception.MsApiException;
 import service.ms_search_engine.lock.MSRedisLockUtils;
 import service.ms_search_engine.utility.JacksonUtils;

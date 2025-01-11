@@ -4,6 +4,7 @@ package service.ms_search_engine.data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import service.ms_search_engine.data.base.BaseRequestData;
 
 import java.util.Date;
 

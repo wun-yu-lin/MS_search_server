@@ -15,7 +15,7 @@ import service.ms_search_engine.annotation.MSUserAuth;
 import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.constant.MSConstant.*;
 import service.ms_search_engine.constant.StatusCode;
-import service.ms_search_engine.data.BaseAuthRequestData;
+import service.ms_search_engine.data.base.BaseAuthRequestData;
 import service.ms_search_engine.exception.MsApiException;
 import service.ms_search_engine.model.MemberModel;
 import service.ms_search_engine.service.MemberService;

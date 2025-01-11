@@ -1,7 +1,7 @@
 package service.ms_search_engine.annotation;
 
 
-import service.ms_search_engine.data.BaseRequestData;
+import service.ms_search_engine.data.base.BaseRequestData;
 import service.ms_search_engine.lock.MSRedisLockUtils.*;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

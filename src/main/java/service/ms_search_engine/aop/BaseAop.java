@@ -2,8 +2,8 @@ package service.ms_search_engine.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import service.ms_search_engine.data.BaseAuthRequestData;
-import service.ms_search_engine.data.BaseRequestData;
+import service.ms_search_engine.data.base.BaseAuthRequestData;
+import service.ms_search_engine.data.base.BaseRequestData;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;

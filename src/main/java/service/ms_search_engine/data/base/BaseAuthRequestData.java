@@ -1,4 +1,4 @@
-package service.ms_search_engine.data;
+package service.ms_search_engine.data.base;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

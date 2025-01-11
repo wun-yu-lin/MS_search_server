@@ -117,13 +117,18 @@ public class ServerConfig {
         if (StringUtils.startsWith(deployEnvironment, "DEV")) {
            return DeployEnv.DEV;
         }
+        if (StringUtils.startsWith(deployEnvironment, "TEST")) {
+            return DeployEnv.TEST_API_WITH_NO_AUTH;
+        }
+
         throw new MsApiException(StatusCode.Base.BASE_PARA_ERROR, "Not allow deploy environment setting");
     }
 
     public enum DeployEnv {
         DEV,
         SIT,
-        PRODUCTION;
+        PRODUCTION,
+        TEST_API_WITH_NO_AUTH;
         public boolean isDev(){
             return this == DeployEnv.DEV;
         }
