@@ -28,6 +28,65 @@ public class SecurityConfiguration extends BaseConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        switch (serverConfig.getDeployEnv()) {
+            case DEV, PRODUCTION, SIT -> {
+                return buildFilerChain(http);
+            }
+            case TEST_API_WITH_NO_AUTH -> {
+                return buildTestFilterChain(http);
+            }
+            default -> throw new IllegalArgumentException();
+        }
+    }
+
+    private CorsConfigurationSource createCorsConfig() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+        return new InMemoryUserDetailsManager(
+                User.withUsername(serverConfig.getAdminUsername())
+                        .password("{noop}" + serverConfig.getAdminPassword())
+                        .authorities("ADMIN", "USER")
+                        .roles("ADMIN", "USER")
+                        .build());
+    }
+
+    private SecurityFilterChain buildTestFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/logIn")
+                        .defaultSuccessUrl("/OAuthSuccess", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .headers(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
+
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        //swagger hub
+                        .requestMatchers(AUTH_WHITELIST).authenticated()
+                        .requestMatchers(AUTH_WHITELIST).hasAnyRole("ADMIN")
+                        .requestMatchers("/**").permitAll()
+                );
+
+
+        return http.build();
+    }
+
+    private SecurityFilterChain buildFilerChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
@@ -79,29 +138,6 @@ public class SecurityConfiguration extends BaseConfig {
 
 
         return http.build();
-    }
-
-    private CorsConfigurationSource createCorsConfig() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("*"));
-        config.setAllowedOrigins(List.of("*"));
-        config.setAllowCredentials(true);
-        config.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername(serverConfig.getAdminUsername())
-                        .password("{noop}" + serverConfig.getAdminPassword())
-                        .authorities("ADMIN", "USER")
-                        .roles("ADMIN", "USER")
-                        .build());
     }
 
 }

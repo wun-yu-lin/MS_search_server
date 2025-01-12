@@ -2,8 +2,8 @@ package service.ms_search_engine.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import service.ms_search_engine.data.BaseAuthRequest;
-import service.ms_search_engine.data.BaseRequest;
+import service.ms_search_engine.data.base.BaseAuthRequestData;
+import service.ms_search_engine.data.base.BaseRequestData;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -20,11 +20,11 @@ public class BaseAop {
         return (MethodSignature) joinPoint.getSignature();
     }
 
-    protected BaseAuthRequest getBaseAuthReqBody(JoinPoint joinPoint) {
+    protected BaseAuthRequestData getBaseAuthReqBody(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            if (arg instanceof BaseAuthRequest) {
-                return (BaseAuthRequest) arg;
+            if (arg instanceof BaseAuthRequestData) {
+                return (BaseAuthRequestData) arg;
             }
         }
         return null;
@@ -47,11 +47,11 @@ public class BaseAop {
     }
 
 
-    protected BaseRequest getBaseReqBody(JoinPoint joinPoint) {
+    protected BaseRequestData getBaseReqBody(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            if (arg instanceof BaseRequest) {
-                return (BaseRequest) arg;
+            if (arg instanceof BaseRequestData) {
+                return (BaseRequestData) arg;
             }
         }
         return null;

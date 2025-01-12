@@ -1,7 +1,7 @@
 package service.ms_search_engine.annotation;
 
 
-import service.ms_search_engine.data.BaseRequest;
+import service.ms_search_engine.data.base.BaseRequestData;
 import service.ms_search_engine.lock.MSRedisLockUtils.*;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -62,7 +62,7 @@ public @interface MSApiLock {
     /**
      * 如果需要指定 reqBodyNames, 此欄位必須帶上，用於 reflection 使用, reqBodyClass 務必繼承 service.ms_search_engine.data.BaseRequest
      */
-    Class<?> reqBodyClass() default BaseRequest.class;
+    Class<?> reqBodyClass() default BaseRequestData.class;
 
     /**
      * <p>
