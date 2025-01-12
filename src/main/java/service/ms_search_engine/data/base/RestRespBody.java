@@ -10,14 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public class RestRespBody<E extends BaseRespData> extends BaseRespBody {
 
     @JsonIgnore
-    private static final String success = "0000";
-
-    @JsonIgnore
     private static final DefaultRespData defaultData = new DefaultRespData();
-
-    private String apiStatus = success;
-
-    private String desc = StringUtils.EMPTY;
 
     private E data;
 
@@ -27,6 +20,7 @@ public class RestRespBody<E extends BaseRespData> extends BaseRespBody {
         DefaultRespData data = new DefaultRespData();
         data = data.getClass().getDeclaredFields().length == 0 ? null : data;
         resp.setData(data);
+        resp.setDesc(successDesc);
         return resp;
     }
 
