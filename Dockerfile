@@ -1,7 +1,7 @@
 FROM openjdk:17-jdk
 VOLUME /tmp
 ADD target/ms_search_engine-SNAPSHOT.jar app.jar
-ADD src/main/resources/application.yml /app/config/application.yml
+ADD src/main/resources/application.properties /app/config/application.properties
 EXPOSE 8080
 LABEL authors="linwunyu"
 
