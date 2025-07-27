@@ -1,0 +1,85 @@
+server:
+  port: {{server_port}}
+  timeZone: {{server_timezone}}
+  serverConfigToken: {{server_server_config_token}}
+  deployEnvironment: {{server_deploy_environment}}
+  tomcat:
+    remoteip:
+      host-header: {{server_tomcat_remote_ip_host_header}}
+      protocol-header: {{server_tomcat_remote_ip_protocol_header}}
+      protocol-header-https-value: {{server_tomcat_remote_ip_protocol_header_https_value}}
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: {{spring_servlet_multipart_max_file_size}}
+      max-request-size: {{spring_servlet_multipart_max_request_size}}
+
+  datasource:
+    mysql_local:
+      driver_class_name: {{spring_datasource_mysql_local_driver_class_name}}
+      jdbc_url: {{spring_datasource_mysql_local_jdbc_url}}
+      username: {{spring_datasource_mysql_local_username}}
+      password: {{spring_datasource_mysql_local_password}}
+
+  mail:
+    host: {{spring_mail_host}}
+    port: {{spring_mail_port}}
+    username: {{spring_mail_username}}
+    password: {{spring_mail_password}}
+    properties:
+      mail:
+        transport:
+          protocol: {{spring_mail_properties_mail_transport_protocol}}
+        smtp:
+          auth: {{spring_mail_properties_mail_smtp_auth}}
+          starttls:
+            enable: {{spring_mail_properties_mail_smtp_starttls_enable}}
+            required: {{spring_mail_properties_mail_smtp_starttls_required}}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: {{spring_security_oauth2_client_registration_google_client_id}}
+            client-secret: {{spring_security_oauth2_client_registration_google_client_secret}}
+          github:
+            client-id: {{spring_security_oauth2_client_registration_github_client_id}}
+            client-secret: {{spring_security_oauth2_client_registration_github_client_secret}}
+    admin:
+      username: {{spring_security_admin_username}}
+      password: {{spring_security_admin_password}}
+
+springdoc:
+  api-docs:
+    path: {{springdoc_api_docs_path}}
+  swagger-ui:
+    enabled: {{springdoc_swagger_ui_enabled}}
+    path: {{springdoc_swagger_ui_path}}
+
+aws:
+  s3:
+    bucket:
+      name: {{aws_s3_bucket_name}}
+    accessKey: {{aws_s3_access_key}}
+    secretKey: {{aws_s3_secret_key}}
+  cloudFront:
+    endpoint: {{aws_cloud_front_endpoint}}
+
+redis:
+  taskQueue:
+    host: {{redis_task_queue_host}}
+    port: {{redis_task_queue_port}}
+    password: {{redis_task_queue_password}}
+    database: {{redis_task_queue_database}}
+    maxWaitMillis: {{redis_task_queue_max_wait_millis}}
+    maxIdle: {{redis_task_queue_max_idle}}
+    minIdle: {{redis_task_queue_min_idle}}
+    maxTotal: {{redis_task_queue_max_total}}
+
+taskProcessorService:
+  enable: false
+
+SentMailTaskProcessorService:
+  enable: true
