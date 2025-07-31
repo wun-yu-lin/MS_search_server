@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.io.IOException;
 
 @ControllerAdvice
-public class ControllerExceptionAdvice {
+public class MSControllerExceptionAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> prepareResponseForRunTimeException(RuntimeException exception){
