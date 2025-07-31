@@ -14,7 +14,12 @@
     <name>MS_search_engine</name>
     <description>MS_search_engine</description>
 
-
+    <repositories>
+        <repository>
+            <id>jdk-repo</id>
+            <url>https://nexus.service.ms-search.us/repository/jdk/</url> <!-- Nexus 上的 repository 路徑 -->
+        </repository>
+    </repositories>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -31,6 +36,12 @@
     </dependencyManagement>
 
     <dependencies>
+<!--        sdk -->
+        <dependency>
+            <groupId>org.mssearch</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>1.0.3-release</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

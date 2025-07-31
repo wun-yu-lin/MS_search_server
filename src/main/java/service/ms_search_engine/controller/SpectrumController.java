@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sdk.mssearch.javasdk.logger.SdkLoggerFactory;
 import service.ms_search_engine.dto.SpectrumQueryParaDto;
 import service.ms_search_engine.exception.DatabaseInsertErrorException;
 import service.ms_search_engine.exception.QueryParameterException;
@@ -28,7 +29,7 @@ import java.util.List;
 public class SpectrumController extends BaseController {
 
     //log operation setting
-    private final static Logger log = LoggerFactory.getLogger(SpectrumController.class);
+    private final static Logger log = SdkLoggerFactory.getLogger(SpectrumController.class);
 
     @Autowired
     private SpectrumService spectrumService;
