@@ -1,4 +1,4 @@
-package service.ms_search_engine.data;
+package service.ms_search_engine.data.base;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class BaseAuthRequest extends BaseRequest {
+public class BaseAuthRequestData extends BaseRequestData {
     @NotBlank
     private String serverTokenFromMember;
 }

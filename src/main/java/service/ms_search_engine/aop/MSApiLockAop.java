@@ -9,12 +9,12 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sdk.mssearch.javasdk.logger.SdkLoggerFactory;
 import service.ms_search_engine.annotation.MSApiLock;
 import service.ms_search_engine.constant.StatusCode;
-import service.ms_search_engine.data.BaseRequest;
+import service.ms_search_engine.data.base.BaseRequestData;
 import service.ms_search_engine.exception.MsApiException;
 import service.ms_search_engine.lock.MSRedisLockUtils;
 import service.ms_search_engine.utility.JacksonUtils;
@@ -26,7 +26,7 @@ import java.util.concurrent.locks.Lock;
 @Component
 public class MSApiLockAop extends BaseAop {
 
-    private final static Logger logger = LoggerFactory.getLogger(MSApiLockAop.class);
+    private final static Logger logger = SdkLoggerFactory.getLogger(MSApiLockAop.class);
 
 
     @Autowired
@@ -39,10 +39,10 @@ public class MSApiLockAop extends BaseAop {
             + " && @annotation(service.ms_search_engine.annotation.MSApiLock)")
     public void msRedisLockTryLock(ProceedingJoinPoint joinPoint) throws Throwable {
         MSApiLock msApiLock = (MSApiLock) getAnnotation(joinPoint, MSApiLock.class);
-        BaseRequest request = getBaseReqBody(joinPoint);
+        BaseRequestData request = getBaseReqBody(joinPoint);
         validate(msApiLock);
         Lock lock = genLock(msApiLock, request, joinPoint);
-        logger.info("gen lock, lock name: {}", lock);
+        logger.info("gen lock, lock name" + lock);
 
         try {
             if (msRedisLockUtils.tryLock(lock, msApiLock.tryLockTime())) {
@@ -73,7 +73,7 @@ public class MSApiLockAop extends BaseAop {
     }
 
 
-    private Lock genLock(MSApiLock msApiLock, BaseRequest request, JoinPoint joinPoint) throws IllegalAccessException, JsonProcessingException {
+    private Lock genLock(MSApiLock msApiLock, BaseRequestData request, JoinPoint joinPoint) throws IllegalAccessException, JsonProcessingException {
         //key argName on Method, value arg value
         Map<String, Object> argMap = getArgsMap(joinPoint);
         String[] params = msApiLock.paramNames();
@@ -82,8 +82,8 @@ public class MSApiLockAop extends BaseAop {
         String paramLockKey = genParamLockKey(params, argMap);
         String reqNamesLockKey = genReqNamesLockKey(reqNames, request, msApiLock.reqBodyClass());
 
-        logger.info("paramLockKey: {}", paramLockKey);
-        logger.info("reqNamesLockKey: {}", reqNamesLockKey);
+        logger.info("paramLockKey:{}", paramLockKey);
+        logger.info("reqNamesLockKey:{}", reqNamesLockKey);
 
         return msRedisLockUtils.getLock(msApiLock.msLockGroup(), paramLockKey + reqNamesLockKey);
     }
@@ -101,7 +101,7 @@ public class MSApiLockAop extends BaseAop {
         return sb.toString();
     }
 
-    private String genReqNamesLockKey(String[] reqNames, BaseRequest baseRequest, Class<?> clazz) throws IllegalAccessException, JsonProcessingException {
+    private String genReqNamesLockKey(String[] reqNames, BaseRequestData baseRequest, Class<?> clazz) throws IllegalAccessException, JsonProcessingException {
         StringBuffer sb = new StringBuffer();
         JsonNode rootNode = JacksonUtils.getJsonRootNode(baseRequest);
         for (String reqName : reqNames) {

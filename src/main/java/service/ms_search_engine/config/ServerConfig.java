@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import sdk.mssearch.javasdk.logger.SdkLoggerFactory;
 import service.ms_search_engine.annotation.NoLogging;
 import service.ms_search_engine.constant.StatusCode;
 import service.ms_search_engine.exception.MsApiException;
@@ -31,7 +32,7 @@ public class ServerConfig {
 
     @JsonIgnore
     @NoLogging
-    private final static Logger logger = LoggerFactory.getLogger(ServerConfig.class);
+    private final static Logger logger = SdkLoggerFactory.getLogger(ServerConfig.class);
 
     //AWS
     @Value("${aws.s3.bucket.name}")
@@ -117,13 +118,18 @@ public class ServerConfig {
         if (StringUtils.startsWith(deployEnvironment, "DEV")) {
            return DeployEnv.DEV;
         }
+        if (StringUtils.startsWith(deployEnvironment, "TEST")) {
+            return DeployEnv.TEST_API_WITH_NO_AUTH;
+        }
+
         throw new MsApiException(StatusCode.Base.BASE_PARA_ERROR, "Not allow deploy environment setting");
     }
 
     public enum DeployEnv {
         DEV,
         SIT,
-        PRODUCTION;
+        PRODUCTION,
+        TEST_API_WITH_NO_AUTH;
         public boolean isDev(){
             return this == DeployEnv.DEV;
         }

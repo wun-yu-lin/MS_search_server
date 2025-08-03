@@ -4,9 +4,9 @@ import org.redisson.RedissonMultiLock;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sdk.mssearch.javasdk.logger.SdkLoggerFactory;
 import service.ms_search_engine.constant.StatusCode;
 import service.ms_search_engine.exception.MsApiException;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 @Component
 public class MSRedisLockUtils  {
 
-    private final static Logger logger = LoggerFactory.getLogger(MSRedisLockUtils.class);
+    private final static Logger logger = SdkLoggerFactory.getLogger(MSRedisLockUtils.class);
 
     private static final String REDIS_LOCK_TITLE  = "REDIS_LOCK_";
 

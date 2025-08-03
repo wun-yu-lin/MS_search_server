@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import sdk.mssearch.javasdk.logger.SdkLoggerFactory;
 import service.ms_search_engine.config.ServerConfig;
 import service.ms_search_engine.constant.RedisConstant;
 import service.ms_search_engine.exception.RedisErrorException;
@@ -17,7 +18,7 @@ import service.ms_search_engine.utility.JacksonUtils;
 public class ServerConfigServiceImpl implements ServerConfigService {
 
     //log operation setting
-    private final static Logger logger = LoggerFactory.getLogger(ServerConfigServiceImpl.class);
+    private final static Logger logger = SdkLoggerFactory.getLogger(ServerConfigServiceImpl.class);
 
     @Autowired
     SentMailService sentMailService;
