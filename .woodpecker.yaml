@@ -36,10 +36,31 @@ steps:
     when:
       event: pull_request
 
+
 #  test:
 #    image: maven:3.8.1-openjdk-17
 #    commands:
 #      - mvn test
+  docker-build-push:
+    image: woodpeckerci/plugin-kaniko
+    settings:
+      registry: image.nexus.service.ms-search.us
+      repo: ms_search_server
+      tags: ${CI_COMMIT_SHA}
+      cache: true
+      skip_tls_verify: false # set to true for testing registries ONLY with self-signed certs
+      build_args:
+        - COMMIT_SHA=${CI_COMMIT_SHA}
+        - COMMIT_AUTHOR_EMAIL=${CI_COMMIT_AUTHOR_EMAIL}
+      username:
+        from_secret: nexus_username
+      password:
+        from_secret: nexus_password
+    when:
+      event:
+        - push
+        - tag
+        - pull_request
 
 # 設定通知，discord 作為通知工具
   notify:
