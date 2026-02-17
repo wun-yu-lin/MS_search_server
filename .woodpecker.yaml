@@ -73,7 +73,8 @@ steps:
         body="Docker image built and pushed:\n\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
     secrets: [GITHUB_TOKEN]
     when:
-      event: pull_request
+      event: 
+        - pull_request
 
 # 設定通知，discord 作為通知工具
   notify:
