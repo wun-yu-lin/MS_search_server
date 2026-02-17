@@ -62,6 +62,19 @@ steps:
         - tag
         - pull_request
 
+  comment-pr-tag:
+    image: alpine/httpie
+    commands:
+      - >
+        http --ignore-stdin POST
+        "https://api.github.com/repos/${CI_REPO}/issues/${CI_COMMIT_PULL_REQUEST}/comments"
+        "Authorization: token $${GITHUB_TOKEN}"
+        "Accept: application/vnd.github.v3+json"
+        body="Docker image built and pushed:\n\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
+    secrets: [GITHUB_TOKEN]
+    when:
+      event: pull_request
+
 # 設定通知，discord 作為通知工具
   notify:
     image: appleboy/drone-discord
