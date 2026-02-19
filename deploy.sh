@@ -40,6 +40,23 @@ if [ ! -f "$VALUES_FILE_BY_ENV" ]; then
     exit 1
 fi
 
+
+: "${REGISTRY_USERNAME:?Need to set REGISTRY_USERNAME}"
+: "${REGISTRY_PASSWORD:?Need to set REGISTRY_PASSWORD}"
+
+echo "🔐 Creating or updating secret: $REGISTRY_SECRET_NAME  in namespace: $NAMESPACE"
+
+kubectl -n $NAMESPACE create secret docker-registry $REGISTRY_SECRET_NAME \
+  --docker-server=$REGISTRY \
+  --docker-username=$REGISTRY_USERNAME \
+  --docker-password=$REGISTRY_PASSWORD \
+  --docker-email=$REGISTRY_EMAIL \
+  --dry-run=client -o yaml \
+  | kubectl apply -f -
+
+echo "✅ Secret $SECRET_NAME applied successfully"
+
+
 echo "Deploying $RELEASE_NAME to namespace $NAMESPACE..."
 echo "Using values from: $VALUES_FILE"
 echo "Image tag: $IMAGE_TAG"
