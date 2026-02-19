@@ -1,0 +1,181 @@
+# Default values for ms-search-engine.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: image.nexus.service.ms-search.us/ms_search_server
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  # Provide this via --set image.tag=...
+  tag: _replace_by_helm_set_
+
+imagePullSecrets:
+  - name: nexus-regcred
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1001
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1001
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines or set them in your own values file.
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Application Configuration
+config:
+  java_sdk:
+    server_name: java-ms-search-server
+    logger:
+      enable_notify: true
+      mail_notify: _replace_by_helm_set_
+      notify_service_list:
+        - local
+    logger_elk:
+      enable_elk: true
+      logstash_host: localhost
+      logstash_port: 5044
+    gmail:
+      smtp_host: smtp.gmail.com
+      smtp_port: 587
+      mail_username: _replace_by_helm_set_
+      mail_password: _replace_by_helm_set_
+      smtp_auth: true
+      smtp_starttls_enable: true
+      smtp_starttls_required: true
+    discord:
+      webhook_url: _replace_by_helm_set_
+  
+  server:
+    port: 8080
+    timezone: Asia/Taipei
+    server_config_token: local-server-config-token
+    deploy_environment: _replace_by_values_
+    tomcat:
+      remote_ip:
+        host_header: X-Forwarded-Host
+        protocol_header: X-Forwarded-Proto
+        protocol_header_https_value: https
+
+  spring:
+    servlet:
+      multipart:
+        max_file_size: 1000MB
+        max_request_size: 1100MB
+    datasource:
+      mysql_local:
+        driver_class_name: com.mysql.cj.jdbc.Driver
+        jdbc_url: _replace_by_values_
+        username: _replace_by_helm_set_
+        password: _replace_by_helm_set_
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: _replace_by_helm_set_
+      password: _replace_by_helm_set_
+      properties:
+        mail:
+          transport_protocol: smtp
+          smtp:
+            auth: true
+            starttls_enable: true
+            starttls_required: true
+    security:
+      oauth2:
+        client:
+          registration:
+            google:
+              client_id: _replace_by_helm_set_
+              client_secret: _replace_by_helm_set_
+            github:
+              client_id: _replace_by_helm_set_
+              client_secret: _replace_by_helm_set_
+      admin:
+        username: _replace_by_helm_set_
+        password: _replace_by_helm_set_
+
+  springdoc:
+    api_docs_path: /api-doc
+    swagger_ui_enabled: true
+    swagger_ui_path: /swagger-ui.html
+
+  aws:
+    s3:
+      bucket_name: ms.search
+      access_key: _replace_by_helm_set_
+      secret_key: _replace_by_helm_set_
+    cloud_front:
+      endpoint: _replace_by_values_
+
+  redis:
+    task_queue:
+      host: _replace_by_values_
+      port: _replace_by_values_
+      password: _replace_by_helm_set_
+      database: 0
+      max_wait_millis: 2000
+      max_idle: 8
+      min_idle: 0
+      max_total: 8
+
+  taskProcessorService:
+    enable: false
+
+  SentMailTaskProcessorService:
+    enable: false

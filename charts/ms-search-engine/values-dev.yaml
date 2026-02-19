@@ -1,0 +1,23 @@
+# Test environment overrides
+config:
+  server:
+    deploy_environment: DEV
+  
+  spring:
+    datasource:
+      mysql_local:
+        jdbc_url: jdbc:mysql://localhost:3306/ms_search_library?serverTimezone=Asia/Taipei&characterEncoding=utf-8
+    
+  redis:
+    task_queue:
+      host: localhost
+      port: 6379
+
+# Resources can be smaller for test
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi

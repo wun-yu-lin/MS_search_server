@@ -46,3 +46,7 @@ build/
 
 #*.mgf
 #*.csv
+
+### Environment Files ###
+.env*
+!.env.template
