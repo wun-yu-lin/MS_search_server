@@ -29,8 +29,14 @@ VALUES_FILE_BASE="${CHART_PATH}/values.yaml"
 VALUES_FILE_BY_ENV="${CHART_PATH}/values-${ENV}.yaml"
 
 # Check if the environment values file exists
-if [ ! -f "$VALUES_FILE" ]; then
-    echo "Error: Configuration file $VALUES_FILE not found!"
+if [ ! -f "$VALUES_FILE_BASE" ]; then
+    echo "Error: Configuration file $VALUES_FILE_BASE not found!"
+    exit 1
+fi
+
+# Check if the environment values file exists
+if [ ! -f "$VALUES_FILE_BY_ENV" ]; then
+    echo "Error: Configuration file $VALUES_FILE_BY_ENV not found!"
     exit 1
 fi
 
