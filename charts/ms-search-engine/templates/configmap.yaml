@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "ms-search-engine.fullname" . }}-config
+  name: {{ .Values.app.appMsSearchServer }}-config
   labels:
-    {{- include "ms-search-engine.labels" . | nindent 4 }}
+    app: {{ .Values.app.appMsSearchServer }}
 data:
   application.yaml: |
     java-sdk:

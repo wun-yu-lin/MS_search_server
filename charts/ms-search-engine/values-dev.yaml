@@ -13,11 +13,11 @@ config:
       host: localhost
       port: 6379
 
-# Resources can be smaller for test
+## Resources can be smaller for test
 resources:
   limits:
+    cpu: 2000m
+    memory: 1024Mi
+  requests:
     cpu: 500m
     memory: 512Mi
-  requests:
-    cpu: 100m
-    memory: 256Mi
