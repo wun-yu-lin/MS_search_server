@@ -6,18 +6,23 @@ config:
   spring:
     datasource:
       mysql_local:
-        jdbc_url: jdbc:mysql://localhost:3306/ms_search_library?serverTimezone=Asia/Taipei&characterEncoding=utf-8 #TODO change
-    
+        jdbc_url: jdbc:mysql://192.168.11.114:3306/ms_search_library?serverTimezone=Asia/Taipei&characterEncoding=utf-8
+
   redis:
     task_queue:
-      host: localhost
+      host: 192.168.11.114
       port: 6379
+
+  java_sdk:
+    logger_elk:
+      logstash_host: 192.168.11.114
 
 # Resources can be smaller for test
 resources:
   limits:
+    cpu: 2000m
+    memory: 1024Mi
+  requests:
     cpu: 500m
     memory: 512Mi
-  requests:
-    cpu: 100m
-    memory: 256Mi
+
