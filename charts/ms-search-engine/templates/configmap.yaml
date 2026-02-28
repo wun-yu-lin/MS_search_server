@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.app.appMsSearchServer }}-config
+  name: {{ .Values.app.appMsSearchServer.name }}-config
   labels:
-    app: {{ .Values.app.appMsSearchServer }}
+    app: {{ .Values.app.appMsSearchServer.name }}
 data:
   application.yaml: |
     java-sdk:

@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: ms-search-engine
   labels:
-    app: {{ .Values.app.appMsSearchServer }}
+    app: {{ .Values.app.appMsSearchServer.name }}
 spec:
-  ingressClassName: {{ .Values.app.appMsSearchServer }}
+  ingressClassName: {{ .Values.app.appMsSearchServer.name }}
   rules:
     - host: ms-search.server.local
       http:
@@ -14,7 +14,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Values.app.appMsSearchServer }}
+                name: {{ .Values.app.appMsSearchServer.name }}
                 port:
                   number: {{ .Values.service.port }}
 

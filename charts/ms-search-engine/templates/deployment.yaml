@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.app.appMsSearchServer}}
+  name: {{ .Values.app.appMsSearchServer.name }}
   namespace: {{.Release.Namespace}}
   labels:
-    app: {{ .Values.app.appMsSearchServer}}
+    app: {{ .Values.app.appMsSearchServer.name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.app.appMsSearchServer}}
+      app: {{ .Values.app.appMsSearchServer.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.app.appMsSearchServer}}
+        app: {{ .Values.app.appMsSearchServer.name }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.name }}
@@ -51,4 +51,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ .Values.app.appMsSearchServer }}-config
+            name: {{ .Values.app.appMsSearchServer.name }}-config

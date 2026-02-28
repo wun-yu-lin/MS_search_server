@@ -38,9 +38,22 @@ resources:
 
 # deployment & ingress
 app:
-  appMsSearchServer: ms-search-server
+  appMsSearchServer:
+    name: ms-search-server
+    config:
+      taskProcessorService:
+        enable: false
+      SentMailTaskProcessorService:
+        enable: false
+  appMsSearchServerBEJob:
+    name: ms-search-server-be
+    config:
+      taskProcessorService:
+        enable: true
+      SentMailTaskProcessorService:
+        enable: true
 
-# Application Configuration
+# Application Configuration for common
 config:
   java_sdk:
     server_name: java-ms-search-server
