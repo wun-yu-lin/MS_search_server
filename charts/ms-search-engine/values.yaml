@@ -53,7 +53,7 @@ app:
       SentMailTaskProcessorService:
         enable: true
 
-# Application Configuration for common  setting
+# Application Configuration for common basic setting
 config:
   java_sdk:
     server_name: java-ms-search-server
