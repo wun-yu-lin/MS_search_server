@@ -86,7 +86,7 @@ steps:
         from_secret: woodpecker_notify_discord_token
       avatar_url: https://woodpecker-ci.org/img/logo.svg
       link_names: true
-      template: "Build {{build.status}} for {{repo.owner}}/{{repo.name}}"
+      template: "CI {{build.status}} for {{repo.owner}}/{{repo.name}}"
     when:
       event:
         - pull_request
