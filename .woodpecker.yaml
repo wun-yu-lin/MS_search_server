@@ -11,7 +11,7 @@ steps:
       - echo $${WOODPECKER_NOTIFY_DISCORD_ID}
       - echo $${WOODPECKER_NOTIFY_DISCORD_TOKEN}
     when:
-      event: [pull_request]
+      event: pull_request
 
   - name: compile
     image: maven:3.8.1-openjdk-17
@@ -20,7 +20,7 @@ steps:
       - mvn compile
       - echo "compile finish"
     when:
-      event: [pull_request]
+      event: pull_request
 
   - name: spotbugs
     image: maven:3.8.1-openjdk-17
@@ -29,7 +29,7 @@ steps:
       - mvn compile
       - mvn spotbugs:check -Dspotbugs.excludeFilterFile=./findbugs-exclude.xml #exclude bug list
     when:
-      event: [pull_request]
+      event: pull_request
 
   - name: pmd
     image: maven:3.8.1-openjdk-17
@@ -38,7 +38,7 @@ steps:
       - mvn compile
       - mvn pmd:pmd
     when:
-      event: [pull_request]
+      event: pull_request
 
   - name: docker-build-push
     image: woodpeckerci/plugin-kaniko
@@ -56,7 +56,10 @@ steps:
       password:
         from_secret: nexus_password
     when:
-      event: [push, tag, pull_request]
+      event:
+        - push
+        - tag
+        - pull_request
 
   - name: comment-pr-tag
     image: alpine/httpie
@@ -71,7 +74,8 @@ steps:
         "Accept: application/vnd.github.v3+json"
         body="Docker image built and pushed:\n\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
     when:
-      event: [pull_request]
+      event: 
+        - pull_request
 
   - name: notify
     image: appleboy/drone-discord
@@ -84,5 +88,8 @@ steps:
       link_names: true
       template: "Build {{build.status}} for {{repo.owner}}/{{repo.name}}"
     when:
-      event: [pull_request]
-      status: [success, failure]
+      event:
+        - pull_request
+      status:
+        - failure
+        - success
