@@ -1,15 +1,19 @@
 steps:
-  build:
+  - name: build
     image: maven:3.8.1-openjdk-17
+    environment:
+      WOODPECKER_NOTIFY_DISCORD_ID:
+        from_secret: woodpecker_notify_discord_id
+      WOODPECKER_NOTIFY_DISCORD_TOKEN:
+        from_secret: woodpecker_notify_discord_token
     commands:
       - echo "start run the build step "
       - echo $${WOODPECKER_NOTIFY_DISCORD_ID}
       - echo $${WOODPECKER_NOTIFY_DISCORD_TOKEN}
-    secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
-
     when:
       event: pull_request
-  compile:
+
+  - name: compile
     image: maven:3.8.1-openjdk-17
     commands:
       - mvn clean
@@ -18,7 +22,7 @@ steps:
     when:
       event: pull_request
 
-  spotbugs:
+  - name: spotbugs
     image: maven:3.8.1-openjdk-17
     commands:
       - mvn clean
@@ -27,7 +31,7 @@ steps:
     when:
       event: pull_request
 
-  pmd:
+  - name: pmd
     image: maven:3.8.1-openjdk-17
     commands:
       - mvn clean
@@ -36,12 +40,7 @@ steps:
     when:
       event: pull_request
 
-
-#  test:
-#    image: maven:3.8.1-openjdk-17
-#    commands:
-#      - mvn test
-  docker-build-push:
+  - name: docker-build-push
     image: woodpeckerci/plugin-kaniko
     settings:
       registry: image.nexus.service.ms-search.us
@@ -62,8 +61,11 @@ steps:
         - tag
         - pull_request
 
-  comment-pr-tag:
+  - name: comment-pr-tag
     image: alpine/httpie
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token
     commands:
       - >
         http --ignore-stdin POST
@@ -71,13 +73,12 @@ steps:
         "Authorization: token $${GITHUB_TOKEN}"
         "Accept: application/vnd.github.v3+json"
         body="Docker image built and pushed:\n\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
-    secrets: [GITHUB_TOKEN]
     when:
       event: 
         - pull_request
 
 # 設定通知，discord 作為通知工具
-  notify:
+  - name: notify
     image: appleboy/drone-discord
     settings:
       webhook_id: 
@@ -86,7 +87,7 @@ steps:
         from_secret: woodpecker_notify_discord_token
       avatar_url: https://woodpecker-ci.org/img/logo.svg
       link_names: true
-      template: >
+      template: "Build {{build.status}} for {{repo.owner}}/{{repo.name}}"
     when:
       event:
         - pull_request
