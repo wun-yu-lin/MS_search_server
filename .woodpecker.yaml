@@ -3,15 +3,15 @@ steps:
     image: maven:3.8.1-openjdk-17
     environment:
       WOODPECKER_NOTIFY_DISCORD_ID:
-        from_secret: woodpecker_notify_discord_id
+        from_secret: WOODPECKER_NOTIFY_DISCORD_ID
       WOODPECKER_NOTIFY_DISCORD_TOKEN:
-        from_secret: woodpecker_notify_discord_token
+        from_secret: WOODPECKER_NOTIFY_DISCORD_TOKEN
     commands:
       - echo "start run the build step "
       - echo $${WOODPECKER_NOTIFY_DISCORD_ID}
       - echo $${WOODPECKER_NOTIFY_DISCORD_TOKEN}
     when:
-      event: pull_request
+      event: [pull_request]
 
   - name: compile
     image: maven:3.8.1-openjdk-17
@@ -20,7 +20,7 @@ steps:
       - mvn compile
       - echo "compile finish"
     when:
-      event: pull_request
+      event: [pull_request]
 
   - name: spotbugs
     image: maven:3.8.1-openjdk-17
@@ -29,7 +29,7 @@ steps:
       - mvn compile
       - mvn spotbugs:check -Dspotbugs.excludeFilterFile=./findbugs-exclude.xml #exclude bug list
     when:
-      event: pull_request
+      event: [pull_request]
 
   - name: pmd
     image: maven:3.8.1-openjdk-17
@@ -38,7 +38,7 @@ steps:
       - mvn compile
       - mvn pmd:pmd
     when:
-      event: pull_request
+      event: [pull_request]
 
   - name: docker-build-push
     image: woodpeckerci/plugin-kaniko
@@ -47,7 +47,7 @@ steps:
       repo: ms_search_server
       tags: ${CI_COMMIT_SHA}
       cache: true
-      skip_tls_verify: false # set to true for testing registries ONLY with self-signed certs
+      skip_tls_verify: false
       build_args:
         - COMMIT_SHA=${CI_COMMIT_SHA}
         - COMMIT_AUTHOR_EMAIL=${CI_COMMIT_AUTHOR_EMAIL}
@@ -56,16 +56,13 @@ steps:
       password:
         from_secret: nexus_password
     when:
-      event:
-        - push
-        - tag
-        - pull_request
+      event: [push, tag, pull_request]
 
   - name: comment-pr-tag
     image: alpine/httpie
     environment:
       GITHUB_TOKEN:
-        from_secret: github_token
+        from_secret: GITHUB_TOKEN
     commands:
       - >
         http --ignore-stdin POST
@@ -74,10 +71,8 @@ steps:
         "Accept: application/vnd.github.v3+json"
         body="Docker image built and pushed:\n\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
     when:
-      event: 
-        - pull_request
+      event: [pull_request]
 
-# 設定通知，discord 作為通知工具
   - name: notify
     image: appleboy/drone-discord
     settings:
@@ -89,8 +84,5 @@ steps:
       link_names: true
       template: "Build {{build.status}} for {{repo.owner}}/{{repo.name}}"
     when:
-      event:
-        - pull_request
-      status:
-        - failure
-        - success
+      event: [pull_request]
+      status: [success, failure]
