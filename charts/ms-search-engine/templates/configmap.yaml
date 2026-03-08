@@ -108,7 +108,122 @@ data:
         maxTotal: {{ .Values.config.redis.task_queue.max_total }}
 
     taskProcessorService:
-      enable: {{ .Values.config.taskProcessorService.enable }}
+      enable: {{ .Values.app.appMsSearchServer.config.taskProcessorService.enable }}
 
     SentMailTaskProcessorService:
-      enable: {{ .Values.config.SentMailTaskProcessorService.enable }}
+      enable: {{ .Values.app.appMsSearchServer.config.SentMailTaskProcessorService.enable }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app.appMsSearchServerBackground.name }}-config
+  labels:
+    app: {{ .Values.app.appMsSearchServerBackground.name }}
+data:
+  application.yaml: |
+    java-sdk:
+      server-name: {{ .Values.config.java_sdk.server_name }}
+      logger:
+        enable-notify: {{ .Values.config.java_sdk.logger.enable_notify }}
+        mail-notify: {{ .Values.config.java_sdk.logger.mail_notify }}
+        notify-service-list: {{ .Values.config.java_sdk.logger.notify_service_list }}
+      logger-elk:
+        enable-elk: {{ .Values.config.java_sdk.logger_elk.enable_elk }}
+        logstash-host: {{ .Values.config.java_sdk.logger_elk.logstash_host }}
+        logstash-port: {{ .Values.config.java_sdk.logger_elk.logstash_port }}
+      gmail:
+        smtp-host: {{ .Values.config.java_sdk.gmail.smtp_host }}
+        smtp-port: {{ .Values.config.java_sdk.gmail.smtp_port }}
+        mail-username: {{ .Values.config.java_sdk.gmail.mail_username }}
+        mail-password: {{ .Values.config.java_sdk.gmail.mail_password }}
+        smtp-auth: {{ .Values.config.java_sdk.gmail.smtp_auth }}
+        smtp-starttls-enable: {{ .Values.config.java_sdk.gmail.smtp_starttls_enable }}
+        smtp-starttls-required: {{ .Values.config.java_sdk.gmail.smtp_starttls_required }}
+      discord:
+        webhook-url: {{ .Values.config.java_sdk.discord.webhook_url }}
+
+    server:
+      port: {{ .Values.config.server.port }}
+      timeZone: {{ .Values.config.server.timezone }}
+      serverConfigToken: {{ .Values.config.server.server_config_token }}
+      deployEnvironment: {{ .Values.config.server.deploy_environment }}
+      tomcat:
+        remoteip:
+          host-header: {{ .Values.config.server.tomcat.remote_ip.host_header }}
+          protocol-header: {{ .Values.config.server.tomcat.remote_ip.protocol_header }}
+          protocol-header-https-value: {{ .Values.config.server.tomcat.remote_ip.protocol_header_https_value }}
+
+    spring:
+      servlet:
+        multipart:
+          max-file-size: {{ .Values.config.spring.servlet.multipart.max_file_size }}
+          max-request-size: {{ .Values.config.spring.servlet.multipart.max_request_size }}
+
+      datasource:
+        mysql_local:
+          driver_class_name: {{ .Values.config.spring.datasource.mysql_local.driver_class_name }}
+          jdbc_url: {{ .Values.config.spring.datasource.mysql_local.jdbc_url }}
+          username: {{ .Values.config.spring.datasource.mysql_local.username }}
+          password: {{ .Values.config.spring.datasource.mysql_local.password }}
+
+      mail:
+        host: {{ .Values.config.spring.mail.host }}
+        port: {{ .Values.config.spring.mail.port }}
+        username: {{ .Values.config.spring.mail.username }}
+        password: {{ .Values.config.spring.mail.password }}
+        properties:
+          mail:
+            transport:
+              protocol: {{ .Values.config.spring.mail.properties.mail.transport_protocol }}
+            smtp:
+              auth: {{ .Values.config.spring.mail.properties.mail.smtp.auth }}
+              starttls:
+                enable: {{ .Values.config.spring.mail.properties.mail.smtp.starttls_enable }}
+                required: {{ .Values.config.spring.mail.properties.mail.smtp.starttls_required }}
+
+      security:
+        oauth2:
+          client:
+            registration:
+              google:
+                client-id: {{ .Values.config.spring.security.oauth2.client.registration.google.client_id }}
+                client-secret: {{ .Values.config.spring.security.oauth2.client.registration.google.client_secret }}
+              github:
+                client-id: {{ .Values.config.spring.security.oauth2.client.registration.github.client_id }}
+                client-secret: {{ .Values.config.spring.security.oauth2.client.registration.github.client_secret }}
+        admin:
+          username: {{ .Values.config.spring.security.admin.username }}
+          password: {{ .Values.config.spring.security.admin.password }}
+
+    springdoc:
+      api-docs:
+        path: {{ .Values.config.springdoc.api_docs_path }}
+      swagger-ui:
+        enabled: {{ .Values.config.springdoc.swagger_ui_enabled }}
+        path: {{ .Values.config.springdoc.swagger_ui_path }}
+
+    aws:
+      s3:
+        bucket:
+          name: {{ .Values.config.aws.s3.bucket_name }}
+        accessKey: {{ .Values.config.aws.s3.access_key }}
+        secretKey: {{ .Values.config.aws.s3.secret_key }}
+      cloudFront:
+        endpoint: {{ .Values.config.aws.cloud_front.endpoint }}
+
+    redis:
+      taskQueue:
+        host: {{ .Values.config.redis.task_queue.host }}
+        port: {{ .Values.config.redis.task_queue.port }}
+        password: {{ .Values.config.redis.task_queue.password }}
+        database: {{ .Values.config.redis.task_queue.database }}
+        maxWaitMillis: {{ .Values.config.redis.task_queue.max_wait_millis }}
+        maxIdle: {{ .Values.config.redis.task_queue.max_idle }}
+        minIdle: {{ .Values.config.redis.task_queue.min_idle }}
+        maxTotal: {{ .Values.config.redis.task_queue.max_total }}
+
+    taskProcessorService:
+      enable: {{ .Values.app.appMsSearchServerBackground.config.taskProcessorService.enable }}
+
+    SentMailTaskProcessorService:
+      enable: {{ .Values.app.appMsSearchServerBackground.config.SentMailTaskProcessorService.enable }}

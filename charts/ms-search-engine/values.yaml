@@ -45,8 +45,8 @@ app:
         enable: false
       SentMailTaskProcessorService:
         enable: false
-  appMsSearchServerBEJob:
-    name: ms-search-server-be
+  appMsSearchServerBackground:
+    name: ms-search-server-background
     config:
       taskProcessorService:
         enable: true
@@ -148,9 +148,3 @@ config:
       max_idle: 8
       min_idle: 0
       max_total: 8
-
-  taskProcessorService:
-    enable: false
-
-  SentMailTaskProcessorService:
-    enable: false
