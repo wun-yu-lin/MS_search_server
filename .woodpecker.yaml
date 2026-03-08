@@ -57,7 +57,6 @@ steps:
         from_secret: nexus_password
     when:
       event:
-        - push
         - tag
         - pull_request
 
