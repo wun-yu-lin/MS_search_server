@@ -7,7 +7,7 @@ steps:
       WOODPECKER_NOTIFY_DISCORD_TOKEN:
         from_secret: WOODPECKER_NOTIFY_DISCORD_TOKEN
     commands:
-      - echo "start run the build step "
+      - echo "start run the build step"
       - echo $${WOODPECKER_NOTIFY_DISCORD_ID}
       - echo $${WOODPECKER_NOTIFY_DISCORD_TOKEN}
     when:
