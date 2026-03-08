@@ -71,7 +71,7 @@ steps:
         "https://api.github.com/repos/${CI_REPO}/issues/${CI_COMMIT_PULL_REQUEST}/comments"
         "Authorization: token $${GITHUB_TOKEN}"
         "Accept: application/vnd.github.v3+json"
-        body="Docker image built and pushed: `image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
+        body="Docker image built and pushed:\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
     when:
       event: 
         - pull_request
