@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM openjdk:17.0.2-jdk
 VOLUME /tmp
 ADD target/ms_search_engine-SNAPSHOT.jar app.jar
 ADD src/main/resources/application.yml /app/config/application.yml
