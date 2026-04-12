@@ -16,8 +16,19 @@
 
     <repositories>
         <repository>
-            <id>jdk-repo</id>
+            <id>jdk</id>
             <url>https://nexus.service.ms-search.us/repository/jdk/</url> <!-- Nexus 上的 repository 路徑 -->
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <properties>

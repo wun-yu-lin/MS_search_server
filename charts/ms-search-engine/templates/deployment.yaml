@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.appMsSearchServer.name }}
+  namespace: {{.Release.Namespace}}
+  labels:
+    app: {{ .Values.app.appMsSearchServer.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.appMsSearchServer.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.appMsSearchServer.name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.name }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu}}
+              memory: {{ .Values.resources.limits.memory}}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu}}
+              memory: {{ .Values.resources.requests.memory }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Values.app.appMsSearchServer.name }}-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.appMsSearchServerBackground.name }}
+  namespace: {{.Release.Namespace}}
+  labels:
+    app: {{ .Values.app.appMsSearchServerBackground.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.appMsSearchServerBackground.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.appMsSearchServerBackground.name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.name }}
+      containers:
+        - name: {{ .Chart.Name }}-background
+          securityContext:
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu}}
+              memory: {{ .Values.resources.limits.memory}}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu}}
+              memory: {{ .Values.resources.requests.memory }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Values.app.appMsSearchServerBackground.name }}-config

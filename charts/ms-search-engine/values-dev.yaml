@@ -1,0 +1,31 @@
+# Test environment overrides
+config:
+  server:
+    deploy_environment: TEST_API_WITH_NO_AUTH
+  
+  spring:
+    datasource:
+      mysql_local:
+        jdbc_url: jdbc:mysql://192.168.11.114:3306/ms_search_library?serverTimezone=Asia/Taipei&characterEncoding=utf-8
+    
+  redis:
+    task_queue:
+      host: 192.168.11.114
+      port: 6379
+
+  java_sdk:
+    logger_elk:
+      logstash_host: 192.168.11.114
+
+
+## Resources can be smaller for test
+resources:
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+gatewayApi:
+  hostname: dev.ms-search.server.local

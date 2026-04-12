@@ -1,48 +1,112 @@
 steps:
-  build:
+  - name: build
     image: maven:3.8.1-openjdk-17
+    environment:
+      WOODPECKER_NOTIFY_DISCORD_ID:
+        from_secret: WOODPECKER_NOTIFY_DISCORD_ID
+      WOODPECKER_NOTIFY_DISCORD_TOKEN:
+        from_secret: WOODPECKER_NOTIFY_DISCORD_TOKEN
     commands:
-      - echo "start run the build step "
+      - echo "start run the build step"
       - echo $${WOODPECKER_NOTIFY_DISCORD_ID}
       - echo $${WOODPECKER_NOTIFY_DISCORD_TOKEN}
-    secrets: [WOODPECKER_NOTIFY_DISCORD_ID, WOODPECKER_NOTIFY_DISCORD_TOKEN]
-
     when:
-      event: pull_request
-  compile:
+      event:
+        - tag
+        - pull_request
+        - push
+
+  - name: compile
     image: maven:3.8.1-openjdk-17
     commands:
       - mvn clean
       - mvn compile
       - echo "compile finish"
     when:
-      event: pull_request
+      event:
+        - tag
+        - pull_request
+        - push
 
-  spotbugs:
+  - name: spotbugs
     image: maven:3.8.1-openjdk-17
     commands:
       - mvn clean
       - mvn compile
       - mvn spotbugs:check -Dspotbugs.excludeFilterFile=./findbugs-exclude.xml #exclude bug list
     when:
-      event: pull_request
+      event:
+        - pull_request
+        - push
 
-  pmd:
+  - name: pmd
     image: maven:3.8.1-openjdk-17
     commands:
       - mvn clean
       - mvn compile
       - mvn pmd:pmd
     when:
-      event: pull_request
+      event:
+        - pull_request
+        - push
 
-#  test:
-#    image: maven:3.8.1-openjdk-17
-#    commands:
-#      - mvn test
+  - name: docker-build-push-PR
+    image: woodpeckerci/plugin-kaniko
+    settings:
+      registry: image.nexus.service.ms-search.us
+      repo: ms_search_server
+      tags: ${CI_COMMIT_SHA}
+      cache: true
+      skip_tls_verify: false
+      build_args:
+        - COMMIT_SHA=${CI_COMMIT_SHA}
+        - COMMIT_AUTHOR_EMAIL=${CI_COMMIT_AUTHOR_EMAIL}
+      username:
+        from_secret: nexus_username
+      password:
+        from_secret: nexus_password
+    when:
+      event:
+        - pull_request
+        - push
 
-# 設定通知，discord 作為通知工具
-  notify:
+  - name: docker-build-push-tag
+    image: woodpeckerci/plugin-kaniko
+    settings:
+      registry: image.nexus.service.ms-search.us
+      repo: ms_search_server
+      tags: ${CI_COMMIT_TAG}
+      cache: true
+      skip_tls_verify: false
+      build_args:
+        - COMMIT_SHA=${CI_COMMIT_SHA}
+        - COMMIT_AUTHOR_EMAIL=${CI_COMMIT_AUTHOR_EMAIL}
+      username:
+        from_secret: nexus_username
+      password:
+        from_secret: nexus_password
+    when:
+      event:
+        - tag
+
+  - name: comment-pr-tag
+    image: alpine/httpie
+    environment:
+      GITHUB_TOKEN:
+        from_secret: GITHUB_TOKEN
+    commands:
+      - >
+        http --ignore-stdin POST
+        "https://api.github.com/repos/${CI_REPO}/issues/${CI_COMMIT_PULL_REQUEST}/comments"
+        "Authorization: token $${GITHUB_TOKEN}"
+        "Accept: application/vnd.github.v3+json"
+        body="Docker image built and pushed:\`image.nexus.service.ms-search.us/ms_search_server:${CI_COMMIT_SHA}\`"
+    when:
+      event: 
+        - pull_request
+        - push
+
+  - name: notify
     image: appleboy/drone-discord
     settings:
       webhook_id: 
@@ -51,10 +115,11 @@ steps:
         from_secret: woodpecker_notify_discord_token
       avatar_url: https://woodpecker-ci.org/img/logo.svg
       link_names: true
-      template: >
+      template: "CI {{build.status}} for {{repo.owner}}/{{repo.name}}"
     when:
       event:
         - pull_request
+        - push
       status:
         - failure
         - success
