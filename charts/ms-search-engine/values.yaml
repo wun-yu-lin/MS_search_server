@@ -22,11 +22,10 @@ service:
   type: ClusterIP
   port: 8080
 
-ingress:
-  annotations: {}
-  host:
-  path: /
-  pathType:
+gatewayApi:
+  hostname: "ms-search.server.local"
+  gatewayName: "eg"
+  gatewayNamespace: "envoy-gateway-system"
 
 resources:
   limits:
