@@ -8,7 +8,7 @@ metadata:
 spec:
   parentRefs:
   - name: {{ .Values.gatewayApi.gatewayName }}
-    namespace: {{ .Values.gatewayApi.gatewayNamespace }}
+    sectionName: http
   hostnames:
   - "{{ .Values.gatewayApi.hostname }}"
   rules:

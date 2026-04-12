@@ -23,9 +23,9 @@ service:
   port: 8080
 
 gatewayApi:
-  hostname: "ms-search.server.local"
-  gatewayName: "eg"
-  gatewayNamespace: "envoy-gateway-system"
+  hostname: ms-search.server.local
+  gatewayName: gateway-api
+  gatewayNamespace: envoy-gateway-system
 
 resources:
   limits:
